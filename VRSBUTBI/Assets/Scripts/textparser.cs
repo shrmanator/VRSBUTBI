@@ -9,8 +9,8 @@ public class textparser : MonoBehaviour
     //"read in file and parse user's commands"
     void Start()
     {
+        string fileName = "";
         using (StreamReader sr = File.OpenText(fileName))
-
         {
 
             string s = sr.ReadToEnd();
