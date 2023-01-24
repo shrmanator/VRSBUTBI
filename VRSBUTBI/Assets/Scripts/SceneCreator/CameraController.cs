@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+public class RTSCamera : MonoBehaviour
 {
     [SerializeField] float panSpeed = 20f;
     [SerializeField] float zoomSpeed = 50f;
@@ -9,35 +9,36 @@ public class CameraController : MonoBehaviour
     [SerializeField] float zoomMin = 10f;
     [SerializeField] float zoomMax = 80f;
 
+    [SerializeField] float panBorderThickness = 10f;
+
     void Update()
     {
         Vector3 pos = transform.position;
 
-
-        // ====== PANNING THE CAMERA ======
-        //
-        if (Input.GetKey("w") || Input.GetKey("up"))
+        // Panning
+        if (Input.GetKey("w") || Input.mousePosition.y >= Screen.height - panBorderThickness)
+        {
             pos.z += panSpeed * Time.deltaTime;
-
-        if (Input.GetKey("s") || Input.GetKey("down"))
+        }
+        if (Input.GetKey("s") || Input.mousePosition.y <= panBorderThickness)
+        {
             pos.z -= panSpeed * Time.deltaTime;
-
-        if (Input.GetKey("d") || Input.GetKey("right"))
+        }
+        if (Input.GetKey("d") || Input.mousePosition.x >= Screen.width - panBorderThickness)
+        {
             pos.x += panSpeed * Time.deltaTime;
-
-        if (Input.GetKey("a") || Input.GetKey("left"))
+        }
+        if (Input.GetKey("a") || Input.mousePosition.x <= panBorderThickness)
+        {
             pos.x -= panSpeed * Time.deltaTime;
+        }
 
-
-        // ====== ZOOMING IN AND OUT ======
-        //
+        // Zooming
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         pos.y -= scroll * zoomSpeed * 100f * Time.deltaTime;
         pos.y = Mathf.Clamp(pos.y, zoomMin, zoomMax);
 
-
-        // ====== ROTATING THE CAMERA ======
-        //
+        // Rotation
         if (Input.GetMouseButton(1))
         {
             transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * rotateSpeed * Time.deltaTime);
