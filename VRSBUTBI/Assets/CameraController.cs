@@ -21,7 +21,8 @@ public class CameraController : MonoBehaviour
     {
         Vector3 cameraPosition = transform.position;
 
-        // ====== PANNING THE CAMERA ======
+        // ====== HORIZONTAL CAMERA MOVEMENT ======
+        //
         if (Input.GetKey("w") || Input.GetKey("up"))
             cameraPosition += transform.forward * panSpeed * Time.deltaTime;
 
@@ -33,6 +34,7 @@ public class CameraController : MonoBehaviour
 
         if (Input.GetKey("a") || Input.GetKey("left"))
             cameraPosition -= transform.right * panSpeed * Time.deltaTime;
+
 
         // ====== VERTICAL CAMERA MOVEMENT ======
         //
