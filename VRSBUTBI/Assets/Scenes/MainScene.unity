@@ -313,12 +313,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1655751403}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3e6ecb58be834f7f92f8cab17052ce8, type: 3}
+  m_Script: {fileID: 11500000, guid: 5cc91c88c01404c278a31f91ab5ced21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   panSpeed: 20
   zoomSpeed: 50
-  rotateSpeed: 100
+  mouseSensitivity: 100
   zoomMin: 10
   zoomMax: 80
 --- !u!1 &2033140947

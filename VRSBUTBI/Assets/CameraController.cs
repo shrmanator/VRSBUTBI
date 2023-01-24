@@ -22,7 +22,9 @@ public class CameraController : MonoBehaviour
         Vector3 cameraPosition = transform.position;
 
         // ====== PANNING THE CAMERA ======
-        //
+        // TODO:
+        // 1. camera should move flat and never on an angle 
+
         if (Input.GetKey("w") || Input.GetKey("up"))
             cameraPosition += transform.forward * panSpeed * Time.deltaTime;
 
@@ -47,14 +49,14 @@ public class CameraController : MonoBehaviour
         //
         if (Input.GetMouseButton(1))
         {
+
+            // TODO; 
+            // 1. fix bug where camera rotates and tilts
+
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
-            transform.Rotate(-mouseY * mouseSensitivity * Time.deltaTime, mouseX * mouseSensitivity * Time.deltaTime, 0);
-
-            // stop camera from rotating too far around its axis
-            // float x = transform.localEulerAngles.x;
-            // x = Mathf.Clamp(x, minX, maxX);
-            // transform.localEulerAngles = new Vector3(x, transform.localEulerAngles.y, transform.localEulerAngles.z);
+            Quaternion rotation = Quaternion.Euler(transform.localEulerAngles.x - mouseY * mouseSensitivity * Time.deltaTime, transform.localEulerAngles.y + mouseX * mouseSensitivity * Time.deltaTime, 0);
+            transform.localRotation = rotation;
         }
 
         transform.position = cameraPosition;
