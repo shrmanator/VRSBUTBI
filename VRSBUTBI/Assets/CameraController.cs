@@ -1,16 +1,37 @@
 using UnityEngine;
 
 /// <summary>
-/// Keyboard camera controls implementation.
-/// Property of VRSBUTBI.
+/// Property of VRSBUTBI. 
+/// This script implements the keyboard camera controls.
 /// </summary>
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] float panSpeed = 20f; // speed of horizontal camera movement
-    [SerializeField] float zoomSpeed = 50f; // speed of zooming in and out
-    [SerializeField] float mouseSensitivity = 100.0f; // sensitivity of mouse movement for rotation
-    [SerializeField] float zoomMin = 2f; // minimum distance from the ground for zooming
-    [SerializeField] float zoomMax = 10f; // maximum distance from the ground for zooming
+    [SerializeField] 
+    /// <summary>
+    /// Speed at which camera pans horizontally or vertically.
+    /// </summary>
+    float panSpeed = 20f;
+    [SerializeField] 
+    /// <summary>
+    /// Speed at which camera zooms in or out.
+    /// </summary>
+    float zoomSpeed = 50f;
+    [SerializeField] 
+    /// <summary>
+    /// Sensitivity of the mouse movement for rotation.
+    /// </summary>
+    float mouseSensitivity = 100.0f;
+    [SerializeField] 
+    /// <summary>
+    /// Minimum limit of the zoom level.
+    /// </summary>
+    float zoomMin = 2f;
+    [SerializeField] 
+    /// <summary>
+    /// Maximum limit of the zoom level.
+    /// </summary>
+    float zoomMax = 10f;
+
 
     void Update()
     {
