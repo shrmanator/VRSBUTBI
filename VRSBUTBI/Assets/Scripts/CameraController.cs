@@ -86,7 +86,7 @@ public class CameraController : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
 
-            float xRotation = transform.localEulerAngles.x - mouseY * mouseSensitivity * Time.deltaTime;
+            float xRotation = transform.localEulerAngles.x + mouseY * mouseSensitivity * Time.deltaTime;
             float yRotation = transform.localEulerAngles.y + mouseX * mouseSensitivity * Time.deltaTime;
 
             Quaternion rotation = Quaternion.Euler(xRotation, yRotation, 0);
@@ -94,7 +94,7 @@ public class CameraController : MonoBehaviour
             // set the camera's rotation equal to the updated camera rotation
             transform.localRotation = rotation;
         }
-        
+
         // set the camera's transform position equal to the updated camera position
         transform.position = cameraPosition;
     }
