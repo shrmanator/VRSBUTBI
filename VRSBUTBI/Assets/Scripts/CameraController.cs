@@ -83,7 +83,7 @@ public class CameraController : MonoBehaviour
         //
         if (Input.GetMouseButton(1))
         {
-            float mouseX = Input.GetAxis("Mouse X"); 
+            float mouseX = Input.GetAxis("Mouse X");
             float mouseY = Input.GetAxis("Mouse Y");
             // rotation on the x-axis based on mouse movement in the vertical direction
             float xRotation = transform.localEulerAngles.x - mouseY * mouseSensitivity;
