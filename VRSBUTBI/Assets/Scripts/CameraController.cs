@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Sensitivity of the mouse movement for rotation.
     /// </summary>
-    float mouseSensitivity = 100.0f;
+    float mouseSensitivity = 800.0f;
     [SerializeField] 
     /// <summary>
     /// Minimum limit of the zoom level.
@@ -83,16 +83,15 @@ public class CameraController : MonoBehaviour
         //
         if (Input.GetMouseButton(1))
         {
-            float mouseX = Input.GetAxis("Mouse X");
-            float mouseY = Input.GetAxis("Mouse Y");
+            float mouseX = Input.GetAxis("Mouse X");  // horizontal mouse movement axis value 
+            float mouseY = Input.GetAxis("Mouse Y");  // vertical mouse movement axis value
 
+            // calculate the updated (x,y)-axis rotation
             float xRotation = transform.localEulerAngles.x + mouseY * mouseSensitivity * Time.deltaTime;
-            float yRotation = transform.localEulerAngles.y + mouseX * mouseSensitivity * Time.deltaTime;
-
-            Quaternion rotation = Quaternion.Euler(xRotation, yRotation, 0);
+            float yRotation = transform.localEulerAngles.y - mouseX * mouseSensitivity * Time.deltaTime;
 
             // set the camera's rotation equal to the updated camera rotation
-            transform.localRotation = rotation;
+            transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
         }
 
         // set the camera's transform position equal to the updated camera position
