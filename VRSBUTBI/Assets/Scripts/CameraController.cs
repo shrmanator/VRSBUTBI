@@ -31,6 +31,36 @@ public class CameraController : MonoBehaviour
     /// Maximum limit of the zoom level.
     /// </summary>
     float zoomMax = 10f;
+    [SerializeField]
+    /// <summary>
+    /// Moves the camera forwards.
+    /// </summary>
+    KeyCode fwdCameraKey;
+    [SerializeField]
+     /// <summary>
+    ///  Moves the camera backwards.
+    /// </summary>
+    KeyCode backwardCameraKey;
+    [SerializeField]
+    /// <summary>
+    ///  Strafes the camera to the right
+    /// </summary>
+    KeyCode rightCameraStrafeKey;
+    [SerializeField]
+    /// <summary>
+    /// Strafes the camera to the left
+    /// </summary>
+    KeyCode leftCameraStrafeKey;
+    [SerializeField]
+    /// <summary>
+    /// Moves the camera up vertically.
+    /// </summary>
+    KeyCode verticalUpCameraKey;
+    [SerializeField]
+    /// <summary>
+    ///  Moves the camera down vertically.
+    /// </summary>
+    KeyCode verticalDownCameraKey;
 
 
     void Update()
@@ -39,22 +69,22 @@ public class CameraController : MonoBehaviour
 
         // ====== HORIZONTAL CAMERA MOVEMENT ======
         //
-        if (Input.GetKey("w") || Input.GetKey("up"))
+        if (Input.GetKey(fwdCameraKey))
         {
             // move forward in respect to x (increase x)
             cameraPosition += transform.forward * panSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("s") || Input.GetKey("down"))
+        if (Input.GetKey(backwardCameraKey))
         {
             // move backward in respect to x (decrease x)
             cameraPosition -= transform.forward * panSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("d") || Input.GetKey("right"))
+        if (Input.GetKey(rightCameraStrafeKey))
         {
             // move right in respect to z (increase z)
             cameraPosition += transform.right * panSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("a") || Input.GetKey("left"))
+        if (Input.GetKey(leftCameraStrafeKey))
         {
             // move left in respect to z (decrease z)
             cameraPosition -= transform.right * panSpeed * Time.deltaTime;
@@ -62,12 +92,12 @@ public class CameraController : MonoBehaviour
 
         // ====== VERTICAL CAMERA MOVEMENT ======
         //
-        if (Input.GetKey("e") || Input.GetKey("/"))
+        if (Input.GetKey(verticalUpCameraKey))
         {
             // move up in respect to y (increase y)
             cameraPosition += transform.up * panSpeed * Time.deltaTime;
         }
-        if (Input.GetKey("f") || Input.GetKey(KeyCode.RightAlt))
+        if (Input.GetKey(verticalDownCameraKey))
         {
             // move down in respect to y (decrease y)
             cameraPosition -= transform.up * panSpeed * Time.deltaTime;
