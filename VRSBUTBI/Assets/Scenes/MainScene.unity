@@ -313,6 +313,12 @@ MonoBehaviour:
   mouseSensitivity: 800
   zoomMin: 2
   zoomMax: 10
+  fwdCameraKey: 119
+  backwardCameraKey: 115
+  rightCameraStrafeKey: 97
+  leftCameraStrafeKey: 100
+  verticalUpCameraKey: 101
+  verticalDownCameraKey: 102
 --- !u!1 &2033140947
 GameObject:
   m_ObjectHideFlags: 0
