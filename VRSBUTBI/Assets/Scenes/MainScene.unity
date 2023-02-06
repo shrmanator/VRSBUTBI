@@ -315,8 +315,8 @@ MonoBehaviour:
   zoomMax: 10
   fwdCameraKey: 119
   backwardCameraKey: 115
-  rightCameraStrafeKey: 97
-  leftCameraStrafeKey: 100
+  leftCameraStrafeKey: 97
+  rightCameraStrafeKey: 100
   verticalUpCameraKey: 101
   verticalDownCameraKey: 102
 --- !u!1 &2033140947

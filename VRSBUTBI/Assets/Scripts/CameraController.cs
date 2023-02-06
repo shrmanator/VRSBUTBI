@@ -43,14 +43,14 @@ public class CameraController : MonoBehaviour
     KeyCode backwardCameraKey;
     [SerializeField]
     /// <summary>
-    ///  Strafes the camera to the right
-    /// </summary>
-    KeyCode rightCameraStrafeKey;
-    [SerializeField]
-    /// <summary>
     /// Strafes the camera to the left
     /// </summary>
     KeyCode leftCameraStrafeKey;
+    [SerializeField]
+    /// <summary>
+    ///  Strafes the camera to the right
+    /// </summary>
+    KeyCode rightCameraStrafeKey;
     [SerializeField]
     /// <summary>
     /// Moves the camera up vertically.
@@ -61,6 +61,7 @@ public class CameraController : MonoBehaviour
     ///  Moves the camera down vertically.
     /// </summary>
     KeyCode verticalDownCameraKey;
+    //TODO: add inverse mouse rotate control
 
 
     void Update()
