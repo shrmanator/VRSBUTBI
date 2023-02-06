@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 /// <summary>
 /// Property of VRSBUTBI. 
 /// This script implements the keyboard camera controls.
@@ -62,6 +63,20 @@ public class CameraController : MonoBehaviour
     /// </summary>
     KeyCode verticalDownCameraKey;
     //TODO: add inverse mouse rotate control
+    [SerializeField]
+    /// <summary>
+    ///  Moves the camera down vertically.
+    /// </summary>
+    bool invertCameraRotation;
+
+    /// <summary>
+    /// The camera's current X rotation.
+    /// </summary>
+    float currentXRotation;
+    /// <summary>
+    ///  The camera's current Y rotation.
+    /// </summary>
+    float currentYRotation;
 
 
     void Update()
@@ -117,14 +132,21 @@ public class CameraController : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X");  // horizontal mouse movement axis value 
             float mouseY = Input.GetAxis("Mouse Y");  // vertical mouse movement axis value
 
-            // calculate the updated (x,y)-axis rotation
-            float xRotation = transform.localEulerAngles.x + mouseY * mouseSensitivity * Time.deltaTime;
-            float yRotation = transform.localEulerAngles.y - mouseX * mouseSensitivity * Time.deltaTime;
-
-            // set the camera's rotation equal to the updated camera rotation
-            transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0);
+            if (invertCameraRotation)
+            {
+                // calculate the inverted (x,y)-axis rotation
+                currentXRotation = transform.localEulerAngles.x + mouseY * mouseSensitivity * Time.deltaTime;
+                currentYRotation = transform.localEulerAngles.y - mouseX * mouseSensitivity * Time.deltaTime;
+            }
+            else
+            {        
+                // calculate the normal (x,y)-axis rotation        
+                currentXRotation = transform.localEulerAngles.x - mouseY * mouseSensitivity * Time.deltaTime;
+                currentYRotation = transform.localEulerAngles.y + mouseX * mouseSensitivity * Time.deltaTime;
+            }
+            // set the camera's rotation equal to the current camera rotation
+            transform.localRotation = Quaternion.Euler(currentXRotation, currentYRotation, 0);
         }
-
         // set the camera's transform position equal to the updated camera position
         transform.position = cameraPosition;
     }
