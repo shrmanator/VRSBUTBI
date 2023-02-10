@@ -5,8 +5,10 @@ using System.IO;
 /// <summary>
 /// Spawns the terrain on simulation start
 /// </summary>
-public class SpawnTerrain : MonoBehaviour
+public class TerrainManager : MonoBehaviour
 {
+    public static TerrainManager Instance;
+
     void Start()
     {   
         // A terrain object with 200 width, 1 height, 200 length.
