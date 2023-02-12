@@ -1,43 +1,50 @@
 using System.IO;
 using UnityEngine;
-using FileBrowser;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
-public class TextParser : MonoBehaviour
-{
-    // Reference to the ObjectCreator script
-    public ObjectCreator objectCreator;
+/// <summary>
+/// This class reads and parses the commands in a text file,
+/// and stores the data in a JSON format to be used by other scripts.
+/// </summary>
+public class TextParser : MonoBehaviour{
 
-    // Reference to the MoveObject script
-    public MoveObject moveObject;
+/// <summary>    
+/// A class to store the data for each command.    
+/// </summary>    
 
+    private class CommandData    
+    {
+        public string Type;
+        public string ObjectName;
+        public string MasterName;
+        public float X;
+        public float Y;
+    }
+    // A list to store all the CommandData objects
+    private List<CommandData> commandDataList = new List<CommandData>();
+    // A public property to access the list of CommandData objects as a JSON string
+    public string CommandDataJson { get; private set; }
     private void Start()
     {
-        // Open a file browser to select a text file
-        FileBrowser.OpenFilePanel("Select the file", "", "txt", (path) =>
+        // Read the text file
+        string[] lines = File.ReadAllLines("file.txt");
+        // Parse the lines into CommandData objects
+        foreach (string line in lines)
         {
-            // Read all the lines in the text file
-            string[] lines = File.ReadAllLines(path);
-            foreach (string line in lines)
+            string[] words = line.Split(' ');
+            if (words[0] == "CREATE")
             {
-                // Split the line into words
-                string[] words = line.Split(' ');
-                if (words[0] == "CREATE")
-                {
-                    // Extract the x and y coordinates
-                    float x = float.Parse(words[1]);
-                    float y = float.Parse(words[2]);
-                    // Call the Create method in the ObjectCreator script
-                    objectCreator.Create(x, y);
-                }
-                else if (words[0] == "MOVE")
-                {
-                    // Extract the x and y coordinates
-                    float x = float.Parse(words[1]);
-                    float y = float.Parse(words[2]);
-                    // Call the Move method in the MoveObject script
-                    moveObject.Move(x, y);
-                }
+                CommandData cmd = new CommandData();
+                cmd.Type = words[0];
+                cmd.ObjectName = words[1];
+                cmd.MasterName = words[2];
+                cmd.X = float.Parse(words[3]);
+                cmd.Y = float.Parse(words[4]);
+                commandDataList.Add(cmd);
             }
-        });
+        }
+        // Serialize the list of CommandData objects to a JSON string
+        CommandDataJson = JsonConvert.SerializeObject(commandDataList);
     }
 }
