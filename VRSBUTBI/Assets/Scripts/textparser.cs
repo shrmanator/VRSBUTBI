@@ -7,6 +7,7 @@ using System.Collections.Generic;
 /// This class reads and parses the commands in a text file,
 /// and stores the data in a JSON format to be used by other scripts.
 /// </summary>
+
 public class TextParser : MonoBehaviour{
 
 /// <summary>    
@@ -21,10 +22,13 @@ public class TextParser : MonoBehaviour{
         public float X;
         public float Y;
     }
+
     // A list to store all the CommandData objects
     private List<CommandData> commandDataList = new List<CommandData>();
+
     // A public property to access the list of CommandData objects as a JSON string
     public string CommandDataJson { get; private set; }
+
     private void Start()
     {
         // Read the text file
