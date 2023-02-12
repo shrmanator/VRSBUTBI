@@ -1,27 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using FileBrowser;
 
-public class textparser : MonoBehaviour
+public class TextParser : MonoBehaviour
 {
-    // Start is called before the first frame update
-    //"read in file and parse user's commands"
-    void Start()
-    {
-        string fileName = "";
-        using (StreamReader sr = File.OpenText(fileName))
+    // Reference to the ObjectCreator script
+    public ObjectCreator objectCreator;
 
+    // Reference to the MoveObject script
+    public MoveObject moveObject;
+
+    private void Start()
+    {
+        // Open a file browser to select a text file
+        FileBrowser.OpenFilePanel("Select the file", "", "txt", (path) =>
         {
-
-            string s = sr.ReadToEnd();
-
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+            // Read all the lines in the text file
+            string[] lines = File.ReadAllLines(path);
+            foreach (string line in lines)
+            {
+                // Split the line into words
+                string[] words = line.Split(' ');
+                if (words[0] == "CREATE")
+                {
+                    // Extract the x and y coordinates
+                    float x = float.Parse(words[1]);
+                    float y = float.Parse(words[2]);
+                    // Call the Create method in the ObjectCreator script
+                    objectCreator.Create(x, y);
+                }
+                else if (words[0] == "MOVE")
+                {
+                    // Extract the x and y coordinates
+                    float x = float.Parse(words[1]);
+                    float y = float.Parse(words[2]);
+                    // Call the Move method in the MoveObject script
+                    moveObject.Move(x, y);
+                }
+            }
+        });
     }
 }
