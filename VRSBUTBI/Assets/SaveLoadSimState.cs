@@ -25,8 +25,12 @@ public class SaveLoadSimState : MonoBehaviour
         FileBrowser.ShowSaveDialog(OnSaveSuccess, OnSaveCancel, FileBrowser.PickMode.Files, false, null, "new_file", "Save File", "Save");
     }
 
+    /// <summary>
+    /// Opens the load file dialog (only accepting .txt files).
+    /// </summary>
     public void OpenLoadDialog()
     {
+        FileBrowser.SetFilters( false, new FileBrowser.Filter( ".txt", ".txt") );
         FileBrowser.ShowLoadDialog(OnLoadSuccess, OnLoadCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
     }
 
