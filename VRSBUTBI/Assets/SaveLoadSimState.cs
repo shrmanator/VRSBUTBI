@@ -13,7 +13,7 @@ public class SaveLoadSimState : MonoBehaviour
 
     private void OnSaveSuccess(string[] filePaths)
     {
-        Debug.Log("Selected file: " + filePaths[0]);
+        Debug.Log("Selected file: " + filePaths[0] " saved!");
     }
 
     private void OnSaveCancel()
