@@ -7,6 +7,8 @@ using System.IO;
 using UnityEngine;
 using Dummiesman;
 using SimpleFileBrowser;
+using static FileBrowserHelper;
+
 
 // creates objects from provided data
 // object data expected to be a string array with the format {Object Type, Object Name, X Y Z}
@@ -14,79 +16,73 @@ namespace ObjectCreator {
 public sealed class ObjCreator : MonoBehaviour
 {
     Dictionary<string, GameObject> importLibrary = new Dictionary<string, GameObject>();
-    string error = string.Empty;
-    //file path for testing. Remove when dialogue prompt is implemented
-    public string filePath = string.Empty;
     OBJLoader objLoader = new OBJLoader();
-    private GameObject loadedObject;
+    private GameObject loadedObject = null;
+    private string[] objectData = new string[3];
+    private bool objectCreatedFlag = false;
 
     //creates objects from a list of objects
     public void CreateObjects(string [,] objectsList)
     {
+        StartCoroutine(CreateObjectsCoroutine(objectsList));
+    }
+
+    private IEnumerator CreateObjectsCoroutine(string [,] objectsList)
+    {
         for (int i = 0; i < objectsList.GetLength(0); i++)
         {
-            UnityEngine.Debug.Log("New object");
-            string[] objectData = new string[] {objectsList[i, 0], objectsList[i, 1], objectsList[i, 2]};
-            CreateObject(objectData);
+            loadedObject = null;
+            objectData[0] = objectsList[i, 0];
+            objectData[1] = objectsList[i, 1];
+            objectData[2] = objectsList[i, 2];
+            UnityEngine.Debug.Log("New object " + objectData[1]);
+            CreateObject();
+            yield return new WaitUntil(() => objectCreatedFlag);
         }
     }
 
     //creates a single object
-    public void CreateObject(string [] objectData)
+    private void CreateObject()
     {
-        UnityEngine.Debug.Log(objectData);
         if (HasObjectType(objectData[0]))
         {
-            CreateObjectFromLibrary(objectData);
+            CreateObjectFromLibrary();
         }
         else
         {
-            ShowSelectObjFileDialogue(objectData);
+            ShowSelectObjFileDialogue();
         }
     }
 
-    private void CreateObjectFromFile(string filePath, string[] objectData)
+    private void CreateObjectFromFile(string[] filePath)
     {
         UnityEngine.Debug.Log("Creating object from file");
-        loadedObject = objLoader.Load(filePath);
+        loadedObject = objLoader.Load(filePath[0]);
         if (!HasObjectType(objectData[0]))
         {
             importLibrary.Add(objectData[0], loadedObject.transform.GetChild(0).gameObject);
         }
-        SetObjectProperties(objectData);
+        SetObjectProperties();
     }
 
-    private void CreateObjectFromLibrary(string[] objectData)
+    private void CreateObjectFromLibrary()
     {
         UnityEngine.Debug.Log("Creating object from library");
-        loadedObject = Instantiate(importLibrary[objectData[0]]);
-        SetObjectProperties(objectData);
+        loadedObject = new GameObject();
+        GameObject model = Instantiate(importLibrary[objectData[0]]);
+        model.transform.parent = loadedObject.transform;
+        SetObjectProperties();
     }
 
-    private void ShowSelectObjFileDialogue(string[] objectData)
-    {
-        UnityEngine.Debug.Log("Showing dialogue");
-        FileBrowser.SetFilters(false, ".obj");
-        StartCoroutine(ShowSelectObjFileDialogueCoroutine(objectData));
-    }
-
-    IEnumerator ShowSelectObjFileDialogueCoroutine(string[] objectData)
-    {
-        UnityEngine.Debug.Log("Running coroutine");
-        string loadString = "Select model for " + objectData[0];
-        yield return FileBrowser.WaitForLoadDialog( FileBrowser.PickMode.Files, false, null, null, loadString, "Import" );
-        if (FileBrowser.Success)
-        {
-            CreateObjectFromFile(FileBrowser.Result[0], objectData);
-        }
-        else
-        {
-            CancelledImportHandler();
-        }
+    private void ShowSelectObjFileDialogue(){
+        FileBrowserHelper fileBrowser = gameObject.AddComponent<FileBrowserHelper>();
+        string title = "Select .obj file to import for " + objectData[0];
+        string[] filter = {".obj"};
+        fileBrowser.LoadSingleFile(CreateObjectFromFile, CancelledImportHandler, title, "Import", filter);
     }
 
     // sets object properties
-    private void SetObjectProperties(string[] objectData)
+    private void SetObjectProperties()
     {
         UnityEngine.Debug.Log("Setting object properties");
         //set name
@@ -95,12 +91,7 @@ public sealed class ObjCreator : MonoBehaviour
         string[] coords = objectData[2].Split(' ');
         loadedObject.transform.position = new Vector3(int.Parse(coords[0]), int.Parse(coords[1]), int.Parse(coords[2]));
         loadedObject.transform.GetChild(0).name = objectData[0];
-    }
-
-    //to delete once file select dialogue is implemented
-    public void SetString(string str)
-    {
-        filePath += str;
+        objectCreatedFlag = true;
     }
 
     //placeholder for error handler for cancelled file imports
