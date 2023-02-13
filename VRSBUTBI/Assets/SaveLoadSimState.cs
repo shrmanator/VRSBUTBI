@@ -22,12 +22,12 @@ public class SaveLoadSimState : MonoBehaviour
     /// </summary>
     public void OpenSaveDialog()
     {
-        FileBrowser.ShowSaveDialog(OnSaveSuccess, OnSaveCancel, FileBrowser.PickMode.Files, false, null, "new_file.txt", "Save File", "Save");
+        FileBrowser.ShowSaveDialog(OnSaveSuccess, OnSaveCancel, FileBrowser.PickMode.Files, false, null, "new_file", "Save File", "Save");
     }
 
     public void OpenLoadDialog()
     {
-        FileBrowser.ShowLoadDialog(OnSaveSuccess, OnSaveCancel, FileBrowser.PickMode.Files, false, null, "new_file.txt", "Save File", "Save");
+        FileBrowser.ShowLoadDialog(OnLoadSuccess, OnLoadCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
     }
 
     /// <summary>
@@ -45,5 +45,22 @@ public class SaveLoadSimState : MonoBehaviour
     private void OnSaveCancel()
     {
         Debug.Log("Save canceled.");
+    }
+
+    /// <summary>
+    /// Handles a successful load.
+    /// </summary>
+    /// <param name="filePaths">The paths of the saved files.</param>
+    private void OnLoadSuccess(string[] filePaths)
+    {
+        Debug.Log("Selected file: " + filePaths[0] + " loaded!");
+    }
+
+    /// <summary>
+    /// Handles a canceled load.
+    /// </summary>
+    private void OnLoadCancel()
+    {
+        Debug.Log("Load canceled.");
     }
 }
