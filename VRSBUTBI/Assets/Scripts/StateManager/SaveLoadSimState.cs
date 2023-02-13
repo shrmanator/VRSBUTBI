@@ -22,6 +22,7 @@ public class SaveLoadSimState : MonoBehaviour
     /// </summary>
     public void OpenSaveDialog()
     {
+        FileBrowser.SetFilters( false, new FileBrowser.Filter( ".obj", ".obj") );
         FileBrowser.ShowSaveDialog(OnSaveSuccess, OnSaveCancel, FileBrowser.PickMode.Files, false, null, "new_file", "Save File", "Save");
     }
 
