@@ -21,11 +21,11 @@ public class InGameButtons : MonoBehaviour
         /// <summary>
         /// Displays a button that, when clicked, will show the save dialog.
         /// </summary>
-        if (GUI.Button(new Rect(150, 105, 100, 30), "Save")) {simFileHandler.OpenSaveDialog();}
+        if (GUI.Button(new Rect(40, 10, 100, 30), "Save")) {simFileHandler.OpenSaveDialog();}
 
         /// <summary>
         /// Displays a button that, when clicked, will show the load dialog.
         /// </summary>
-        if (GUI.Button(new Rect(270, 105, 100, 30), "Load File")) {simFileHandler.OpenLoadDialog();}
+        if (GUI.Button(new Rect(150, 10, 100, 30), "Load File")) {simFileHandler.OpenLoadDialog();}
     }
 }
