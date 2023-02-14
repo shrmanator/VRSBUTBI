@@ -8,6 +8,10 @@ using SimpleFileBrowser;
 /// </summary>
 public class SaveLoadSimState : MonoBehaviour
 {
+
+    public delegate void OnFileLoaded(string filePath);
+    public static event OnFileLoaded FileLoaded;
+
     /// <summary>
     /// Opens the save file dialog.
     /// </summary>
@@ -50,8 +54,7 @@ public class SaveLoadSimState : MonoBehaviour
     private void OnLoadSuccess(string[] filePaths)
     {
         Debug.Log("Selected file: " + filePaths[0] + " loaded!");
-        string fileText = File.ReadAllText(filePaths[0]);
-        Debug.Log("Contents of the file: " + fileText);
+        FileLoaded?.Invoke(filePaths[0]);
     }
 
     /// <summary>
