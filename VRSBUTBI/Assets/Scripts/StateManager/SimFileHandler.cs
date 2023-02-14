@@ -6,7 +6,7 @@ using SimpleFileBrowser;
 /// <summary>
 /// Handles the saving and loading of simulation state.
 /// </summary>
-public class SaveLoadSimState : MonoBehaviour
+public class SimFileHandler : MonoBehaviour
 {
 
     public delegate void OnFileLoaded(string filePath);
