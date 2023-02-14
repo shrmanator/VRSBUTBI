@@ -1,22 +1,13 @@
 using UnityEngine;
+using System.IO;
 using SimpleFileBrowser;
+
 
 /// <summary>
 /// Handles the saving and loading of simulation state.
 /// </summary>
 public class SaveLoadSimState : MonoBehaviour
 {
-    /// <summary>
-    /// Delegate for handling a successful save.
-    /// </summary>
-    /// <param name="filePaths">The paths of the saved files.</param>
-    public delegate void OnSuccess(string[] filePaths);
-
-    /// <summary>
-    /// Delegate for handling a canceled save.
-    /// </summary>
-    public delegate void OnCancel();
-
     /// <summary>
     /// Opens the save file dialog.
     /// </summary>
@@ -59,6 +50,8 @@ public class SaveLoadSimState : MonoBehaviour
     private void OnLoadSuccess(string[] filePaths)
     {
         Debug.Log("Selected file: " + filePaths[0] + " loaded!");
+        string fileText = File.ReadAllText(filePaths[0]);
+        Debug.Log("Contents of the file: " + fileText);
     }
 
     /// <summary>
