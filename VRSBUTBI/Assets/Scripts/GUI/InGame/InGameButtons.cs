@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Controls the display of the save and load buttons
+/// Controls how the save and load buttons are displayed in the scene.
 /// </summary>
 public class InGameButtons : MonoBehaviour
 {
