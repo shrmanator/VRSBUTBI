@@ -10,6 +10,9 @@ public class InGameButtons : MonoBehaviour
 
     private SimFileHandler simFileHandler;
     
+    /// <summary>
+    /// Finds the "StateManager" object and gets the SimFileHandler component.
+    /// </summary>
     private void Start()
     {
         GameObject simFileHandlerObject = GameObject.Find("StateManager");
