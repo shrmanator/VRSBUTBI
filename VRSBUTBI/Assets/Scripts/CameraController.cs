@@ -24,14 +24,14 @@ public class CameraController : MonoBehaviour
     float mouseSensitivity = 800.0f;
     [SerializeField] 
     /// <summary>
-    /// Minimum limit of the zoom level.
+    /// Minimum limit of vertical movement.
     /// </summary>
-    float zoomMin = 2f;
+    float verticalMin = 2f;
     [SerializeField] 
     /// <summary>
-    /// Maximum limit of the zoom level.
+    /// Maximum limit of vertical movement.
     /// </summary>
-    float zoomMax = 10f;
+    float verticalMax = 100f;
     [SerializeField]
     /// <summary>
     /// Moves the camera forwards.
@@ -123,7 +123,7 @@ public class CameraController : MonoBehaviour
         //
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         cameraPosition.y -= scroll * zoomSpeed * 100f * Time.deltaTime;
-        cameraPosition.y = Mathf.Clamp(cameraPosition.y, zoomMin, zoomMax);
+        cameraPosition.y = Mathf.Clamp(cameraPosition.y, verticalMin, verticalMax);
 
         // ====== ROTATING THE CAMERA ======
         //
