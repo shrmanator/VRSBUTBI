@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Speed at which camera pans horizontally or vertically.
     /// </summary>
-    float panSpeed = 20f;
+    float panSpeed = 50f;
     [SerializeField] 
     /// <summary>
     /// Speed at which camera zooms in or out.
