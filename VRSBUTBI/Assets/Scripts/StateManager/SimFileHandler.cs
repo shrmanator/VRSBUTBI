@@ -8,7 +8,6 @@ using SimpleFileBrowser;
 /// </summary>
 public class SimFileHandler : MonoBehaviour
 {
-
     public delegate void OnFileLoaded(string filePath);
     public static event OnFileLoaded FileLoaded;
 
