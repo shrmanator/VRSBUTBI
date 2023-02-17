@@ -1,6 +1,12 @@
 using UnityEngine;
 using System.IO;
 
+
+/// <summary>
+/// This class is responsible for parsing an input file, organizing the data into a list of objects,
+/// and saving the data to a JSON file. It subscribes to the FileLoaded event of the SimFileHandler
+/// and raises the JsonFileCreated event when the JSON file is created.
+/// </summary>
 public class FileParser : MonoBehaviour
 {
     // Define a class or struct to hold the data from the input file
@@ -22,7 +28,8 @@ public class FileParser : MonoBehaviour
     }
 
     /// <summary>
-    /// This method is called when the SimFileHandler's FileLoaded event is raised. It parses the contents of the file, saves the data to a JSON file, and raises the JsonFileCreated event.
+    /// This method is called when the SimFileHandler's FileLoaded event is raised. It parses the
+    /// contents of the file, saves the data to a JSON file, and raises the JsonFileCreated event.
     /// </summary>
     /// <param name="filePath">The path of the file that was loaded by the SimFileHandler</param>
     private void ParseFile(string filePath)
