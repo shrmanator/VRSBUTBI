@@ -16,7 +16,7 @@ namespace ObjectCreator {
 public sealed class ObjCreator : MonoBehaviour
 {
     Dictionary<string, GameObject> importLibrary = new Dictionary<string, GameObject>();
-    OBJLoader objLoader = new OBJLoader();
+    //OBJLoader objLoader = new OBJLoader();
     private GameObject loadedObject = null;
     private string[] objectData = new string[3];
     private bool objectCreatedFlag = false;
@@ -44,6 +44,7 @@ public sealed class ObjCreator : MonoBehaviour
     //creates a single object
     private void CreateObject()
     {
+        objectCreatedFlag = false;
         if (HasObjectType(objectData[0]))
         {
             CreateObjectFromLibrary();
@@ -56,8 +57,8 @@ public sealed class ObjCreator : MonoBehaviour
 
     private void CreateObjectFromFile(string[] filePath)
     {
-        UnityEngine.Debug.Log("Creating object from file");
-        loadedObject = objLoader.Load(filePath[0]);
+        UnityEngine.Debug.Log(filePath[0]);
+        loadedObject = new OBJLoader().Load(filePath[0]);
         if (!HasObjectType(objectData[0]))
         {
             importLibrary.Add(objectData[0], loadedObject.transform.GetChild(0).gameObject);
