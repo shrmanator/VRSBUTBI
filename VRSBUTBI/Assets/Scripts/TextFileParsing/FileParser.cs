@@ -4,8 +4,10 @@ using System.IO;
 
 /// <summary>
 /// This class is responsible for parsing an input file, organizing the data into a list of objects,
-/// and saving the data to a JSON file. It subscribes to the FileLoaded event of the SimFileHandler
-/// and raises the JsonFileCreated event when the JSON file is created.
+/// and saving the data to a JSON file. 
+/// 
+/// It subscribes to the FileLoaded event of the SimFileHandler (see SimFileHandler.cs) and raises the
+///  JsonFileCreated event (see the start method) when the JSON file is created.
 /// </summary>
 public class FileParser : MonoBehaviour
 {
