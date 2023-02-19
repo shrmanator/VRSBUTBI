@@ -2,8 +2,19 @@ using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
 
+
+/// <summary>
+/// This class is responsible for parsing an input txt file and organizing that text into a list of commands.
+/// 
+/// It subscribes to the FileLoaded event of the SimFileHandler (see SimFileHandler.cs) and raises the
+/// CommandReceivedEventHandler once a new txt file is loaded.
+/// </summary>
 public class FileParser : MonoBehaviour
 {
+    // Define the CommandReceived event
+    public delegate void CommandReceivedEventHandler(List<object[]> commands);
+    public static event CommandReceivedEventHandler CommandReceived;
+
     private void Start()
     {
         // Subscribe to the FileLoaded event of the SimFileHandler
@@ -43,12 +54,7 @@ public class FileParser : MonoBehaviour
                     break;
             }
         }
-
         // Raise the CommandReceived event and pass the list of commands
         CommandReceived?.Invoke(commands);
     }
-
-    // Define the CommandReceived event
-    public delegate void CommandReceivedEventHandler(List<object[]> commands);
-    public static event CommandReceivedEventHandler CommandReceived;
 }
