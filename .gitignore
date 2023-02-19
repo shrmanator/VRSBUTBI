@@ -111,7 +111,7 @@ Backups/
 # Build artifacts
 [Bb]uild[Aa]rtifacts/
 # Asset metadata
-*.meta
+# *.meta
 # Mobile saves
 *.csav
 # Plugin settings
