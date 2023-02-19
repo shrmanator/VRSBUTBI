@@ -11,8 +11,15 @@ using System.Collections.Generic;
 /// </summary>
 public class FileParser : MonoBehaviour
 {
-    // Define the CommandReceived event
+    /// <summary>
+    /// Delegate for handling the CommandReceived event, which is raised when a list of commands is received.
+    /// </summary>
+    /// <param name="commands">The list of commands received.</param>
     public delegate void CommandReceivedEventHandler(List<object[]> commands);
+
+    /// <summary>
+    /// Event that is raised when a list of commands is received.
+    /// </summary>
     public static event CommandReceivedEventHandler CommandReceived;
 
     private void Start()
