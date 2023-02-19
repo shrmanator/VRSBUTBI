@@ -12,14 +12,25 @@ using static FileBrowserHelper;
 
 // creates objects from provided data
 // object data expected to be a string array with the format {Object Type, Object Name, X Y Z}
-namespace ObjectCreator {
-public sealed class ObjCreator : MonoBehaviour
+public sealed class ObjectCreator : MonoBehaviour
 {
-    Dictionary<string, GameObject> importLibrary = new Dictionary<string, GameObject>();
-    //OBJLoader objLoader = new OBJLoader();
-    private GameObject loadedObject = null;
-    private string[] objectData = new string[3];
-    private bool objectCreatedFlag = false;
+    public static ObjectCreator creator {get; private set;}
+    private static Dictionary<string, GameObject> importLibrary = new Dictionary<string, GameObject>();
+    private GameObject _loadedObject = null;
+    private string[] _objectData = new string[3];
+    private bool _isCreatingObject = false;
+
+
+    private void Awake()
+    {
+        if (creator != null && creator != this)
+        {
+            Destroy(this);
+        }
+        else{
+            creator = this;
+        }
+    }
 
     //creates objects from a list of objects
     public void CreateObjects(string [,] objectsList)
@@ -27,25 +38,37 @@ public sealed class ObjCreator : MonoBehaviour
         StartCoroutine(CreateObjectsCoroutine(objectsList));
     }
 
+    public void CreateObject(string [] objectData)
+    {
+        StartCoroutine(CreateObjectCoroutine(objectData));
+    }
+
     private IEnumerator CreateObjectsCoroutine(string [,] objectsList)
     {
         for (int i = 0; i < objectsList.GetLength(0); i++)
         {
-            loadedObject = null;
-            objectData[0] = objectsList[i, 0];
-            objectData[1] = objectsList[i, 1];
-            objectData[2] = objectsList[i, 2];
-            UnityEngine.Debug.Log("New object " + objectData[1]);
-            CreateObject();
-            yield return new WaitUntil(() => objectCreatedFlag);
+            _loadedObject = null;
+            _objectData[0] = objectsList[i, 0];
+            _objectData[1] = objectsList[i, 1];
+            _objectData[2] = objectsList[i, 2];
+            UnityEngine.Debug.Log("New object " + _objectData[1]);
+            SelectCreateMethod();
+            yield return new WaitUntil(() => _isCreatingObject == false);
         }
     }
 
-    //creates a single object
-    private void CreateObject()
+    private IEnumerator CreateObjectCoroutine(string [] objectData)
     {
-        objectCreatedFlag = false;
-        if (HasObjectType(objectData[0]))
+        _loadedObject = null;
+        SelectCreateMethod();
+        yield return new WaitUntil(() => _isCreatingObject);
+    }
+
+    //creates a single object
+    private void SelectCreateMethod()
+    {
+        _isCreatingObject = true;
+        if (HasObjectType(_objectData[0]))
         {
             CreateObjectFromLibrary();
         }
@@ -58,10 +81,10 @@ public sealed class ObjCreator : MonoBehaviour
     private void CreateObjectFromFile(string[] filePath)
     {
         UnityEngine.Debug.Log(filePath[0]);
-        loadedObject = new OBJLoader().Load(filePath[0]);
-        if (!HasObjectType(objectData[0]))
+        _loadedObject = new OBJLoader().Load(filePath[0]);
+        if (!HasObjectType(_objectData[0]))
         {
-            importLibrary.Add(objectData[0], loadedObject.transform.GetChild(0).gameObject);
+            importLibrary.Add(_objectData[0], _loadedObject.transform.GetChild(0).gameObject);
         }
         SetObjectProperties();
     }
@@ -69,15 +92,15 @@ public sealed class ObjCreator : MonoBehaviour
     private void CreateObjectFromLibrary()
     {
         UnityEngine.Debug.Log("Creating object from library");
-        loadedObject = new GameObject();
-        GameObject model = Instantiate(importLibrary[objectData[0]]);
-        model.transform.parent = loadedObject.transform;
+        _loadedObject = new GameObject();
+        GameObject model = Instantiate(importLibrary[_objectData[0]]);
+        model.transform.parent = _loadedObject.transform;
         SetObjectProperties();
     }
 
     private void ShowSelectObjFileDialogue(){
         FileBrowserHelper fileBrowser = gameObject.AddComponent<FileBrowserHelper>();
-        string title = "Select .obj file to import for " + objectData[0];
+        string title = "Select .obj file to import for " + _objectData[0];
         string[] filter = {".obj"};
         fileBrowser.LoadSingleFile(CreateObjectFromFile, CancelledImportHandler, title, "Import", filter);
     }
@@ -87,12 +110,12 @@ public sealed class ObjCreator : MonoBehaviour
     {
         UnityEngine.Debug.Log("Setting object properties");
         //set name
-        loadedObject.name = objectData[1];
+        _loadedObject.name = _objectData[1];
         //set position
-        string[] coords = objectData[2].Split(' ');
-        loadedObject.transform.position = new Vector3(int.Parse(coords[0]), int.Parse(coords[1]), int.Parse(coords[2]));
-        loadedObject.transform.GetChild(0).name = objectData[0];
-        objectCreatedFlag = true;
+        string[] coords = _objectData[2].Split(' ');
+        _loadedObject.transform.position = new Vector3(int.Parse(coords[0]), int.Parse(coords[1]), int.Parse(coords[2]));
+        _loadedObject.transform.GetChild(0).name = _objectData[0];
+        _isCreatingObject = false;
     }
 
     //placeholder for error handler for cancelled file imports
@@ -106,5 +129,4 @@ public sealed class ObjCreator : MonoBehaviour
         UnityEngine.Debug.Log(importLibrary.ContainsKey(objectType));
         return importLibrary.ContainsKey(objectType);
     }
-}
 }

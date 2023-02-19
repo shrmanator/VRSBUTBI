@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using ObjectCreator;
+using static ObjectCreator;
 
 public class ObjectCreatorTester : MonoBehaviour
 { 
@@ -11,8 +11,7 @@ public class ObjectCreatorTester : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ObjCreator creator = gameObject.AddComponent<ObjCreator>();
-        creator.CreateObjects(objects);
+        ObjectCreator.creator.CreateObjects(objects);
     }
 
     // Update is called once per frame
