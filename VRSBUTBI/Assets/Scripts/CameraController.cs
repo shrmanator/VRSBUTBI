@@ -112,12 +112,12 @@ public class CameraController : MonoBehaviour
         if (Input.GetKey(verticalUpCameraKey))
         {
             // move up in respect to y (increase y)
-            cameraPosition += transform.up * panSpeed * Time.deltaTime;
+            cameraPosition += Vector3.up * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(verticalDownCameraKey))
         {
             // move down in respect to y (decrease y)
-            cameraPosition -= transform.up * panSpeed * Time.deltaTime;
+            cameraPosition -= Vector3.up * panSpeed * Time.deltaTime;
         }
 
         // ====== ZOOMING IN AND OUT ======
