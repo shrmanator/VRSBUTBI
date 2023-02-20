@@ -1,8 +1,10 @@
+/// Property of VRSBUTBI.
+
 using System;
 using UnityEngine;
 
 /// <summary>
-/// Controls the sun and sky components of the scene.
+/// Controls the sun and its properties in the scene.
 /// </summary>
 public class SunController : MonoBehaviour
 {
@@ -16,19 +18,29 @@ public class SunController : MonoBehaviour
     private Vector3 sunOffset;
 
     /// <summary>
-    /// Initialize the sun and sky components.
+    /// Initialize the sun's position and components.
     /// </summary>
-    void Start()
+    private void Start()
     {
-        /// Create a new game object for the sun, adds a light component, and sets its properties.
-        GameObject sunObject = new GameObject("Sun");
-        Light lightComponent = sunObject.AddComponent<Light>();
+        GameObject sunObject = new GameObject("Sun");  /// Create a new game object for the sun
+        Light lightComponent = sunObject.AddComponent<Light>();  /// Add a Light component to the sun
+
+        /// Set the sun's properties
         lightComponent.type = LightType.Directional;
         lightComponent.color = color;
         lightComponent.intensity = intensity;
         sunObject.transform.rotation = Quaternion.Euler(50.0f, 30.0f, 0.0f);
-        
-        /// Calculate the position of the sun based on the time of day and sets its position and orientation.
+
+        /// Set the sun's initial position in the sky
+        SetSunInitialPosition();
+    }
+    
+    /// <summary>
+    /// Calculate the initial position of the sun based on the time of day
+    /// and set its position and orientation.
+    /// </summary>
+    private void SetSunInitialPosition()
+    {
         DateTime now = DateTime.Now;
         float hourAngle = (float)(now.Hour * 15 - 90) * Mathf.Deg2Rad;
         float declination = (float)(23.45 * Mathf.Sin(Mathf.Deg2Rad * (360f * (284f + now.DayOfYear) / 365f)));
@@ -39,11 +51,11 @@ public class SunController : MonoBehaviour
         sunTransform.position = transform.position + sunOffset;
         sunTransform.LookAt(transform);
     }
-    
+
     /// <summary>
     /// Rotate the sun around the center of the scene.
     /// </summary>
-    void Update()
+    private void Update()
     {
         sunOffset = Quaternion.AngleAxis(orbitSpeed * Time.deltaTime, Vector3.up) * sunOffset;
         sunTransform.position = transform.position + sunOffset;

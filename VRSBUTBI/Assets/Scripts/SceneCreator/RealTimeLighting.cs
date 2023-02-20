@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class RealTimeLighting : MonoBehaviour
 {
+    /// <summary>
+    /// Creates a new directional light and sets its position and type
+    /// </summary>
     void Start()
     {
         // Make a game object for the light
@@ -18,6 +21,9 @@ public class RealTimeLighting : MonoBehaviour
         lightComp.type = LightType.Directional;
     }
 
+    /// <summary>
+    /// Updates the color and intensity of the main light based on the current time of day
+    /// </summary>
     void Update()
     {
         GameObject mainLight = GameObject.Find("MainLight");

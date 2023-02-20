@@ -1,10 +1,12 @@
+/// Property of VRSBUTBI.
+
 using UnityEngine;
 using System.IO;
 using SimpleFileBrowser;
 
 
 /// <summary>
-/// Handles the saving and loading of simulation state.
+/// Handles the saving and loading of the simulation's state.
 /// </summary>
 public class SimFileHandler : MonoBehaviour
 {
