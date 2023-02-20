@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074005, b: 0.35872722, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -226,7 +226,7 @@ MonoBehaviour:
       - 0
       globalNormalsAngle: 69
       flipNormals: 0
-    vertexPathUpToDate: 0
+    vertexPathUpToDate: 1
     vertexPathMaxAngleError: 0.3
     vertexPathMinVertexSpacing: 0
     showTransformTool: 1
@@ -273,6 +273,7 @@ GameObject:
   - component: {fileID: 534479545}
   - component: {fileID: 534479547}
   - component: {fileID: 534479546}
+  - component: {fileID: 534479548}
   m_Layer: 0
   m_Name: SceneCreator
   m_TagString: Untagged
@@ -319,6 +320,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58d434a5ade1bbb4bab6adc9cd4d7e1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &534479548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 534479543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b46bbb5c45e1c3a499d0f926397a9d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sunTransform: {fileID: 0}
+  orbitRadius: 50
+  orbitSpeed: 1
+  inclination: 45
+  intensity: 1
+  color: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &917195162
 GameObject:
   m_ObjectHideFlags: 0
