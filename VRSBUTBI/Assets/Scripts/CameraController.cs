@@ -1,8 +1,9 @@
+/// Property of VRSBUTBI. 
+
 using UnityEngine;
 
 
 /// <summary>
-/// Property of VRSBUTBI. 
 /// This script implements the keyboard camera controls.
 /// </summary>
 public class CameraController : MonoBehaviour

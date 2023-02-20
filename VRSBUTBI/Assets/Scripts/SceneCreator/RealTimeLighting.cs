@@ -1,9 +1,10 @@
+/// Property of VRSBUTBI.
+
 using System;
 using UnityEngine;
 
 public class RealTimeLighting : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         // Make a game object for the light
@@ -17,7 +18,6 @@ public class RealTimeLighting : MonoBehaviour
         lightComp.type = LightType.Directional;
     }
 
-    // Update is called once per frame
     void Update()
     {
         GameObject mainLight = GameObject.Find("MainLight");
