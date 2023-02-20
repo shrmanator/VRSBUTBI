@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b46bbb5c45e1c3a499d0f926397a9d5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sunTransform: {fileID: 0}
+  sunTransform: {fileID: 534479545}
   orbitRadius: 50
   orbitSpeed: 1
   inclination: 45
