@@ -547,7 +547,7 @@ MonoBehaviour:
   rightCameraStrafeKey: 100
   verticalUpCameraKey: 101
   verticalDownCameraKey: 102
-  invertCameraRotation: 1
+  invertCameraRotation: 0
 --- !u!1 &1829985365
 GameObject:
   m_ObjectHideFlags: 0
