@@ -42,23 +42,25 @@ public class FileParser : MonoBehaviour
         // Parse each line into a command and add it to the list
         foreach (string line in lines)
         {
-            if (string.IsNullOrEmpty(line)) continue; // Skip empty lines
+            if (!string.IsNullOrEmpty(line)) {
 
-            // Split the line into its components
-            string[] components = line.Split(',');
+                // Split the line into its components
+                string[] components = line.Split(',');
 
-            // Parse the components and add them to the list of commands
-            switch (components[0])
-            {
-                case "CREATE":
-                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
-                    break;
-                case "SETOBJCELL":
-                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
-                    break;
-                default:
-                    Debug.LogWarning("Unrecognized command: " + components[0]);
-                    break;
+                // Parse the components and add them to the list of commands
+                switch (components[0])
+                {
+                    case "CREATE":
+                        commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
+                        break;
+                    case "SETOBJCELL":
+                        commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
+                        break;
+                    default:
+                        
+                        Debug.LogWarning("Unrecognized command: " + components[0]);
+                        break;
+                }
             }
         }
         // Raise the CommandReceived event and pass the list of commands
