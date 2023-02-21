@@ -44,8 +44,8 @@ public class FileParser : MonoBehaviour
         {
             if (!string.IsNullOrEmpty(line)) {
 
-                // Split the line into its components
-                string[] components = line.Split(',');
+                // Split the line into separate commands
+                string[] components = line.Split(' ');
 
                 // Parse the components and add them to the list of commands
                 switch (components[0])
@@ -57,12 +57,15 @@ public class FileParser : MonoBehaviour
                         commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
                         break;
                     default:
-                        
+
                         Debug.LogWarning("Unrecognized command: " + components[0]);
                         break;
                 }
             }
         }
+        foreach (object[] command in commands)
+            foreach (object item in command)
+                print(item);
         // Raise the CommandReceived event and pass the list of commands
         CommandReceived?.Invoke(commands);
     }
