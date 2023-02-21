@@ -1,48 +1,58 @@
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 using Dummiesman;
-using SimpleFileBrowser;
-using static FileBrowserHelper;
 
-
-// creates objects from provided data
-// object data expected to be a string array with the format {Object Type, Object Name, X Y Z}
+/// <summary>
+/// creates objects from provided data
+/// object data expected to be a string array with the format {Object Type, Object Name, X Y Z}
+/// <summary>
 public sealed class ObjectCreator : MonoBehaviour
 {
-    public static ObjectCreator creator {get; private set;}
-    private static Dictionary<string, GameObject> importLibrary = new Dictionary<string, GameObject>();
+    public static ObjectCreator Creator {get; private set;}
+    private static Dictionary<string, GameObject> _importLibrary = new Dictionary<string, GameObject>();
     private GameObject _loadedObject = null;
     private string[] _objectData = new string[3];
     private bool _isCreatingObject = false;
 
-
-    private void Awake()
+    /// <summary>
+    /// Ensures that there is only one instance of ObjectCreator
+    /// </summary>
+    void Awake()
     {
-        if (creator != null && creator != this)
+        if (Creator != null && Creator != this)
         {
             Destroy(this);
         }
         else{
-            creator = this;
+            Creator = this;
         }
     }
 
-    //creates objects from a list of objects
+    /// <summary>
+    /// Creates objects from a list.
+    /// </summary>
+    /// <param name="objectsList">The list of objects to create</param>
     public void CreateObjects(string [,] objectsList)
     {
         StartCoroutine(CreateObjectsCoroutine(objectsList));
     }
 
+    /// <summary>
+    /// Creates objects from a list.
+    /// </summary>
+    /// <param name="objectData">The data of the object to create</param>
     public void CreateObject(string [] objectData)
     {
         StartCoroutine(CreateObjectCoroutine(objectData));
     }
 
+    /// <summary>
+    /// Coroutine for creating objects from a list
+    /// Note: has some code duplication with CreateObjectCoroutine. This is because the for loop must be in the coroutine to work.
+    /// The coroutine ensures that the object creation process happens in the correct order.
+    /// </summary>
+    /// <param name="objectsList">The data of the object to create</param>
     private IEnumerator CreateObjectsCoroutine(string [,] objectsList)
     {
         for (int i = 0; i < objectsList.GetLength(0); i++)
@@ -51,24 +61,36 @@ public sealed class ObjectCreator : MonoBehaviour
             _objectData[0] = objectsList[i, 0];
             _objectData[1] = objectsList[i, 1];
             _objectData[2] = objectsList[i, 2];
-            UnityEngine.Debug.Log("New object " + _objectData[1]);
+            _isCreatingObject = true;
             SelectCreateMethod();
             yield return new WaitUntil(() => _isCreatingObject == false);
         }
     }
 
+    /// <summary>
+    /// Coroutine for creating a single object
+    /// Note: has some code duplication with CreateObjectCoroutine. This is because the for loop must be in the coroutine to work.
+    /// CreateObject has a coroutine to prevent issues with multiple calls to CreateObject
+    /// </summary>
+    /// <param name="objectsList">The data of the object to create</param>
     private IEnumerator CreateObjectCoroutine(string [] objectData)
     {
         _loadedObject = null;
+        _objectData[0] = objectData[0];
+        _objectData[1] = objectData[1];
+        _objectData[2] = objectData[2];
+        _isCreatingObject = true;
         SelectCreateMethod();
-        yield return new WaitUntil(() => _isCreatingObject);
+        yield return new WaitUntil(() => _isCreatingObject == false);
     }
 
-    //creates a single object
+    /// <summary>
+    /// Determines whether the object is created from a pre-existing import or imported from file.
+    /// To-Do: add check for assets imported before runtime
+    /// </summary>
     private void SelectCreateMethod()
     {
-        _isCreatingObject = true;
-        if (HasObjectType(_objectData[0]))
+        if (IsInImportLibrary(_objectData[0]))
         {
             CreateObjectFromLibrary();
         }
@@ -78,26 +100,29 @@ public sealed class ObjectCreator : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates objects from a list.
+    /// </summary>
+    /// <param name="filePath">The path of the file to load</param>
     private void CreateObjectFromFile(string[] filePath)
     {
-        UnityEngine.Debug.Log(filePath[0]);
         _loadedObject = new OBJLoader().Load(filePath[0]);
-        if (!HasObjectType(_objectData[0]))
-        {
-            importLibrary.Add(_objectData[0], _loadedObject.transform.GetChild(0).gameObject);
-        }
+        _importLibrary.Add(_objectData[0], _loadedObject);
         SetObjectProperties();
     }
 
+    /// <summary>
+    /// Copies the object from _importLibrary
+    /// </summary>
     private void CreateObjectFromLibrary()
     {
-        UnityEngine.Debug.Log("Creating object from library");
-        _loadedObject = new GameObject();
-        GameObject model = Instantiate(importLibrary[_objectData[0]]);
-        model.transform.parent = _loadedObject.transform;
+        _loadedObject = Instantiate(_importLibrary[_objectData[0]]);
         SetObjectProperties();
     }
 
+    /// <summary>
+    /// Creates the appropriate file select prompt
+    /// </summary>
     private void ShowSelectObjFileDialogue(){
         FileBrowserHelper fileBrowser = gameObject.AddComponent<FileBrowserHelper>();
         string title = "Select .obj file to import for " + _objectData[0];
@@ -105,7 +130,9 @@ public sealed class ObjectCreator : MonoBehaviour
         fileBrowser.LoadSingleFile(CreateObjectFromFile, CancelledImportHandler, title, "Import", filter);
     }
 
-    // sets object properties
+    /// <summary>
+    /// Sets object properties
+    /// </summary>
     private void SetObjectProperties()
     {
         UnityEngine.Debug.Log("Setting object properties");
@@ -118,15 +145,21 @@ public sealed class ObjectCreator : MonoBehaviour
         _isCreatingObject = false;
     }
 
-    //placeholder for error handler for cancelled file imports
+    /// <summary>
+    /// Placeholder for cancelled import
+    /// To-Do: reprompt user once and continue if cancelled again
+    /// </summary>
     private void CancelledImportHandler()
     {
         UnityEngine.Debug.Log("Import cancelled");
     }
 
-    private bool HasObjectType(string objectType)
+    /// <summary>
+    /// Checks if the object type matches an object in _importLibrary
+    /// <param name="objectType">The object type to look up</param>
+    /// </summary>
+    private bool IsInImportLibrary(string objectType)
     {
-        UnityEngine.Debug.Log(importLibrary.ContainsKey(objectType));
-        return importLibrary.ContainsKey(objectType);
+        return _importLibrary.ContainsKey(objectType);
     }
 }

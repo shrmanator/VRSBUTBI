@@ -11,7 +11,7 @@ public class ObjectCreatorTester : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ObjectCreator.creator.CreateObjects(objects);
+        ObjectCreator.Creator.CreateObjects(objects);
     }
 
     // Update is called once per frame
