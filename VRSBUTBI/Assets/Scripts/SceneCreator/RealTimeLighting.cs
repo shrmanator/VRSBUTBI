@@ -2,6 +2,7 @@
 
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class RealTimeLighting : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class RealTimeLighting : MonoBehaviour
         mainLight.transform.position = new Vector3(0, 1000, 0);
         // Set the light type to directional
         lightComp.type = LightType.Directional;
+
+        FileParser.CommandReceived += printCommandsToConsole;
+    }
+
+    void printCommandsToConsole(List<object[]> commands) {
+        print(commands[0][0]);
     }
 
     /// <summary>

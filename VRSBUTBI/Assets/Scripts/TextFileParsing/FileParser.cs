@@ -57,15 +57,11 @@ public class FileParser : MonoBehaviour
                         commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
                         break;
                     default:
-
                         Debug.LogWarning("Unrecognized command: " + components[0]);
                         break;
                 }
             }
         }
-        foreach (object[] command in commands)
-            foreach (object item in command)
-                print(item);
         // Raise the CommandReceived event and pass the list of commands
         CommandReceived?.Invoke(commands);
     }
