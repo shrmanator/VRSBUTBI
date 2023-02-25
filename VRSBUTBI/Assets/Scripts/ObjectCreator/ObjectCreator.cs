@@ -14,6 +14,7 @@ public sealed class ObjectCreator : MonoBehaviour
     private GameObject _loadedObject = null;
     private string[] _objectData = new string[3];
     private bool _isCreatingObject = false;
+    private bool _isSecondPrompt = false;
 
     /// <summary>
     /// Ensures that there is only one instance of ObjectCreator
@@ -49,7 +50,7 @@ public sealed class ObjectCreator : MonoBehaviour
 
     /// <summary>
     /// Coroutine for creating objects from a list
-    /// Note: has some code duplication with CreateObjectCoroutine. This is because the for loop must be in the coroutine to work.
+    /// Note: has some code duplication with CreateObjectCoroutine. This is because the for loop must be inside the coroutine to work.
     /// The coroutine ensures that the object creation process happens in the correct order.
     /// </summary>
     /// <param name="objectsList">The data of the object to create</param>
@@ -90,9 +91,16 @@ public sealed class ObjectCreator : MonoBehaviour
     /// </summary>
     private void SelectCreateMethod()
     {
+        UnityEngine.Debug.Log("Creating " + _objectData[0] + " " + _objectData[1] + " at " + _objectData[2]);
         if (IsInImportLibrary(_objectData[0]))
         {
             CreateObjectFromLibrary();
+        }
+        // Resources has no "check if file exists function" so we try to import 
+        // and if it returns null, no file exists
+        else if (ImportFromResources())
+        {
+            SetObjectProperties();
         }
         else
         {
@@ -161,5 +169,21 @@ public sealed class ObjectCreator : MonoBehaviour
     private bool IsInImportLibrary(string objectType)
     {
         return _importLibrary.ContainsKey(objectType);
+    }
+
+    /// <summary>
+    /// Imports asset from Resources folder or returns false if not found
+    /// File must be in 'Assets/Resources' and the file name must match the object type
+    /// </summary>
+    private bool ImportFromResources()
+    {
+        var loadedObjectPrefab = Resources.Load(_objectData[0]) as GameObject;
+        // Instantiates object if a file was found
+        if (loadedObjectPrefab != null)
+        {
+            _loadedObject = GameObject.Instantiate(loadedObjectPrefab);
+            return true;
+        }
+        return false;
     }
 }
