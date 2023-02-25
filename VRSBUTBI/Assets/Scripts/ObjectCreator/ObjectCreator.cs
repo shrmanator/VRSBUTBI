@@ -14,7 +14,7 @@ public sealed class ObjectCreator : MonoBehaviour
     private GameObject _loadedObject = null;
     private string[] _objectData = new string[3];
     private bool _isCreatingObject = false;
-    private bool _isSecondPrompt = false;
+    private bool _isRetry = false;
 
     /// <summary>
     /// Ensures that there is only one instance of ObjectCreator
@@ -63,6 +63,7 @@ public sealed class ObjectCreator : MonoBehaviour
             _objectData[1] = objectsList[i, 1];
             _objectData[2] = objectsList[i, 2];
             _isCreatingObject = true;
+            _isRetry = false;
             SelectCreateMethod();
             yield return new WaitUntil(() => _isCreatingObject == false);
         }
@@ -81,6 +82,7 @@ public sealed class ObjectCreator : MonoBehaviour
         _objectData[1] = objectData[1];
         _objectData[2] = objectData[2];
         _isCreatingObject = true;
+        _isRetry = false;
         SelectCreateMethod();
         yield return new WaitUntil(() => _isCreatingObject == false);
     }
@@ -115,7 +117,7 @@ public sealed class ObjectCreator : MonoBehaviour
     private void CreateObjectFromFile(string[] filePath)
     {
         _loadedObject = new OBJLoader().Load(filePath[0]);
-        _importLibrary.Add(_objectData[0], _loadedObject);
+        AddObjectToImportLibrary();
         SetObjectProperties();
     }
 
@@ -124,8 +126,19 @@ public sealed class ObjectCreator : MonoBehaviour
     /// </summary>
     private void CreateObjectFromLibrary()
     {
-        _loadedObject = Instantiate(_importLibrary[_objectData[0]]);
-        SetObjectProperties();
+        if (IsInImportLibrary(_objectData[0]))
+        {
+            _loadedObject = Instantiate(_importLibrary[_objectData[0]]);
+            SetObjectProperties();
+        }
+    }
+
+    private void AddObjectToImportLibrary()
+    {
+        if (!IsInImportLibrary(_objectData[0]))
+        {
+            _importLibrary.Add(_objectData[0], _loadedObject);
+        }
     }
 
     /// <summary>
@@ -135,7 +148,7 @@ public sealed class ObjectCreator : MonoBehaviour
         FileBrowserHelper fileBrowser = gameObject.AddComponent<FileBrowserHelper>();
         string title = "Select .obj file to import for " + _objectData[0];
         string[] filter = {".obj"};
-        fileBrowser.LoadSingleFile(CreateObjectFromFile, CancelledImportHandler, title, "Import", filter);
+        fileBrowser.LoadSingleFile(CreateObjectFromFile, CanceledImportHandler, title, "Import", filter);
     }
 
     /// <summary>
@@ -154,12 +167,20 @@ public sealed class ObjectCreator : MonoBehaviour
     }
 
     /// <summary>
-    /// Placeholder for cancelled import
-    /// To-Do: reprompt user once and continue if cancelled again
+    /// Attempts to create object again or stop object creation if this is the second attempt
     /// </summary>
-    private void CancelledImportHandler()
+    private void CanceledImportHandler()
     {
-        UnityEngine.Debug.Log("Import cancelled");
+        if(_isRetry)
+        {
+            _isCreatingObject = false;
+            UnityEngine.Debug.Log(
+                "Canceled import on " + _objectData[0] + " " + _objectData[1]);
+        }
+        else{
+            _isRetry = true;
+            SelectCreateMethod();
+        }
     }
 
     /// <summary>
@@ -182,6 +203,7 @@ public sealed class ObjectCreator : MonoBehaviour
         if (loadedObjectPrefab != null)
         {
             _loadedObject = GameObject.Instantiate(loadedObjectPrefab);
+            AddObjectToImportLibrary();
             return true;
         }
         return false;
