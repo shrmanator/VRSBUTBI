@@ -42,28 +42,34 @@ public class FileParser : MonoBehaviour
         // Parse each line into a command and add it to the list
         foreach (string line in lines)
         {
-            if (string.IsNullOrEmpty(line)) continue; // Skip empty lines
-
-            // Split the line into its components
-            string[] components = line.Split(',');
-
-            // Parse the components and add them to the list of commands
-            switch (components[0])
+            if (!string.IsNullOrEmpty(line)) // Skip empty lines
             {
-                case "CREATE":
-                    //Check for valid input (OBJ, OBJ1, x, y, z)
-                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]), int.Parse(components[5]) });
-                    break;
-                case "SETOBJCELL":
-                    //Check for valid input (Core, width lenght, value, unit)
-                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), components[4] });
-                    break;
-                case "MOVE":
-                    break;
-                default:
-                    Debug.LogWarning("Unrecognized command: " + components[0]);
-                    break;
+                // Split the line into its components
+                string[] components = line.Split(' ');
+
+                // Parse the components and add them to the list of commands
+                switch (components[0])
+                {
+                    case "CREATE":
+                        //Check for valid input (OBJ, OBJ1, x, y, z)
+                        commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]), int.Parse(components[5]) });
+                        break;
+                    case "SETOBJCELL":
+                        //Check for valid input (Core, width lenght, value, unit)
+                        commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), components[4] });
+                        break;
+                    case "MOVE":
+                        break;
+                    default:
+                        Debug.LogWarning("Unrecognized command: " + components[0]);
+                        break;
+                }
             }
+        }
+        foreach (object[] command in commands)
+        {
+            foreach (object item in command)
+                print(item);
         }
         // Raise the CommandReceived event and pass the list of commands
         CommandReceived?.Invoke(commands);
