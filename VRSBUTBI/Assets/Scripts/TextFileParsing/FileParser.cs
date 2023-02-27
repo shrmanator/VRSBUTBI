@@ -52,7 +52,7 @@ public class FileParser : MonoBehaviour
             {
                 case "CREATE":
                     //Check for valid input (OBJ, OBJ1, x, y, z)
-                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]), int.Parse(components[5] });
+                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]), int.Parse(components[5]) });
                     break;
                 case "SETOBJCELL":
                     //Check for valid input (Core, width lenght, value, unit)
