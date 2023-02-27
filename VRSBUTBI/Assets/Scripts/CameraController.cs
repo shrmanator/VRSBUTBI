@@ -79,7 +79,6 @@ public class CameraController : MonoBehaviour
     /// </summary>
     float currentYRotation;
 
-
     void Update()
     {
         Vector3 cameraPosition = transform.position;
@@ -88,23 +87,27 @@ public class CameraController : MonoBehaviour
         //
         if (Input.GetKey(fwdCameraKey))
         {
-            // move forward in respect to x (increase x)
-            cameraPosition += transform.forward * panSpeed * Time.deltaTime;
+            // move forward in respect to x and z (increase x and z)
+            Vector3 forward = new Vector3(transform.forward.x, 0, transform.forward.z);
+            cameraPosition += forward * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(backwardCameraKey))
         {
-            // move backward in respect to x (decrease x)
-            cameraPosition -= transform.forward * panSpeed * Time.deltaTime;
+            // move backward in respect to x and z (decrease x and z)
+            Vector3 backward = new Vector3(-transform.forward.x, 0, -transform.forward.z);
+            cameraPosition += backward * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(rightCameraStrafeKey))
         {
-            // move right in respect to z (increase z)
-            cameraPosition += transform.right * panSpeed * Time.deltaTime;
+            // move right in respect to x and z (increase x and z)
+            Vector3 right = new Vector3(transform.right.x, 0, transform.right.z);
+            cameraPosition += right * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(leftCameraStrafeKey))
         {
-            // move left in respect to z (decrease z)
-            cameraPosition -= transform.right * panSpeed * Time.deltaTime;
+            // move left in respect to x and z (decrease x and z)
+            Vector3 left = new Vector3(-transform.right.x, 0, -transform.right.z);
+            cameraPosition += left * panSpeed * Time.deltaTime;
         }
 
         // ====== VERTICAL CAMERA MOVEMENT ======
