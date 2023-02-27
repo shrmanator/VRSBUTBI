@@ -51,10 +51,14 @@ public class FileParser : MonoBehaviour
             switch (components[0])
             {
                 case "CREATE":
-                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
+                    //Check for valid input (OBJ, OBJ1, x, y, z)
+                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]), int.Parse(components[5] });
                     break;
                 case "SETOBJCELL":
-                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]) });
+                    //Check for valid input (Core, width lenght, value, unit)
+                    commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), components[4] });
+                    break;
+                case "MOVE":
                     break;
                 default:
                     Debug.LogWarning("Unrecognized command: " + components[0]);
