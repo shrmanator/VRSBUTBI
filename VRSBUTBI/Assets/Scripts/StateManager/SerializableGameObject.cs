@@ -1,3 +1,12 @@
+using UnityEngine;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using SimpleFileBrowser;
+using System.Runtime.Serialization;
+using System.Reflection;
+using System;
+
 [System.Serializable]
 public class SerializableGameObject : ISerializable
 {
