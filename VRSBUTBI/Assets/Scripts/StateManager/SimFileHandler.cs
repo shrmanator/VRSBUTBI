@@ -8,7 +8,6 @@ using System.Reflection;
 using System;
 
 
-
 public class SimFileHandler : MonoBehaviour
 {
     private string saveFileName = "save_game.dat";
@@ -57,77 +56,77 @@ public class SimFileHandler : MonoBehaviour
         return serializableGameObjects.ToArray();
     }
 
-   public static void SaveGame(string fileName, SerializableGameObject[] gameObjects)
-{
-    // Check if gameObjects is null or empty
-    if (gameObjects == null || gameObjects.Length == 0)
+    public static void SaveGame(string fileName, SerializableGameObject[] gameObjects)
     {
-        Debug.LogWarning("Cannot save empty game state.");
-        return;
-    }
-
-    // Remove any extra file name from the save path
-    if (Path.HasExtension(fileName))
-    {
-        fileName = Path.GetFileNameWithoutExtension(fileName);
-    }
-
-    // Create persistent directory if it does not exist
-    string directory = Path.Combine(Application.persistentDataPath, "SimSaves");
-    if (!Directory.Exists(directory))
-    {
-        Directory.CreateDirectory(directory);
-    }
-
-    // Create file path
-    string filePath = Path.Combine(directory, fileName + ".dat");
-
-    // Open file stream
-    FileStream fileStream = null;
-
-    try
-    {
-        if (File.Exists(filePath))
+        // Check if gameObjects is null or empty
+        if (gameObjects == null || gameObjects.Length == 0)
         {
-            fileStream = File.Open(filePath, FileMode.Open);
-            if (fileStream.Length > 0)
+            Debug.LogWarning("Cannot save empty game state.");
+            return;
+        }
+
+        // Remove any extra file name from the save path
+        if (Path.HasExtension(fileName))
+        {
+            fileName = Path.GetFileNameWithoutExtension(fileName);
+        }
+
+        // Create persistent directory if it does not exist
+        string directory = Path.Combine(Application.persistentDataPath, "SimSaves");
+        if (!Directory.Exists(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+
+        // Create file path
+        string filePath = Path.Combine(directory, fileName + ".dat");
+
+        // Open file stream
+        FileStream fileStream = null;
+
+        try
+        {
+            if (File.Exists(filePath))
             {
-                // Deserialize game objects from file
+                fileStream = File.Open(filePath, FileMode.Open);
+                if (fileStream.Length > 0)
+                {
+                    // Deserialize game objects from file
+                    BinaryFormatter binaryFormatter = new BinaryFormatter();
+
+                    foreach (SerializableGameObject gameObject in gameObjects)
+                    {
+                        gameObject.Deserialize(binaryFormatter.Deserialize(fileStream));
+                    }
+                }
+            }
+            else
+            {
+                fileStream = File.Create(filePath);
+
+                // Serialize game objects and write to file
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
 
                 foreach (SerializableGameObject gameObject in gameObjects)
                 {
-                    gameObject.Deserialize(binaryFormatter.Deserialize(fileStream));
+                    binaryFormatter.Serialize(fileStream, gameObject);
                 }
             }
+            Debug.Log($"Simulation state saved to {filePath}");
         }
-        else
+        catch (IOException ex)
         {
-            fileStream = File.Create(filePath);
-
-            // Serialize game objects and write to file
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-
-            foreach (SerializableGameObject gameObject in gameObjects)
+            Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
+        }
+        finally
+        {
+            // Close file stream
+            if (fileStream != null)
             {
-                binaryFormatter.Serialize(fileStream, gameObject);
+                fileStream.Close();
             }
         }
-        Debug.Log($"Simulation state saved to {filePath}");
     }
-    catch (IOException ex)
-    {
-        Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
-    }
-    finally
-    {
-        // Close file stream
-        if (fileStream != null)
-        {
-            fileStream.Close();
-        }
-    }
-}
 
 
 
@@ -183,8 +182,6 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
-
-
     public void OpenTxtFileLoadDialog()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter(".txt", ".txt"));
@@ -222,85 +219,3 @@ public class SimFileHandler : MonoBehaviour
     }
 }
 
-
-[System.Serializable]
-public class SerializableGameObject : ISerializable
-{
-    public string name;
-    public SerializableVector3 position;
-    public SerializableVector3 rotation;
-
-    public SerializableGameObject(string name, SerializableVector3 position, SerializableVector3 rotation)
-    {
-        this.name = name;
-        this.position = position;
-        this.rotation = rotation;
-    }
-
-    // Constructor for deserialization
-    protected SerializableGameObject(SerializationInfo info, StreamingContext context)
-    {
-        // Deserialize the object's fields from the SerializationInfo object
-        name = info.GetString("name");
-        position = (SerializableVector3)info.GetValue("position", typeof(SerializableVector3));
-        rotation = (SerializableVector3)info.GetValue("rotation", typeof(SerializableVector3));
-    }
-
-    // Method to serialize the object's fields into a SerializationInfo object
-    public void GetObjectData(SerializationInfo info, StreamingContext context)
-    {
-        info.AddValue("name", name);
-        info.AddValue("position", position);
-        info.AddValue("rotation", rotation);
-    }
-
-    public void Deserialize(object obj)
-    {
-        if (obj is SerializableGameObject serializedObject)
-        {
-            name = serializedObject.name;
-            position = serializedObject.position;
-            rotation = serializedObject.rotation;
-        }
-    }
-}
-
-[System.Serializable]
-public class SerializableVector3 {
-    public float x;
-    public float y;
-    public float z;
-
-    public SerializableVector3(Vector3 vector) {
-        x = vector.x;
-        y = vector.y;
-        z = vector.z;
-    }
-
-    public Vector3 ToVector3() {
-        return new Vector3(x, y, z);
-    }
-}
-
-public class VersionDeserializationBinder : SerializationBinder
-{
-    public override Type BindToType(string assemblyName, string typeName)
-    {
-        Type typeToDeserialize = null;
-
-        try
-        {
-            // Get the current assembly
-            Assembly currentAssembly = Assembly.GetExecutingAssembly();
-
-            // Attempt to load the specified type from the current assembly
-            typeToDeserialize = currentAssembly.GetType(typeName);
-        }
-        catch (Exception)
-        {
-            // Ignore the exception and return null
-        }
-
-        return typeToDeserialize;
-    }
-}
