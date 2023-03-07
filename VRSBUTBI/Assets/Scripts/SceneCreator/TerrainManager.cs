@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEditor;
 using System.IO;
- 
+using System;
+
 /// <summary>
 /// Spawns the terrain on simulation start
 /// </summary>
+[Serializable]
 public class TerrainManager : MonoBehaviour
 {
     public static TerrainManager Instance;
