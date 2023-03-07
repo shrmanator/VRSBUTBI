@@ -1,3 +1,13 @@
+/*
+This script is responsible for handling the saving and loading of a simulation game's state in Unity.
+It provides methods for opening a file dialog to save and load the game state and uses the
+BinaryFormatter class to serialize and deserialize a list of SerializableGameObject objects,
+which are representations of GameObjects in the game world that are marked with the "Serializable" tag.
+It also creates a persistent directory to store saved game states in and checks if the directory exists
+before attempting to save to it. The script includes error handling for failed save or load attempts and
+uses events to notify other objects when a file has been successfully loaded.
+*/
+
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
