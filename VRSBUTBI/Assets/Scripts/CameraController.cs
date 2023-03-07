@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// This script implements the keyboard camera controls.
+/// This script implements the keyboard camera controls for the regular non-VR camera.
 /// </summary>
 public class CameraController : MonoBehaviour
 {
