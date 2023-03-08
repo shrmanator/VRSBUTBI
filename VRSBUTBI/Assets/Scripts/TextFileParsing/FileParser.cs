@@ -57,43 +57,43 @@ public class FileParser : MonoBehaviour
                 {
                     case "CREATE":
                         //Check for valid input (OBJ Type, OBJ name, x, y, z)
-                        string objectName = parts[1];
+                        string objectName1 = parts[1];
                         string masterName = parts[2];
                         float x = float.Parse(parts[3]);
                         float y = float.Parse(parts[4]);
                         float z = float.Parse(parts[5]);
-                        commands.Add(new object[] { objectName, masterName, x, y, z });
-                        //createCommands.Add(new object[] { objectName, masterName, x, y, z });
+                        commands.Add(new object[] { objectName1, masterName, x, y, z });
+                        //createCommands.Add(new object[] { objectName1, masterName, x, y, z });
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
-                        string objName = parts[1];
+                        string objectName2 = parts[1];
                         string cellName = parts[2];
                         string formula = parts[3];
-                        commands.Add(new object[] { objName, cellName, formula });
-                        //setobjCommands.Add(new object[] { objName, cellName, formula });
+                        commands.Add(new object[] { objectName2, cellName, formula });
+                        //setobjCommands.Add(new object[] { objectName2, cellName, formula });
                         break;
                     case "MOVE":
-                        string objectName = tokens[1];
-                        string pathName = tokens[2];
-                        float duration = float.Parse(tokens[3]);
-                        float startPosition = tokens.Length > 4 ? float.Parse(tokens[4].Substring(12)) : 0;
-                        commands.Add(new object[] { objectName, pathName, duration, startPosition });
-                        //moveCommands.Add(new object[] { objectName, pathName, duration, startPosition });
+                        string objectName3 = parts[1];
+                        string pathName = parts[2];
+                        float duration1 = float.Parse(parts[3]);
+                        float startPosition = parts.Length > 4 ? float.Parse(parts[4].Substring(12)) : 0;
+                        commands.Add(new object[] { objectName3, pathName, duration1, startPosition });
+                        //moveCommands.Add(new object[] { objectName3, pathName, duration1, startPosition });
 
                         break;
                     case "DESTROY":
                         string objToDestory = parts[1];
                         commands.Add(new object[] { objToDestory });
                         break;
-                    case "DYNUPDATECELL"
+                    case "DYNUPDATECELL":
                         string objToUpdate = parts[1];
                         string cellToUpdate = parts[2];
-                        float duration = float.Parse(parts[3]);
+                        float duration2 = float.Parse(parts[3]);
                         float startVal = float.Parse(parts[4]);
                         float endVal = float.Parse(parts[5]);
                         string units = parts.Length > 6 ? parts[6] : null;
-                        commands.Add(new object[] { objToUpdate, cellToUpdate, duration, startVal, endVal, units });
+                        commands.Add(new object[] { objToUpdate, cellToUpdate, duration2, startVal, endVal, units });
                         break;
                     default:
                         Debug.LogWarning("Unrecognized command: " + parts[0]);
