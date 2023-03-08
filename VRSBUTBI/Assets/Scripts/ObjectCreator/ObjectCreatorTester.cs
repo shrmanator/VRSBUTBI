@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using static ObjectCreator;
 
+
+//class for testing the Object Creator
 public class ObjectCreatorTester : MonoBehaviour
 { 
-    // example list of object data
+    // test object data
     string[,] objects = new string[,] {{"Cat", "Cat1", "0 0 0"}, {"Cat", "Cat2", "10 10 10"},
     {"Tree", "Tree1", "30 5 30"}, {"dead_trees", "Dead Trees", "20 0 20"}};
     //string[] anObject = new string[] {"dead_trees", "Dead Trees", "0 0 0"};
