@@ -58,21 +58,25 @@ public class FileParser : MonoBehaviour
                         float x = float.Parse(parts[3]);
                         float y = float.Parse(parts[4]);
                         float z = float.Parse(parts[5]);
+                        commands.Add(new object[] { objectName, masterName, x, y, z });
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
                         string objName = parts[1];
                         string cellName = parts[2];
                         string formula = parts[3];
+                        commands.Add(new object[] { objName, cellName, formula });
                         break;
                     case "MOVE":
                         string objectName = tokens[1];
                         string pathName = tokens[2];
                         float duration = float.Parse(tokens[3]);
                         float startPosition = tokens.Length > 4 ? float.Parse(tokens[4].Substring(12)) : 0;
+                        commands.Add(new object[] { objectName, pathName, duration, startPosition });
                         break;
                     case "DESTROY":
                         string objToDestory = parts[1];
+                        commands.Add(new object[] { objToDestory });
                         break;
                     case "DYNUPDATECELL"
                         string objToUpdate = parts[1];
@@ -81,6 +85,7 @@ public class FileParser : MonoBehaviour
                         float startVal = float.Parse(parts[4]);
                         float endVal = float.Parse(parts[5]);
                         string units = parts.Length > 6 ? parts[6] : null;
+                        commands.Add(new object[] { objToUpdate, cellToUpdate, duration, startVal, endVal, units });
                         break;
                     default:
                         Debug.LogWarning("Unrecognized command: " + parts[0]);
