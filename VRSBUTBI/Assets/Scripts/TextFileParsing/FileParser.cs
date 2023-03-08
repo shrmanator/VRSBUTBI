@@ -46,10 +46,10 @@ public class FileParser : MonoBehaviour
             {
                 // Split the line into its components
                 string[] parts = line.Split(' ');
-                string commands = components[0];
+                string cmmd = parts[0];
 
                 // Parse the components and add them to the list of commands
-                switch (commands)
+                switch (cmmd)
                 {
                     case "CREATE":
                         //Check for valid input (OBJ Type, OBJ name, x, y, z)
