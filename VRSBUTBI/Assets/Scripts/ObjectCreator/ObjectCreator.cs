@@ -5,14 +5,14 @@ using Dummiesman;
 
 /// <summary>
 /// creates objects from provided data
-/// object data expected to be a string array with the format {Object Type, Object Name, X Y Z}
+/// object data expected to be an object list with the format {Object Type, Object Name, X, Y, Z}
 /// <summary>
 public sealed class ObjectCreator : MonoBehaviour
 {
     public static ObjectCreator Creator {get; private set;}
     private static Dictionary<string, GameObject> _importLibrary = new Dictionary<string, GameObject>();
     private GameObject _loadedObject = null;
-    private string[] _objectData = new string[3];
+    private object[] _objectData = new object[5];
     private bool _isCreatingObject = false;
     private bool _isRetry = false;
 
@@ -34,7 +34,7 @@ public sealed class ObjectCreator : MonoBehaviour
     /// Creates objects from a list.
     /// </summary>
     /// <param name="objectsList">The list of objects to create</param>
-    public void CreateObjects(string [,] objectsList)
+    public void CreateObjects(object [,] objectsList)
     {
         StartCoroutine(CreateObjectsCoroutine(objectsList));
     }
@@ -43,7 +43,7 @@ public sealed class ObjectCreator : MonoBehaviour
     /// Creates objects from a list.
     /// </summary>
     /// <param name="objectData">The data of the object to create</param>
-    public void CreateObject(string [] objectData)
+    public void CreateObject(object [] objectData)
     {
         StartCoroutine(CreateObjectCoroutine(objectData));
     }
@@ -54,7 +54,7 @@ public sealed class ObjectCreator : MonoBehaviour
     /// The coroutine ensures that the object creation process happens in the correct order.
     /// </summary>
     /// <param name="objectsList">The data of the object to create</param>
-    private IEnumerator CreateObjectsCoroutine(string [,] objectsList)
+    private IEnumerator CreateObjectsCoroutine(object [,] objectsList)
     {
         for (int i = 0; i < objectsList.GetLength(0); i++)
         {
@@ -75,7 +75,7 @@ public sealed class ObjectCreator : MonoBehaviour
     /// CreateObject has a coroutine to prevent issues with multiple calls to CreateObject
     /// </summary>
     /// <param name="objectsList">The data of the object to create</param>
-    private IEnumerator CreateObjectCoroutine(string [] objectData)
+    private IEnumerator CreateObjectCoroutine(object [] objectData)
     {
         _loadedObject = null;
         _objectData[0] = objectData[0];
@@ -94,7 +94,7 @@ public sealed class ObjectCreator : MonoBehaviour
     private void SelectCreateMethod()
     {
         UnityEngine.Debug.Log("Creating " + _objectData[0] + " " + _objectData[1] + " at " + _objectData[2]);
-        if (IsInImportLibrary(_objectData[0]))
+        if (IsInImportLibrary((string)_objectData[0]))
         {
             CreateObjectFromLibrary();
         }
@@ -126,18 +126,18 @@ public sealed class ObjectCreator : MonoBehaviour
     /// </summary>
     private void CreateObjectFromLibrary()
     {
-        if (IsInImportLibrary(_objectData[0]))
+        if (IsInImportLibrary((string)_objectData[0]))
         {
-            _loadedObject = Instantiate(_importLibrary[_objectData[0]]);
+            _loadedObject = Instantiate(_importLibrary[(string)_objectData[0]]);
             SetObjectProperties();
         }
     }
 
     private void AddObjectToImportLibrary()
     {
-        if (!IsInImportLibrary(_objectData[0]))
+        if (!IsInImportLibrary((string)_objectData[0]))
         {
-            _importLibrary.Add(_objectData[0], _loadedObject);
+            _importLibrary.Add((string)_objectData[0], _loadedObject);
         }
     }
 
@@ -158,11 +158,10 @@ public sealed class ObjectCreator : MonoBehaviour
     {
         UnityEngine.Debug.Log("Setting object properties");
         //set name
-        _loadedObject.name = _objectData[1];
+        _loadedObject.name = (string)_objectData[1];
         //set position
-        string[] coords = _objectData[2].Split(' ');
-        _loadedObject.transform.position = new Vector3(int.Parse(coords[0]), int.Parse(coords[1]), int.Parse(coords[2]));
-        _loadedObject.transform.GetChild(0).name = _objectData[0];
+        _loadedObject.transform.position = new Vector3((float)_objectData[2], (float)_objectData[3], (float)_objectData[4]);
+        _loadedObject.transform.GetChild(0).name = (string)_objectData[0];
         _isCreatingObject = false;
     }
 
@@ -198,7 +197,7 @@ public sealed class ObjectCreator : MonoBehaviour
     /// </summary>
     private bool ImportFromResources()
     {
-        var loadedObjectPrefab = Resources.Load(_objectData[0]) as GameObject;
+        var loadedObjectPrefab = Resources.Load((string)_objectData[0]) as GameObject;
         // Instantiates object if a file was found
         if (loadedObjectPrefab != null)
         {
