@@ -38,6 +38,10 @@ public class FileParser : MonoBehaviour
 
         // Create a list to hold the commands
         List<object[]> commands = new List<object[]>();
+        //List<object[]> createCommands = new List<object[]>();
+        //List<object[]> moveCommands = new List<object[]>();
+        //List<object[]> setobjCommands = new List<object[]>();
+
 
         // Parse each line into a command and add it to the list
         foreach (string line in lines)
@@ -59,6 +63,7 @@ public class FileParser : MonoBehaviour
                         float y = float.Parse(parts[4]);
                         float z = float.Parse(parts[5]);
                         commands.Add(new object[] { objectName, masterName, x, y, z });
+                        //createCommands.Add(new object[] { objectName, masterName, x, y, z });
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
@@ -66,6 +71,7 @@ public class FileParser : MonoBehaviour
                         string cellName = parts[2];
                         string formula = parts[3];
                         commands.Add(new object[] { objName, cellName, formula });
+                        //setobjCommands.Add(new object[] { objName, cellName, formula });
                         break;
                     case "MOVE":
                         string objectName = tokens[1];
@@ -73,6 +79,8 @@ public class FileParser : MonoBehaviour
                         float duration = float.Parse(tokens[3]);
                         float startPosition = tokens.Length > 4 ? float.Parse(tokens[4].Substring(12)) : 0;
                         commands.Add(new object[] { objectName, pathName, duration, startPosition });
+                        //moveCommands.Add(new object[] { objectName, pathName, duration, startPosition });
+
                         break;
                     case "DESTROY":
                         string objToDestory = parts[1];
