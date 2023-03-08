@@ -45,23 +45,45 @@ public class FileParser : MonoBehaviour
             if (!string.IsNullOrEmpty(line)) // Skip empty lines
             {
                 // Split the line into its components
-                string[] components = line.Split(' ');
+                string[] parts = line.Split(' ');
+                string commands = components[0];
 
                 // Parse the components and add them to the list of commands
-                switch (components[0])
+                switch (commands)
                 {
                     case "CREATE":
-                        //Check for valid input (OBJ, OBJ1, x, y, z)
-                        commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), int.Parse(components[4]), int.Parse(components[5]) });
+                        //Check for valid input (OBJ Type, OBJ name, x, y, z)
+                        string objectName = parts[1];
+                        string masterName = parts[2];
+                        float x = float.Parse(parts[3]);
+                        float y = float.Parse(parts[4]);
+                        float z = float.Parse(parts[5]);
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
-                        commands.Add(new object[] { components[1], components[2], int.Parse(components[3]), components[4] });
+                        string objName = parts[1];
+                        string cellName = parts[2];
+                        string formula = parts[3];
                         break;
                     case "MOVE":
+                        string objectName = tokens[1];
+                        string pathName = tokens[2];
+                        float duration = float.Parse(tokens[3]);
+                        float startPosition = tokens.Length > 4 ? float.Parse(tokens[4].Substring(12)) : 0;
+                        break;
+                    case "DESTROY":
+                        string objToDestory = parts[1];
+                        break;
+                    case "DYNUPDATECELL"
+                        string objToUpdate = parts[1];
+                        string cellToUpdate = parts[2];
+                        float duration = float.Parse(parts[3]);
+                        float startVal = float.Parse(parts[4]);
+                        float endVal = float.Parse(parts[5]);
+                        string units = parts.Length > 6 ? parts[6] : null;
                         break;
                     default:
-                        Debug.LogWarning("Unrecognized command: " + components[0]);
+                        Debug.LogWarning("Unrecognized command: " + parts[0]);
                         break;
                 }
             }
