@@ -22,6 +22,15 @@ public class FileParser : MonoBehaviour
     /// </summary>
     public static event CommandReceivedEventHandler CommandReceived;
 
+    public delegate void CreateCommandReceivedEventHandler(string objectName1, string masterName, float x, float y, float z);
+    public static event CreateCommandReceivedEventHandler CreateCommandReceived;
+
+    public delegate void setobjCommandReceivedEventHandler(string objectName2, string cellName, string formula);
+    public static event setobjCommandReceivedEventHandler setobjCommandReceived;
+
+    public delegate void moveCommandReceivedEventHandler(string objectName3, string pathName, float duration1, float startPosition);
+    public static event moveCommandReceivedEventHandler moveCommandReceived;
+
     private void Start()
     {
         // Subscribe to the TextFileLoaded event of the SimFileHandler
@@ -64,6 +73,7 @@ public class FileParser : MonoBehaviour
                         float z = float.Parse(parts[5]);
                         //commands.Add(new object[] { objectName1, masterName, x, y, z });
                         createCommands.Add(new object[] { objectName1, masterName, x, y, z });
+                        CreateCommandReceived?.Invoke(objectName1, masterName, x, y, z);
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
