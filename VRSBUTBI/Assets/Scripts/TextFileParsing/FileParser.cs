@@ -24,8 +24,8 @@ public class FileParser : MonoBehaviour
 
     private void Start()
     {
-        // Subscribe to the FileLoaded event of the SimFileHandler
-        SimFileHandler.FileLoaded += ParseFile;
+        // Subscribe to the TextFileLoaded event of the SimFileHandler
+        SimFileHandler.TextFileLoaded += ParseFile;
     }
 
     private void ParseFile(string filePath)

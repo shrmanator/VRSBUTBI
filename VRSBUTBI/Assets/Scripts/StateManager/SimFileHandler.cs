@@ -23,8 +23,11 @@ public class SimFileHandler : MonoBehaviour
     private string saveFileName = "save_game.dat";
     private static string savePath;
 
-    public delegate void OnFileLoaded(string filePath);
-    public static event OnFileLoaded FileLoaded;
+    public delegate void OnGameFileLoaded(string filePath);
+    public static event OnGameFileLoaded GameFileLoaded;
+
+    public delegate void OnTextFileLoaded(string filePath);
+    public static event OnTextFileLoaded TextFileLoaded;
 
     private void Awake()
     {
@@ -35,17 +38,17 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
-    public void OpenSaveDialog()
+    public void OpenGameSaveDialog()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter(".bin", ".bin"));
-        FileBrowser.ShowSaveDialog(OnSaveSuccess, OnSaveCancel, FileBrowser.PickMode.Files, false, null, "new_file", "Save File", "Save");
+        FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, null, "new_file", "Save File", "Save");
     }
 
     /// <summary>
     /// Handles a successful save.
     /// </summary>
     /// <param name="filePaths">The paths of the saved files.</param>
-    private void OnSaveSuccess(string[] filePaths)
+    private void OnGameSaveSuccess(string[] filePaths)
     {
         SaveGame(filePaths[0], GetSerializableGameObjects());
     }
@@ -192,40 +195,50 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
-    public void OpenTxtFileLoadDialog()
+    public void OpenTextFileLoadDialog()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter(".txt", ".txt"));
-        FileBrowser.ShowLoadDialog(OnLoadSuccess, OnLoadCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
+        FileBrowser.ShowLoadDialog(OnLoadTextSuccess, OnLoadTextCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
     }
 
     public void OpenSimStateLoadDialog()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter(".bin", ".bin"));
-        FileBrowser.ShowLoadDialog(OnLoadSuccess, OnLoadCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
+        FileBrowser.ShowLoadDialog(OnLoadGameSuccess, OnLoadGameCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
     }
 
     /// <summary>
     /// Handles a successful load.
     /// </summary>
     /// <param name="filePaths">The paths of the saved files.</param>
-    private void OnLoadSuccess(string[] filePaths)
+    private void OnLoadGameSuccess(string[] filePaths)
     {
         SerializableGameObject[] gameObjects = SimFileHandler.LoadGame(filePaths[0]);
         if (gameObjects != null)
         {
             print(gameObjects);
         }
-        FileLoaded?.Invoke(filePaths[0]);
+        GameFileLoaded?.Invoke(filePaths[0]);
     }
 
-    private void OnSaveCancel()
+    private void OnLoadTextSuccess(string[] filePaths)
     {
-        Debug.Log("Save canceled.");
+        TextFileLoaded?.Invoke(filePaths[0]);
     }
 
-    private void OnLoadCancel()
+    private void OnLoadTextCancel()
     {
-        Debug.Log("Load canceled.");
+        Debug.Log("Text file load cancelled");
+    }
+
+    private void OnSaveGameCancel()
+    {
+        Debug.Log("Save game canceled.");
+    }
+
+    private void OnLoadGameCancel()
+    {
+        Debug.Log("Load game canceled.");
     }
 }
 

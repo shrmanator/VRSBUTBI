@@ -24,12 +24,12 @@ public class InGameButtons : MonoBehaviour
         /// <summary>
         /// Displays a button that, when clicked, will show the save dialog.
         /// </summary>
-        if (GUI.Button(new Rect(40, 10, 100, 30), "Save")) {simFileHandler.OpenSaveDialog();}
+        if (GUI.Button(new Rect(40, 10, 100, 30), "Save")) {simFileHandler.OpenGameSaveDialog();}
 
         /// <summary>
         /// Displays a button that, when clicked, will show the load dialog for a .txt file.
         /// </summary>
-        if (GUI.Button(new Rect(150, 10, 100, 30), "Load STROBOSCOPE")) {simFileHandler.OpenTxtFileLoadDialog();}
+        if (GUI.Button(new Rect(150, 10, 100, 30), "Load STROBOSCOPE")) {simFileHandler.OpenTextFileLoadDialog();}
 
         /// <summary>
         /// Displays a button that, when clicked, will show the load dialog for a previously saved sim state.
