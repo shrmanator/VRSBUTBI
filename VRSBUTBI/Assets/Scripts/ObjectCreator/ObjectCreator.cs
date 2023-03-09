@@ -19,6 +19,11 @@ public sealed class ObjectCreator : MonoBehaviour
     /// <summary>
     /// Ensures that there is only one instance of ObjectCreator
     /// </summary>
+
+    void Start()
+    {
+        
+    }
     void Awake()
     {
         if (Creator != null && Creator != this)
@@ -56,12 +61,18 @@ public sealed class ObjectCreator : MonoBehaviour
     /// <param name="objectsList">The data of the object to create</param>
     private IEnumerator CreateObjectsCoroutine(object [,] objectsList)
     {
+        while (_isCreatingObject)
+        {
+            yield return null;
+        }
         for (int i = 0; i < objectsList.GetLength(0); i++)
         {
             _loadedObject = null;
             _objectData[0] = objectsList[i, 0];
             _objectData[1] = objectsList[i, 1];
             _objectData[2] = objectsList[i, 2];
+            _objectData[3] = objectsList[i, 3];
+            _objectData[4] = objectsList[i, 4];
             _isCreatingObject = true;
             _isRetry = false;
             SelectCreateMethod();
@@ -77,10 +88,11 @@ public sealed class ObjectCreator : MonoBehaviour
     /// <param name="objectsList">The data of the object to create</param>
     private IEnumerator CreateObjectCoroutine(object [] objectData)
     {
+        while (_isCreatingObject){
+            yield return null;
+        }
         _loadedObject = null;
-        _objectData[0] = objectData[0];
-        _objectData[1] = objectData[1];
-        _objectData[2] = objectData[2];
+        _objectData = objectData;
         _isCreatingObject = true;
         _isRetry = false;
         SelectCreateMethod();
@@ -93,7 +105,7 @@ public sealed class ObjectCreator : MonoBehaviour
     /// </summary>
     private void SelectCreateMethod()
     {
-        UnityEngine.Debug.Log("Creating " + _objectData[0] + " " + _objectData[1] + " at " + _objectData[2]);
+        UnityEngine.Debug.Log("Creating " + _objectData[0] + " " + _objectData[1] + " at " + _objectData[2] + ", " +  _objectData[3] + ", " + _objectData[4]);
         if (IsInImportLibrary((string)_objectData[0]))
         {
             CreateObjectFromLibrary();
@@ -148,7 +160,7 @@ public sealed class ObjectCreator : MonoBehaviour
         FileBrowserHelper fileBrowser = gameObject.AddComponent<FileBrowserHelper>();
         string title = "Select .obj file to import for " + _objectData[0];
         string[] filter = {".obj"};
-        fileBrowser.LoadSingleFile(CreateObjectFromFile, CanceledImportHandler, title, "Import", filter);
+        fileBrowser.LoadSingleFile(CreateObjectFromFile, CancelledImportHandler, title, "Import", filter);
     }
 
     /// <summary>
@@ -160,7 +172,7 @@ public sealed class ObjectCreator : MonoBehaviour
         //set name
         _loadedObject.name = (string)_objectData[1];
         //set position
-        _loadedObject.transform.position = new Vector3((float)_objectData[2], (float)_objectData[3], (float)_objectData[4]);
+        _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
         _loadedObject.transform.GetChild(0).name = (string)_objectData[0];
         _isCreatingObject = false;
     }
@@ -168,13 +180,14 @@ public sealed class ObjectCreator : MonoBehaviour
     /// <summary>
     /// Attempts to create object again or stop object creation if this is the second attempt
     /// </summary>
-    private void CanceledImportHandler()
+    private void CancelledImportHandler()
     {
         if(_isRetry)
         {
             _isCreatingObject = false;
             UnityEngine.Debug.Log(
                 "Canceled import on " + _objectData[0] + " " + _objectData[1]);
+            _isRetry = false;
         }
         else{
             _isRetry = true;
