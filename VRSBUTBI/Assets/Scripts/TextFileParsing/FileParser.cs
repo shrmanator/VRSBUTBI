@@ -130,6 +130,7 @@ public class FileParser : MonoBehaviour
                         break;
                 }
             }
+            // pauses the loop while isCreatingObject is true
             yield return new WaitWhile(() => isCreatingObject);
         }
         /*foreach (object[] command in commands)
@@ -141,6 +142,7 @@ public class FileParser : MonoBehaviour
         CommandReceived?.Invoke(commands);*/
     }
 
+    //triggers on ObjectCreated to set isCreatingObject to false
     private void OnObjectCreated(){
         isCreatingObject = false;
     }
