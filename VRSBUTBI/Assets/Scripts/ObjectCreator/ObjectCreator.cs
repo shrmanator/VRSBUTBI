@@ -9,6 +9,8 @@ using Dummiesman;
 /// <summary>
 public sealed class ObjectCreator : MonoBehaviour
 {
+    public delegate void ObjectCreatedReceivedEventHandler();
+    public static event ObjectCreatedReceivedEventHandler ObjectCreated;
     public static ObjectCreator Creator {get; private set;}
     private static Dictionary<string, GameObject> _importLibrary = new Dictionary<string, GameObject>();
     private GameObject _loadedObject = null;
@@ -22,7 +24,7 @@ public sealed class ObjectCreator : MonoBehaviour
 
     void Start()
     {
-        
+        FileParser.CreateCommandReceived += CreateObject;
     }
     void Awake()
     {
@@ -61,10 +63,6 @@ public sealed class ObjectCreator : MonoBehaviour
     /// <param name="objectsList">The data of the object to create</param>
     private IEnumerator CreateObjectsCoroutine(object [,] objectsList)
     {
-        while (_isCreatingObject)
-        {
-            yield return null;
-        }
         for (int i = 0; i < objectsList.GetLength(0); i++)
         {
             _loadedObject = null;
@@ -76,7 +74,7 @@ public sealed class ObjectCreator : MonoBehaviour
             _isCreatingObject = true;
             _isRetry = false;
             SelectCreateMethod();
-            yield return new WaitUntil(() => _isCreatingObject == false);
+            yield return new WaitWhile(() => _isCreatingObject);
         }
     }
 
@@ -96,7 +94,7 @@ public sealed class ObjectCreator : MonoBehaviour
         _isCreatingObject = true;
         _isRetry = false;
         SelectCreateMethod();
-        yield return new WaitUntil(() => _isCreatingObject == false);
+        yield return new WaitWhile(() => _isCreatingObject);
     }
 
     /// <summary>
@@ -175,6 +173,7 @@ public sealed class ObjectCreator : MonoBehaviour
         _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
         _loadedObject.transform.GetChild(0).name = (string)_objectData[0];
         _isCreatingObject = false;
+        ObjectCreated?.Invoke();
     }
 
     /// <summary>
@@ -188,6 +187,7 @@ public sealed class ObjectCreator : MonoBehaviour
             UnityEngine.Debug.Log(
                 "Canceled import on " + _objectData[0] + " " + _objectData[1]);
             _isRetry = false;
+            ObjectCreated?.Invoke();
         }
         else{
             _isRetry = true;

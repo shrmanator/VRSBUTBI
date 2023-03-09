@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System.Collections.Generic;
+using System.Collections;
 
 
 /// <summary>
@@ -22,7 +23,7 @@ public class FileParser : MonoBehaviour
     /// </summary>
     public static event CommandReceivedEventHandler CommandReceived;
 
-    public delegate void CreateCommandReceivedEventHandler(string objectName1, string masterName, float x, float y, float z);
+    public delegate void CreateCommandReceivedEventHandler(object[] newObject);
     public static event CreateCommandReceivedEventHandler CreateCommandReceived;
 
     public delegate void setobjCommandReceivedEventHandler(string objectName2, string cellName, string formula);
@@ -31,10 +32,20 @@ public class FileParser : MonoBehaviour
     public delegate void moveCommandReceivedEventHandler(string objectName3, string pathName, float duration1, float startPosition);
     public static event moveCommandReceivedEventHandler moveCommandReceived;
 
+    List<object[]> createCommands;
+    List<object[]> moveCommands;
+    List<object[]> setobjCommands;
+
+    bool isCreatingObject;
+
+
     private void Start()
     {
         // Subscribe to the TextFileLoaded event of the SimFileHandler
         SimFileHandler.TextFileLoaded += ParseFile;
+        // Subscribe to the ObjectCreated event of the ObjectCreator
+        ObjectCreator.ObjectCreated += OnObjectCreated;
+
     }
 
     private void ParseFile(string filePath)
@@ -47,11 +58,17 @@ public class FileParser : MonoBehaviour
 
         // Create a list to hold the commands
         //List<object[]> commands = new List<object[]>();
-        List<object[]> createCommands = new List<object[]>();
-        List<object[]> moveCommands = new List<object[]>();
-        List<object[]> setobjCommands = new List<object[]>();
+        createCommands = new List<object[]>();
+        moveCommands = new List<object[]>();
+        setobjCommands = new List<object[]>();
 
+        isCreatingObject = false;
 
+        StartCoroutine(ParseFileCoroutine(lines));
+    }
+
+    private IEnumerator ParseFileCoroutine(string[] lines)
+    {
         // Parse each line into a command and add it to the list
         foreach (string line in lines)
         {
@@ -72,11 +89,14 @@ public class FileParser : MonoBehaviour
                         float y = float.Parse(parts[4]);
                         float z = float.Parse(parts[5]);
                         //commands.Add(new object[] { objectName1, masterName, x, y, z });
-                        createCommands.Add(new object[] { objectName1, masterName, x, y, z });
-                        CreateCommandReceived?.Invoke(objectName1, masterName, x, y, z);
+                        object[] newObject = new object[] { objectName1, masterName, x, y, z };
+                        createCommands.Add(newObject);
+                        isCreatingObject = true;
+                        CreateCommandReceived?.Invoke(newObject);
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
+                        Debug.Log("SETOBJCELL");
                         string objectName2 = parts[1];
                         string cellName = parts[2];
                         string formula = parts[3];
@@ -94,7 +114,7 @@ public class FileParser : MonoBehaviour
                         break;
                     case "DESTROY":
                         string objToDestory = parts[1];
-                        commands.Add(new object[] { objToDestory });
+                        //commands.Add(new object[] { objToDestory });
                         break;
                     case "DYNUPDATECELL":
                         string objToUpdate = parts[1];
@@ -110,13 +130,19 @@ public class FileParser : MonoBehaviour
                         break;
                 }
             }
+            yield return new WaitWhile(() => isCreatingObject);
         }
-        foreach (object[] command in commands)
+        /*foreach (object[] command in commands)
         {
             foreach (object item in command)
                 print(item);
         }
         // Raise the CommandReceived event and pass the list of commands
-        CommandReceived?.Invoke(commands);
+        CommandReceived?.Invoke(commands);*/
     }
+
+    private void OnObjectCreated(){
+        isCreatingObject = false;
+    }
+
 }
