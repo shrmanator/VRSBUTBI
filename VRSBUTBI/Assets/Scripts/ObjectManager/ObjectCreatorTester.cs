@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static ObjectCreator;
+using static ObjectManager;
 
 
 //class for testing the Object Creator
@@ -16,7 +16,7 @@ public class ObjectCreatorTester : MonoBehaviour
     void Start()
     {
         //ObjectCreator.Creator.CreateObjects(objects);
-        ObjectCreator.Creator.CreateObject(anObject1);
-        ObjectCreator.Creator.CreateObject(anObject2);
+        ObjectManager.Manager.CreateObject(anObject1);
+        ObjectManager.Manager.CreateObject(anObject2);
     }
 }

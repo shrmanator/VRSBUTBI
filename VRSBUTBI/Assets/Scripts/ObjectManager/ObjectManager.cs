@@ -7,11 +7,11 @@ using Dummiesman;
 /// creates objects from provided data
 /// object data expected to be an object list with the format {Object Type, Object Name, X, Y, Z}
 /// <summary>
-public sealed class ObjectCreator : MonoBehaviour
+public sealed class ObjectManager : MonoBehaviour
 {
     public delegate void ObjectCreatedReceivedEventHandler();
     public static event ObjectCreatedReceivedEventHandler ObjectCreated;
-    public static ObjectCreator Creator {get; private set;}
+    public static ObjectManager Manager {get; private set;}
     private static Dictionary<string, GameObject> _importLibrary = new Dictionary<string, GameObject>();
     private GameObject _loadedObject = null;
     private object[] _objectData = new object[5];
@@ -25,15 +25,17 @@ public sealed class ObjectCreator : MonoBehaviour
     void Start()
     {
         FileParser.CreateCommandReceived += CreateObject;
+        FileParser.DestroyCommandReceived += DestroyObject;
+        FileParser.setobjCommandReceived += ChangeObjectProperties;
     }
     void Awake()
     {
-        if (Creator != null && Creator != this)
+        if (Manager != null && Manager != this)
         {
             Destroy(this);
         }
         else{
-            Creator = this;
+            Manager = this;
         }
     }
 
@@ -219,5 +221,36 @@ public sealed class ObjectCreator : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void ChangeObjectProperties (object[] data){
+        GameObject obj = GameObject.Find((string)data[0]);
+        if (obj == null){
+            UnityEngine.Debug.Log(data[0] + " not found!");
+            return;
+        }
+        switch ((string)data[1]){
+            case "TRANSFORM":
+                obj.transform.localScale = new Vector3(float.Parse(data[2].ToString()), float.Parse(data[3].ToString()), float.Parse(data[4].ToString()));
+                break;
+            case "ROTATE":
+                obj.transform.Rotate(float.Parse(data[2].ToString()), float.Parse(data[3].ToString()), float.Parse(data[4].ToString()));
+                break;
+            default:
+                UnityEngine.Debug.Log("Unidentified property");
+                break;
+        }
+    }
+
+    public void DestroyObject(string name){
+        UnityEngine.Debug.Log(name);
+        var obj = GameObject.Find(name);
+        UnityEngine.Debug.Log(obj);
+        if (obj == null)
+        {
+            UnityEngine.Debug.Log(name + " not found!");
+            return;
+        }
+        Destroy(obj);
     }
 }

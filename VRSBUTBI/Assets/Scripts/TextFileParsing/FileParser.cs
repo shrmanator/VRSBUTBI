@@ -26,11 +26,14 @@ public class FileParser : MonoBehaviour
     public delegate void CreateCommandReceivedEventHandler(object[] newObject);
     public static event CreateCommandReceivedEventHandler CreateCommandReceived;
 
-    public delegate void setobjCommandReceivedEventHandler(string objectName2, string cellName, string formula);
+    public delegate void setobjCommandReceivedEventHandler(object[] data);
     public static event setobjCommandReceivedEventHandler setobjCommandReceived;
 
     public delegate void moveCommandReceivedEventHandler(string objectName3, string pathName, float duration1, float startPosition);
     public static event moveCommandReceivedEventHandler moveCommandReceived;
+
+    public delegate void DestroyCommandReceivedEventHandler(string objectName);
+    public static event DestroyCommandReceivedEventHandler DestroyCommandReceived;
 
     List<object[]> createCommands;
     List<object[]> moveCommands;
@@ -38,13 +41,15 @@ public class FileParser : MonoBehaviour
 
     bool isCreatingObject;
 
+    char[] whitespace = {' ', '\n', '\t', '\r', };
+
 
     private void Start()
     {
         // Subscribe to the TextFileLoaded event of the SimFileHandler
         SimFileHandler.TextFileLoaded += ParseFile;
         // Subscribe to the ObjectCreated event of the ObjectCreator
-        ObjectCreator.ObjectCreated += OnObjectCreated;
+        ObjectManager.ObjectCreated += OnObjectCreated;
 
     }
 
@@ -75,7 +80,7 @@ public class FileParser : MonoBehaviour
             if (!string.IsNullOrEmpty(line)) // Skip empty lines
             {
                 // Split the line into its components
-                string[] parts = line.Split(' ');
+                string[] parts = line.Split(whitespace);
                 string cmmd = parts[0];
 
                 // Parse the components and add them to the list of commands
@@ -113,7 +118,9 @@ public class FileParser : MonoBehaviour
 
                         break;
                     case "DESTROY":
+                        Debug.Log("Destroying " + parts[1]);
                         string objToDestory = parts[1];
+                        DestroyCommandReceived?.Invoke(objToDestory);
                         //commands.Add(new object[] { objToDestory });
                         break;
                     case "DYNUPDATECELL":
