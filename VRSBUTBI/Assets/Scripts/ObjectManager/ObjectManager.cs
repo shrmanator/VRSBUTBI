@@ -18,16 +18,19 @@ public sealed class ObjectManager : MonoBehaviour
     private bool _isCreatingObject = false;
     private bool _isRetry = false;
 
-    /// <summary>
-    /// Ensures that there is only one instance of ObjectCreator
-    /// </summary>
 
+    /// <summary>
+    /// Subscribe to Create, Destroy, and SetObj events
+    /// </summary>
     void Start()
     {
         FileParser.CreateCommandReceived += CreateObject;
-        FileParser.DestroyCommandReceived += DestroyObject;
-        FileParser.setobjCommandReceived += ChangeObjectProperties;
+        ScenePlayer.DestroyCommandReceived += DestroyObject;
+        ScenePlayer.SetObjCommandReceived += ChangeObjectProperties;
     }
+    /// <summary>
+    /// Ensures that there is only one instance of ObjectCreator
+    /// </summary>
     void Awake()
     {
         if (Manager != null && Manager != this)
@@ -62,7 +65,9 @@ public sealed class ObjectManager : MonoBehaviour
     /// Note: has some code duplication with CreateObjectCoroutine. This is because the for loop must be inside the coroutine to work.
     /// The coroutine ensures that the object creation process happens in the correct order.
     /// </summary>
-    /// <param name="objectsList">The data of the object to create</param>
+    /// <param name="objectsList">The data of the object to create. 
+    /// Expected object data: {object name, object type, x, y, z starting coordinates
+    /// </param>
     private IEnumerator CreateObjectsCoroutine(object [,] objectsList)
     {
         for (int i = 0; i < objectsList.GetLength(0); i++)
@@ -85,7 +90,9 @@ public sealed class ObjectManager : MonoBehaviour
     /// Note: has some code duplication with CreateObjectCoroutine. This is because the for loop must be in the coroutine to work.
     /// CreateObject has a coroutine to prevent issues with multiple calls to CreateObject
     /// </summary>
-    /// <param name="objectsList">The data of the object to create</param>
+    /// <param name="objectsList">The data of the object to create. 
+    /// Expected object data: {object name, object type, x, y, z starting coordinates
+    /// </param>
     private IEnumerator CreateObjectCoroutine(object [] objectData)
     {
         while (_isCreatingObject){
@@ -105,8 +112,8 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     private void SelectCreateMethod()
     {
-        UnityEngine.Debug.Log("Creating " + _objectData[0] + " " + _objectData[1] + " at " + _objectData[2] + ", " +  _objectData[3] + ", " + _objectData[4]);
-        if (IsInImportLibrary((string)_objectData[0]))
+        UnityEngine.Debug.Log("Creating " + _objectData[1] + " " + _objectData[0] + " at " + _objectData[2] + ", " +  _objectData[3] + ", " + _objectData[4]);
+        if (IsInImportLibrary((string)_objectData[1]))
         {
             CreateObjectFromLibrary();
         }
@@ -138,18 +145,18 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     private void CreateObjectFromLibrary()
     {
-        if (IsInImportLibrary((string)_objectData[0]))
+        if (IsInImportLibrary((string)_objectData[1]))
         {
-            _loadedObject = Instantiate(_importLibrary[(string)_objectData[0]]);
+            _loadedObject = Instantiate(_importLibrary[(string)_objectData[1]]);
             SetObjectProperties();
         }
     }
 
     private void AddObjectToImportLibrary()
     {
-        if (!IsInImportLibrary((string)_objectData[0]))
+        if (!IsInImportLibrary((string)_objectData[1]))
         {
-            _importLibrary.Add((string)_objectData[0], _loadedObject);
+            _importLibrary.Add((string)_objectData[1], _loadedObject);
         }
     }
 
@@ -170,10 +177,10 @@ public sealed class ObjectManager : MonoBehaviour
     {
         UnityEngine.Debug.Log("Setting object properties");
         //set name
-        _loadedObject.name = (string)_objectData[1];
+        _loadedObject.name = (string)_objectData[0];
         //set position
         _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
-        _loadedObject.transform.GetChild(0).name = (string)_objectData[0];
+        _loadedObject.transform.GetChild(0).name = (string)_objectData[1];
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }
@@ -199,8 +206,8 @@ public sealed class ObjectManager : MonoBehaviour
 
     /// <summary>
     /// Checks if the object type matches an object in _importLibrary
-    /// <param name="objectType">The object type to look up</param>
     /// </summary>
+    /// <param name="objectType">The object type to look up</param>
     private bool IsInImportLibrary(string objectType)
     {
         return _importLibrary.ContainsKey(objectType);
@@ -212,7 +219,7 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     private bool ImportFromResources()
     {
-        var loadedObjectPrefab = Resources.Load((string)_objectData[0]) as GameObject;
+        var loadedObjectPrefab = Resources.Load((string)_objectData[1]) as GameObject;
         // Instantiates object if a file was found
         if (loadedObjectPrefab != null)
         {
@@ -223,18 +230,40 @@ public sealed class ObjectManager : MonoBehaviour
         return false;
     }
 
+    /// <summary>
+    /// Changes an object's properties. Called on SetObjCommandReceived event. 
+    /// </summary>
+    /// <param name="data"> Expected {"SETOBJCELL", object name, property name, property value(s)
+    /// Currently supported properties and expected values:
+    /// "TRANSFORM" float x , float y , float x scale factors 
+    /// "ROTATE" float x, float y, float z, degrees 
+    /// </param>
     public void ChangeObjectProperties (object[] data){
-        GameObject obj = GameObject.Find((string)data[0]);
+        GameObject obj = GameObject.Find((string)data[1]);
         if (obj == null){
-            UnityEngine.Debug.Log(data[0] + " not found!");
+            UnityEngine.Debug.Log(data[1] + " not found!");
             return;
         }
-        switch ((string)data[1]){
+        switch ((string)data[2]){
             case "TRANSFORM":
-                obj.transform.localScale = new Vector3(float.Parse(data[2].ToString()), float.Parse(data[3].ToString()), float.Parse(data[4].ToString()));
+                if (data.Length != 6){
+                    UnityEngine.Debug.Log("Invalid syntax for SETOBJCELL TRANSFORM");
+                    return;
+                }
+                float xScale = float.Parse(data[3].ToString());
+                float yScale = float.Parse(data[4].ToString());
+                float zScale = float.Parse(data[5].ToString());
+                ChangeObjectSize(obj, xScale, yScale, zScale);
                 break;
             case "ROTATE":
-                obj.transform.Rotate(float.Parse(data[2].ToString()), float.Parse(data[3].ToString()), float.Parse(data[4].ToString()));
+                if (data.Length != 6){
+                    UnityEngine.Debug.Log("Invalid syntax for SETOBJCELL ROTATE");
+                    return;
+                }
+                float xDegrees = float.Parse(data[3].ToString());
+                float yDegrees = float.Parse(data[4].ToString());
+                float zDegrees = float.Parse(data[5].ToString());
+                RotateObject(obj, xDegrees, yDegrees, zDegrees);
                 break;
             default:
                 UnityEngine.Debug.Log("Unidentified property");
@@ -242,6 +271,44 @@ public sealed class ObjectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Changes an object's size. A value of 0 keeps that dimension at its current scale
+    /// </summary>
+    /// <param name="obj"> The object to change</param>
+    /// <param name="x"> x axis scale factor</param>
+    /// <param name="x"> y axis scale factor</param>
+    /// <param name="x"> z axis scale factor</param>
+    private void ChangeObjectSize (GameObject obj, float x, float y, float z){
+        if (x == 0){
+            x = obj.transform.localScale.x;
+        }
+        if (y == 0)
+        {
+            y = obj.transform.localScale.y;
+        }
+        if (z == 0)
+        {
+            z = obj.transform.localScale.z;
+        }
+        obj.transform.localScale = new Vector3(x, y, z);
+    }
+
+
+    /// <summary>
+    /// Changes an object's angle.
+    /// </summary>
+    /// <param name="obj"> The object to change </param>
+    /// <param name="x"> Degrees to rotate on x axis </param>
+    /// <param name="x"> Degrees to rotate on y axis </param>
+    /// <param name="x"> Degrees to rotate on z axis </param>
+    private void RotateObject(GameObject obj, float x, float y, float z){
+        obj.transform.Rotate(x, y, z);
+    }
+
+    /// <summary>
+    /// Destroys a selected object. Called on DestroyCommandReceived event.
+    /// </summary>
+    /// <param name="name">Name of the object to destory</param>
     public void DestroyObject(string name){
         UnityEngine.Debug.Log(name);
         var obj = GameObject.Find(name);

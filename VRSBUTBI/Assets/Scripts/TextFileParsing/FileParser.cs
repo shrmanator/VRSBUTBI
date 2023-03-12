@@ -39,8 +39,12 @@ public class FileParser : MonoBehaviour
     List<object[]> moveCommands;
     List<object[]> setobjCommands;
 
+    List<object[]> commands;
+
     bool isCreatingObject;
 
+    // whitespace delimeters to use for parsing
+    // prevents error if there's a blank line at the end of the file
     char[] whitespace = {' ', '\n', '\t', '\r', };
 
 
@@ -66,6 +70,7 @@ public class FileParser : MonoBehaviour
         createCommands = new List<object[]>();
         moveCommands = new List<object[]>();
         setobjCommands = new List<object[]>();
+        commands = new List<object[]>();
 
         isCreatingObject = false;
 
@@ -81,19 +86,20 @@ public class FileParser : MonoBehaviour
             {
                 // Split the line into its components
                 string[] parts = line.Split(whitespace);
-                string cmmd = parts[0];
+                string cmd = parts[0];
 
                 // Parse the components and add them to the list of commands
-                switch (cmmd)
+                switch (cmd)
                 {
                     case "CREATE":
+                    //handles object creation during file parsing to prevent issues during playback
                         //Check for valid input (OBJ Type, OBJ name, x, y, z)
                         string objectName1 = parts[1];
                         string masterName = parts[2];
                         float x = float.Parse(parts[3]);
                         float y = float.Parse(parts[4]);
                         float z = float.Parse(parts[5]);
-                        //commands.Add(new object[] { objectName1, masterName, x, y, z });
+                        commands.Add(new object[] {cmd, objectName1, masterName, x, y, z });
                         object[] newObject = new object[] { objectName1, masterName, x, y, z };
                         createCommands.Add(newObject);
                         isCreatingObject = true;
@@ -101,27 +107,27 @@ public class FileParser : MonoBehaviour
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
-                        Debug.Log("SETOBJCELL");
                         string objectName2 = parts[1];
                         string cellName = parts[2];
-                        string formula = parts[3];
-                        //commands.Add(new object[] { objectName2, cellName, formula });
-                        setobjCommands.Add(new object[] { objectName2, cellName, formula });
+                        //string formula = parts[3];
+                        float x1 = float.Parse(parts[3]);
+                        float y1 = float.Parse(parts[4]);
+                        float z1 = float.Parse(parts[5]);
+                        commands.Add(new object[] {cmd, objectName2, cellName, x1, y1, z1 });
+                        setobjCommands.Add(new object[] {objectName2, cellName, x1, y1, z1 });
                         break;
                     case "MOVE":
                         string objectName3 = parts[1];
                         string pathName = parts[2];
                         float duration1 = float.Parse(parts[3]);
                         float startPosition = parts.Length > 4 ? float.Parse(parts[4].Substring(12)) : 0;
-                        //commands.Add(new object[] { objectName3, pathName, duration1, startPosition });
+                        commands.Add(new object[] {cmd, objectName3, pathName, duration1, startPosition });
                         moveCommands.Add(new object[] { objectName3, pathName, duration1, startPosition });
-
                         break;
                     case "DESTROY":
-                        Debug.Log("Destroying " + parts[1]);
                         string objToDestory = parts[1];
-                        DestroyCommandReceived?.Invoke(objToDestory);
-                        //commands.Add(new object[] { objToDestory });
+                        //DestroyCommandReceived?.Invoke(objToDestory);
+                        commands.Add(new object[] {cmd, objToDestory });
                         break;
                     case "DYNUPDATECELL":
                         string objToUpdate = parts[1];
@@ -130,7 +136,10 @@ public class FileParser : MonoBehaviour
                         float startVal = float.Parse(parts[4]);
                         float endVal = float.Parse(parts[5]);
                         string units = parts.Length > 6 ? parts[6] : null;
-                        //commands.Add(new object[] { objToUpdate, cellToUpdate, duration2, startVal, endVal, units });
+                        commands.Add(new object[] {cmd, objToUpdate, cellToUpdate, duration2, startVal, endVal, units });
+                        break;
+                    case "TIME":
+                        commands.Add(new object[] {cmd, parts[1]});
                         break;
                     default:
                         Debug.LogWarning("Unrecognized command: " + parts[0]);
@@ -140,16 +149,21 @@ public class FileParser : MonoBehaviour
             // pauses the loop while isCreatingObject is true
             yield return new WaitWhile(() => isCreatingObject);
         }
+        ScenePlayer.Player.SetScene(commands);
+        ScenePlayer.Player.PlayScene();
+
         /*foreach (object[] command in commands)
         {
             foreach (object item in command)
                 print(item);
-        }
+        }*/
         // Raise the CommandReceived event and pass the list of commands
-        CommandReceived?.Invoke(commands);*/
+        //CommandReceived?.Invoke(commands);
     }
 
-    //triggers on ObjectCreated to set isCreatingObject to false
+    /// <summary>
+    /// Callback for ObjectCreated event
+    /// </summary>
     private void OnObjectCreated(){
         isCreatingObject = false;
     }
