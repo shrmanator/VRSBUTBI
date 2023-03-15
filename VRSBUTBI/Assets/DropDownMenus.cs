@@ -7,6 +7,8 @@ public class DropDownMenus : MonoBehaviour
     private TextMeshProUGUI label;
     private SimFileHandler simFileHandler;
 
+    private bool firstOptionSelected = true;
+
     void Start()
     {
         GameObject simFileHandlerObject = GameObject.Find("StateManager");
@@ -29,18 +31,28 @@ public class DropDownMenus : MonoBehaviour
 
                 // Change the label text
                 label.text = "Load";
+
+                // Set the selected index to -1 to avoid the default selection
+                tmpDropdown.value = -1;
             }
         }
     }
 
     void OnOptionSelected(int optionIndex)
     {
-        // Check if the first option was selected
+        // Ignore the first call to this method if the first option is selected as a default value
+        if (firstOptionSelected)
+        {
+            firstOptionSelected = false;
+            return;
+        }
+
+        // Handle the selected option
         if (optionIndex == 0)
         {
             simFileHandler.OpenTextFileLoadDialog();
         }
-        if (optionIndex == 1)
+        else if (optionIndex == 1)
         {
             simFileHandler.OpenSimStateLoadDialog();
         }
