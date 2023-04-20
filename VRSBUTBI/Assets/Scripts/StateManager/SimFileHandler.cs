@@ -18,6 +18,7 @@ using SimpleFileBrowser;
 using System.Runtime.Serialization;
 using System.Reflection;
 using System;
+using System.Linq;
 
 
 public class SimFileHandler : MonoBehaviour
@@ -72,75 +73,36 @@ public class SimFileHandler : MonoBehaviour
         return serializableGameObjects.ToArray();
     }
 
+
     public static void SaveGame(string fileName, SerializableGameObject[] gameObjects)
     {
-        // Check if gameObjects is null or empty
         if (gameObjects == null || gameObjects.Length == 0)
         {
             Debug.LogWarning("Cannot save empty game state.");
             return;
         }
 
-        // Remove any extra file name from the save path
         if (Path.HasExtension(fileName))
         {
             fileName = Path.GetFileNameWithoutExtension(fileName);
         }
 
-        // Create persistent directory if it does not exist
-        string directory = Path.Combine(Application.persistentDataPath, "SimSaves");
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        // Create file path
+        string directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         string filePath = Path.Combine(directory, fileName + ".dat");
-
-        // Open file stream
-        FileStream fileStream = null;
 
         try
         {
-            if (File.Exists(filePath))
+            using (FileStream fileStream = File.Create(filePath))
             {
-                fileStream = File.Open(filePath, FileMode.Open);
-                if (fileStream.Length > 0)
-                {
-                    // Deserialize game objects from file
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-
-                    foreach (SerializableGameObject gameObject in gameObjects)
-                    {
-                        gameObject.Deserialize(binaryFormatter.Deserialize(fileStream));
-                    }
-                }
-            }
-            else
-            {
-                fileStream = File.Create(filePath);
-
-                // Serialize game objects and write to file
                 BinaryFormatter binaryFormatter = new BinaryFormatter();
-
-                foreach (SerializableGameObject gameObject in gameObjects)
-                {
-                    binaryFormatter.Serialize(fileStream, gameObject);
-                }
+                binaryFormatter.Serialize(fileStream, gameObjects);
             }
+
             Debug.Log($"Simulation state saved to {filePath}");
         }
         catch (IOException ex)
         {
             Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
-        }
-        finally
-        {
-            // Close file stream
-            if (fileStream != null)
-            {
-                fileStream.Close();
-            }
         }
     }
 
@@ -149,54 +111,45 @@ public class SimFileHandler : MonoBehaviour
 
     public static SerializableGameObject[] LoadGame(string fileName)
     {
-        // Create file path
-        string filePath = Path.Combine(Application.persistentDataPath, "SimSaves", fileName);
+        string directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string filePath = Path.Combine(directory, fileName);
 
-        // Check if file exists
         if (!File.Exists(filePath))
         {
             Debug.LogError("Failed to load game from " + filePath + ": File not found");
             return null;
         }
 
-        // Open file stream
-        FileStream fileStream = null;
         try
         {
-            fileStream = File.OpenRead(filePath);
-
-            // Deserialize game objects and print their contents
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            binaryFormatter.Binder = new VersionDeserializationBinder(); // Use custom binder
-            SerializableGameObject[] gameObjects = (SerializableGameObject[])binaryFormatter.Deserialize(fileStream);
-            if (gameObjects != null && gameObjects.Length > 0)
+            using (FileStream fileStream = File.OpenRead(filePath))
             {
-                foreach (SerializableGameObject gameObject in gameObjects)
+                BinaryFormatter binaryFormatter = new BinaryFormatter();
+                binaryFormatter.Binder = new VersionDeserializationBinder(); // Use custom binder
+                SerializableGameObject[] gameObjects = (SerializableGameObject[])binaryFormatter.Deserialize(fileStream);
+                if (gameObjects != null && gameObjects.Length > 0)
                 {
-                    Debug.Log("Object name: " + gameObject.name);
-                    // Print or display other properties of the game object as desired
+                    foreach (SerializableGameObject gameObject in gameObjects)
+                    {
+                        Debug.Log("Object name: " + gameObject.name);
+                        // Print or display other properties of the game object as desired
+                    }
                 }
+                else
+                {
+                    Debug.LogWarning("No game objects found in file: " + filePath);
+                }
+                return gameObjects;
             }
-            else
-            {
-                Debug.LogWarning("No game objects found in file: " + filePath);
-            }
-            return gameObjects;
         }
         catch (IOException ex)
         {
             Debug.LogError("Failed to load game from " + filePath + ": " + ex.Message);
             return null;
         }
-        finally
-        {
-            // Close file stream
-            if (fileStream != null)
-            {
-                fileStream.Close();
-            }
-        }
     }
+
+
 
     public void OpenTextFileLoadDialog()
     {
@@ -206,7 +159,7 @@ public class SimFileHandler : MonoBehaviour
 
     public void OpenSimStateLoadDialog()
     {
-        FileBrowser.SetFilters(false, new FileBrowser.Filter(".bin", ".bin"));
+        FileBrowser.SetFilters(false, new FileBrowser.Filter(".dat", ".dat"));
         FileBrowser.ShowLoadDialog(OnLoadGameSuccess, OnLoadGameCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
     }
 

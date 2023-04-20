@@ -27,5 +27,4 @@ public class InGameButtons : MonoBehaviour
         /// </summary>
         if (GUI.Button(new Rect(40, 10, 100, 30), "Save")) {simFileHandler.OpenGameSaveDialog();}
     }
-
 }
