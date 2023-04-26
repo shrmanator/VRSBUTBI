@@ -24,6 +24,11 @@ public class ObjectPrefabManager : MonoBehaviour
 
     public GameObject GetPrefabByName(string name)
     {
-        return objectPrefabMap.ContainsKey(name) ? objectPrefabMap[name] : "null";
+        if (name == null)
+        {
+            Debug.LogWarning("Cannot get prefab with null name");
+            return null;
+        }
+        return objectPrefabMap.ContainsKey(name) ? objectPrefabMap[name] : null;
     }
 }
