@@ -8,6 +8,8 @@ which are representations of GameObjects in the game world that are marked with 
 It also creates a persistent directory to store saved game states in and checks if the directory exists
 before attempting to save to it. The script includes error handling for failed save or load attempts and
 uses events to notify other objects when a file has been successfully loaded.
+
+NOTE: SerializableGameObject is a class found in the SerializableGameObject.cs script. 
 */
 
 using UnityEngine;
@@ -23,7 +25,10 @@ using System.Linq;
 
 public class SimFileHandler : MonoBehaviour
 {
-    private string saveFileName = "save_game.dat";
+    // Maps the imported object names to their corresponding prefabs:
+    [SerializeField] private Dictionary<string, GameObject> objectPrefabMap;
+
+    private string saveFileName = "saved_sim_state.bin";
     private static string savePath;
 
     public delegate void OnGameFileLoaded(string filePath);
@@ -48,6 +53,7 @@ public class SimFileHandler : MonoBehaviour
         FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, null, "new_file.bin", "Save File", "Save");
     }
 
+
     /// <summary>
     /// Handles a successful save.
     /// </summary>
@@ -57,6 +63,7 @@ public class SimFileHandler : MonoBehaviour
         SaveGame(filePaths[0], GetSerializableGameObjects());
     }
 
+
     private SerializableGameObject[] GetSerializableGameObjects()
     {
         List<SerializableGameObject> serializableGameObjects = new List<SerializableGameObject>();
@@ -64,10 +71,9 @@ public class SimFileHandler : MonoBehaviour
         {
             SerializableVector3 position = new SerializableVector3(obj.transform.position);
             SerializableVector3 rotation = new SerializableVector3(obj.transform.rotation.eulerAngles);
-            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, position, rotation);
-
-            SerializableGameObject testGameObject = new SerializableGameObject("MyObject", new SerializableVector3(new Vector3(1f, 2f, 3f)), new SerializableVector3(new Vector3(0f, 90f, 0f)));
-            serializableGameObjects.Add(testGameObject);
+            SerializableVector3 scale = new SerializableVector3(obj.transform.localScale); // Add this line
+            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, position, rotation, scale); 
+            
             serializableGameObjects.Add(serializedObject);
         }
         return serializableGameObjects.ToArray();
@@ -107,8 +113,6 @@ public class SimFileHandler : MonoBehaviour
     }
 
 
-
-
     public static SerializableGameObject[] LoadGame(string fileName)
     {
         string directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
@@ -131,7 +135,8 @@ public class SimFileHandler : MonoBehaviour
                 {
                     foreach (SerializableGameObject gameObject in gameObjects)
                     {
-                        Debug.Log("Object name: " + gameObject.name);
+                        Debug.Log("Object name: " + gameObject.objectName);
+
                         // Print or display other properties of the game object as desired
                     }
                 }
@@ -172,10 +177,45 @@ public class SimFileHandler : MonoBehaviour
         SerializableGameObject[] gameObjects = SimFileHandler.LoadGame(filePaths[0]);
         if (gameObjects != null)
         {
-            print(gameObjects);
+            InstantiateLoadedObjects(gameObjects);
         }
         GameFileLoaded?.Invoke(filePaths[0]);
     }
+
+    private void InstantiateLoadedObjects(SerializableGameObject[] loadedObjects)
+    {
+        if (loadedObjects == null || loadedObjects.Length == 0)
+        {
+            Debug.LogWarning("No game objects to instantiate.");
+            return;
+        }
+
+        ObjectPrefabManager prefabManager = FindObjectOfType<ObjectPrefabManager>();
+        if (prefabManager == null)
+        {
+            Debug.LogError("ObjectPrefabManager not found in the scene.");
+            return;
+        }
+
+        foreach (SerializableGameObject loadedObject in loadedObjects)
+        {
+            GameObject prefab = prefabManager.GetPrefabByName(loadedObject.objectName);
+            if (prefab != null)
+            {
+                GameObject newGameObject = Instantiate(prefab);
+                newGameObject.name = loadedObject.objectName;
+                newGameObject.tag = "Serializable";
+                newGameObject.transform.position = loadedObject.position.ToVector3();
+                newGameObject.transform.rotation = Quaternion.Euler(loadedObject.rotation.ToVector3());
+                newGameObject.transform.localScale = loadedObject.scale.ToVector3();
+            }
+            else
+            {
+                Debug.LogWarning("Prefab not found for object name: " + loadedObject.objectName);
+            }
+        }
+    }
+
 
     private void OnLoadTextSuccess(string[] filePaths)
     {

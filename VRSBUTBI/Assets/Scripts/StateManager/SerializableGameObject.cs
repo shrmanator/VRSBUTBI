@@ -28,59 +28,37 @@ using System;
 /// Class for serializing and deserializing game objects.
 /// </summary>
 [System.Serializable]
-public class SerializableGameObject : ISerializable
+public class SerializableGameObject
 {
-    /// <summary>
-    /// The name of the game object.
-    /// </summary>
-    public string name;
-
-    /// <summary>
-    /// The position of the game object.
-    /// </summary>
+    public string objectName;
     public SerializableVector3 position;
-
-    /// <summary>
-    /// The rotation of the game object.
-    /// </summary>
     public SerializableVector3 rotation;
+    public SerializableVector3 scale;
 
-    /// <summary>
-    /// Constructor for creating a new SerializableGameObject.
-    /// </summary>
-    /// <param name="name">The name of the game object.</param>
-    /// <param name="position">The position of the game object.</param>
-    /// <param name="rotation">The rotation of the game object.</param>
-    public SerializableGameObject(string name, SerializableVector3 position, SerializableVector3 rotation)
+    public SerializableGameObject(string objectName, SerializableVector3 position, SerializableVector3 rotation, SerializableVector3 scale)
     {
-        this.name = name;
+        this.objectName = objectName;
         this.position = position;
         this.rotation = rotation;
+        this.scale = scale;;
     }
 
-    /// <summary>
-    /// Constructor for deserializing a SerializableGameObject.
-    /// </summary>
-    /// <param name="info">The SerializationInfo containing the data to deserialize.</param>
-    /// <param name="context">The streaming context.</param>
     protected SerializableGameObject(SerializationInfo info, StreamingContext context)
     {
-        // Deserialize the object's fields from the SerializationInfo object
-        name = info.GetString("name");
+        // ...
         position = (SerializableVector3)info.GetValue("position", typeof(SerializableVector3));
         rotation = (SerializableVector3)info.GetValue("rotation", typeof(SerializableVector3));
+
+        // Deserialize the scale field
+        scale = (SerializableVector3)info.GetValue("scale", typeof(SerializableVector3));
     }
 
-    /// <summary>
-    /// Method to serialize the object's fields into a SerializationInfo object.
-    /// </summary>
-    /// <param name="info">The SerializationInfo object to populate with data.</param>
-    /// <param name="context">The streaming context.</param>
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
-        info.AddValue("name", name);
+        info.AddValue("name", objectName);
         info.AddValue("position", position);
         info.AddValue("rotation", rotation);
+        info.AddValue("scale", scale);
     }
 
     /// <summary>
@@ -91,7 +69,7 @@ public class SerializableGameObject : ISerializable
     {
         if (obj is SerializableGameObject serializedObject)
         {
-            name = serializedObject.name;
+            objectName = serializedObject.objectName;
             position = serializedObject.position;
             rotation = serializedObject.rotation;
         }
