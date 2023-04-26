@@ -17,16 +17,11 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using SimpleFileBrowser;
-using System.Runtime.Serialization;
-using System.Reflection;
 using System;
-using System.Linq;
-
 
 public class SimFileHandler : MonoBehaviour
 {
-    // Maps the imported object names to their corresponding prefabs:
-    [SerializeField] private Dictionary<string, GameObject> objectPrefabMap;
+    [SerializeField] private ObjectPrefabManager objectPrefabManager;
 
     private string saveFileName = "saved_sim_state.bin";
     private static string savePath;
@@ -48,21 +43,14 @@ public class SimFileHandler : MonoBehaviour
 
     public void OpenGameSaveDialog()
     {
-        // FileBrowser is defined in the SimpleFileBrowser library
         FileBrowser.SetFilters(false, new FileBrowser.Filter(".bin", ".bin"));
-        FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, null, "new_file.bin", "Save File", "Save");
+        FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, savePath, "new_file.bin", "Save File", "Save");
     }
 
-
-    /// <summary>
-    /// Handles a successful save.
-    /// </summary>
-    /// <param name="filePaths">The paths of the saved files.</param>
     private void OnGameSaveSuccess(string[] filePaths)
     {
         SaveGame(filePaths[0], GetSerializableGameObjects());
     }
-
 
     private SerializableGameObject[] GetSerializableGameObjects()
     {
@@ -71,14 +59,13 @@ public class SimFileHandler : MonoBehaviour
         {
             SerializableVector3 position = new SerializableVector3(obj.transform.position);
             SerializableVector3 rotation = new SerializableVector3(obj.transform.rotation.eulerAngles);
-            SerializableVector3 scale = new SerializableVector3(obj.transform.localScale); // Add this line
-            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, position, rotation, scale); 
-            
+            SerializableVector3 scale = new SerializableVector3(obj.transform.localScale);
+            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, position, rotation, scale);
+
             serializableGameObjects.Add(serializedObject);
         }
         return serializableGameObjects.ToArray();
     }
-
 
     public static void SaveGame(string fileName, SerializableGameObject[] gameObjects)
     {
@@ -93,17 +80,12 @@ public class SimFileHandler : MonoBehaviour
             fileName = Path.GetFileNameWithoutExtension(fileName);
         }
 
-        string directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string filePath = Path.Combine(directory, fileName + ".dat");
+        string filePath = Path.Combine(savePath, fileName + ".json");
 
         try
         {
-            using (FileStream fileStream = File.Create(filePath))
-            {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Serialize(fileStream, gameObjects);
-            }
-
+            string json = JsonUtility.ToJson(new SerializableGameObjectWrapper { gameObjects = gameObjects }, true);
+            File.WriteAllText(filePath, json);
             Debug.Log($"Simulation state saved to {filePath}");
         }
         catch (IOException ex)
@@ -115,8 +97,7 @@ public class SimFileHandler : MonoBehaviour
 
     public static SerializableGameObject[] LoadGame(string fileName)
     {
-        string directory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-        string filePath = Path.Combine(directory, fileName);
+        string filePath = Path.Combine(savePath, fileName);
 
         if (!File.Exists(filePath))
         {
@@ -126,26 +107,9 @@ public class SimFileHandler : MonoBehaviour
 
         try
         {
-            using (FileStream fileStream = File.OpenRead(filePath))
-            {
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-                binaryFormatter.Binder = new VersionDeserializationBinder(); // Use custom binder
-                SerializableGameObject[] gameObjects = (SerializableGameObject[])binaryFormatter.Deserialize(fileStream);
-                if (gameObjects != null && gameObjects.Length > 0)
-                {
-                    foreach (SerializableGameObject gameObject in gameObjects)
-                    {
-                        Debug.Log("Object name: " + gameObject.objectName);
-
-                        // Print or display other properties of the game object as desired
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning("No game objects found in file: " + filePath);
-                }
-                return gameObjects;
-            }
+            string json = File.ReadAllText(filePath);
+            SerializableGameObjectWrapper wrapper = JsonUtility.FromJson<SerializableGameObjectWrapper>(json);
+            return wrapper.gameObjects;
         }
         catch (IOException ex)
         {
@@ -153,7 +117,6 @@ public class SimFileHandler : MonoBehaviour
             return null;
         }
     }
-
 
 
     public void OpenTextFileLoadDialog()
@@ -164,7 +127,7 @@ public class SimFileHandler : MonoBehaviour
 
     public void OpenSimStateLoadDialog()
     {
-        FileBrowser.SetFilters(false, new FileBrowser.Filter(".dat", ".dat"));
+        FileBrowser.SetFilters(false, new FileBrowser.Filter(".json", ".json"));
         FileBrowser.ShowLoadDialog(OnLoadGameSuccess, OnLoadGameCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
     }
 
@@ -211,7 +174,7 @@ public class SimFileHandler : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("Prefab not found for object name: " + loadedObject.objectName);
+                Debug.LogWarning("SimfileHandler.cs error: Prefab not found for object name: " + loadedObject.objectName);
             }
         }
     }
@@ -238,3 +201,9 @@ public class SimFileHandler : MonoBehaviour
     }
 }
 
+
+[Serializable]
+public class SerializableGameObjectWrapper
+{
+    public SerializableGameObject[] gameObjects;
+}
