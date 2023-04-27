@@ -174,7 +174,7 @@ public class SimFileHandler : MonoBehaviour
             }
             else
             {
-                Debug.LogWarning("SimfileHandler.cs error: Prefab not found for object name: " + loadedObject.objectName);
+                Debug.LogWarning("SimFileHandler.cs error: Prefab not found for object name: " + loadedObject.objectName);
             }
         }
     }
