@@ -182,6 +182,7 @@ public sealed class ObjectManager : MonoBehaviour
         //set position
         _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
         _loadedObject.transform.GetChild(0).name = (string)_objectData[1];
+        _loadedObject.tag = "Serializable";
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }

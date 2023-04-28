@@ -5,7 +5,7 @@ using UnityEngine;
 public class DynamicObjectTester : MonoBehaviour
 {
     object[] transformCommand = {"DYNUPDATECELL", "Cube", "TRANSFORM", 20, 10, 10, 10};
-    object[] transformCommand1 = { "DYNUPDATECELL", "Cube", "TRANSFORM", 30, 5, 30, 10 };
+    object[] transformCommand1 = {"DYNUPDATECELL", "Cube", "TRANSFORM", 30, 5, 30, 10 };
     // Start is called before the first frame update
     void Start()
     {
