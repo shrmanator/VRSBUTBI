@@ -1,11 +1,15 @@
 /*
-This script is responsible for handling the saving and loading of a simulation game's state in Unity.
+This script is responsible for handling the saving and loading of a simulation game state in Unity.
+
 It provides methods for opening a file dialog to save and load the game state and uses the
-BinaryFormatter class to serialize and deserialize a list of SerializableGameObject objects,
+JsonUtility class to serialize and deserialize a list of SerializableGameObject objects,
 which are representations of GameObjects in the game world that are marked with the "Serializable" tag.
+
 It also creates a persistent directory to store saved game states in and checks if the directory exists
 before attempting to save to it. The script includes error handling for failed save or load attempts and
 uses events to notify other objects when a file has been successfully loaded.
+
+NOTE: SerializableGameObject is a class found in the SerializableGameObject.cs script. 
 */
 
 using UnityEngine;
@@ -13,14 +17,13 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using SimpleFileBrowser;
-using System.Runtime.Serialization;
-using System.Reflection;
 using System;
-
 
 public class SimFileHandler : MonoBehaviour
 {
-    private string saveFileName = "save_game.dat";
+    [SerializeField] private ObjectPrefabManager objectPrefabManager;
+
+    private string saveFileName = "saved_sim_state.bin";
     private static string savePath;
 
     public delegate void OnGameFileLoaded(string filePath);
@@ -41,13 +44,9 @@ public class SimFileHandler : MonoBehaviour
     public void OpenGameSaveDialog()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter(".bin", ".bin"));
-        FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, null, "new_file", "Save File", "Save");
+        FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, savePath, "new_file.bin", "Save File", "Save");
     }
 
-    /// <summary>
-    /// Handles a successful save.
-    /// </summary>
-    /// <param name="filePaths">The paths of the saved files.</param>
     private void OnGameSaveSuccess(string[] filePaths)
     {
         SaveGame(filePaths[0], GetSerializableGameObjects());
@@ -60,10 +59,9 @@ public class SimFileHandler : MonoBehaviour
         {
             SerializableVector3 position = new SerializableVector3(obj.transform.position);
             SerializableVector3 rotation = new SerializableVector3(obj.transform.rotation.eulerAngles);
-            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, position, rotation);
+            SerializableVector3 scale = new SerializableVector3(obj.transform.localScale);
+            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, position, rotation, scale);
 
-            SerializableGameObject testGameObject = new SerializableGameObject("MyObject", new SerializableVector3(new Vector3(1f, 2f, 3f)), new SerializableVector3(new Vector3(0f, 90f, 0f)));
-            serializableGameObjects.Add(testGameObject);
             serializableGameObjects.Add(serializedObject);
         }
         return serializableGameObjects.ToArray();
@@ -71,129 +69,55 @@ public class SimFileHandler : MonoBehaviour
 
     public static void SaveGame(string fileName, SerializableGameObject[] gameObjects)
     {
-        // Check if gameObjects is null or empty
         if (gameObjects == null || gameObjects.Length == 0)
         {
             Debug.LogWarning("Cannot save empty game state.");
             return;
         }
 
-        // Remove any extra file name from the save path
         if (Path.HasExtension(fileName))
         {
             fileName = Path.GetFileNameWithoutExtension(fileName);
         }
 
-        // Create persistent directory if it does not exist
-        string directory = Path.Combine(Application.persistentDataPath, "SimSaves");
-        if (!Directory.Exists(directory))
-        {
-            Directory.CreateDirectory(directory);
-        }
-
-        // Create file path
-        string filePath = Path.Combine(directory, fileName + ".dat");
-
-        // Open file stream
-        FileStream fileStream = null;
+        string filePath = Path.Combine(savePath, fileName + ".json");
 
         try
         {
-            if (File.Exists(filePath))
-            {
-                fileStream = File.Open(filePath, FileMode.Open);
-                if (fileStream.Length > 0)
-                {
-                    // Deserialize game objects from file
-                    BinaryFormatter binaryFormatter = new BinaryFormatter();
-
-                    foreach (SerializableGameObject gameObject in gameObjects)
-                    {
-                        gameObject.Deserialize(binaryFormatter.Deserialize(fileStream));
-                    }
-                }
-            }
-            else
-            {
-                fileStream = File.Create(filePath);
-
-                // Serialize game objects and write to file
-                BinaryFormatter binaryFormatter = new BinaryFormatter();
-
-                foreach (SerializableGameObject gameObject in gameObjects)
-                {
-                    binaryFormatter.Serialize(fileStream, gameObject);
-                }
-            }
+            string json = JsonUtility.ToJson(new SerializableGameObjectWrapper { gameObjects = gameObjects }, true);
+            File.WriteAllText(filePath, json);
             Debug.Log($"Simulation state saved to {filePath}");
         }
         catch (IOException ex)
         {
             Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
         }
-        finally
-        {
-            // Close file stream
-            if (fileStream != null)
-            {
-                fileStream.Close();
-            }
-        }
     }
-
-
 
 
     public static SerializableGameObject[] LoadGame(string fileName)
     {
-        // Create file path
-        string filePath = Path.Combine(Application.persistentDataPath, "SimSaves", fileName);
+        string filePath = Path.Combine(savePath, fileName);
 
-        // Check if file exists
         if (!File.Exists(filePath))
         {
             Debug.LogError("Failed to load game from " + filePath + ": File not found");
             return null;
         }
 
-        // Open file stream
-        FileStream fileStream = null;
         try
         {
-            fileStream = File.OpenRead(filePath);
-
-            // Deserialize game objects and print their contents
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
-            binaryFormatter.Binder = new VersionDeserializationBinder(); // Use custom binder
-            SerializableGameObject[] gameObjects = (SerializableGameObject[])binaryFormatter.Deserialize(fileStream);
-            if (gameObjects != null && gameObjects.Length > 0)
-            {
-                foreach (SerializableGameObject gameObject in gameObjects)
-                {
-                    Debug.Log("Object name: " + gameObject.name);
-                    // Print or display other properties of the game object as desired
-                }
-            }
-            else
-            {
-                Debug.LogWarning("No game objects found in file: " + filePath);
-            }
-            return gameObjects;
+            string json = File.ReadAllText(filePath);
+            SerializableGameObjectWrapper wrapper = JsonUtility.FromJson<SerializableGameObjectWrapper>(json);
+            return wrapper.gameObjects;
         }
         catch (IOException ex)
         {
             Debug.LogError("Failed to load game from " + filePath + ": " + ex.Message);
             return null;
         }
-        finally
-        {
-            // Close file stream
-            if (fileStream != null)
-            {
-                fileStream.Close();
-            }
-        }
     }
+
 
     public void OpenTextFileLoadDialog()
     {
@@ -203,7 +127,7 @@ public class SimFileHandler : MonoBehaviour
 
     public void OpenSimStateLoadDialog()
     {
-        FileBrowser.SetFilters(false, new FileBrowser.Filter(".bin", ".bin"));
+        FileBrowser.SetFilters(false, new FileBrowser.Filter(".json", ".json"));
         FileBrowser.ShowLoadDialog(OnLoadGameSuccess, OnLoadGameCancel, FileBrowser.PickMode.Files, false, null, "", "Load File", "Load");
     }
 
@@ -216,10 +140,45 @@ public class SimFileHandler : MonoBehaviour
         SerializableGameObject[] gameObjects = SimFileHandler.LoadGame(filePaths[0]);
         if (gameObjects != null)
         {
-            print(gameObjects);
+            InstantiateLoadedObjects(gameObjects);
         }
         GameFileLoaded?.Invoke(filePaths[0]);
     }
+
+    private void InstantiateLoadedObjects(SerializableGameObject[] loadedObjects)
+    {
+        if (loadedObjects == null || loadedObjects.Length == 0)
+        {
+            Debug.LogWarning("No game objects to instantiate.");
+            return;
+        }
+
+        ObjectPrefabManager prefabManager = FindObjectOfType<ObjectPrefabManager>();
+        if (prefabManager == null)
+        {
+            Debug.LogError("ObjectPrefabManager not found in the scene.");
+            return;
+        }
+
+        foreach (SerializableGameObject loadedObject in loadedObjects)
+        {
+            GameObject prefab = prefabManager.GetPrefabByName(loadedObject.objectName);
+            if (prefab != null)
+            {
+                GameObject newGameObject = Instantiate(prefab);
+                newGameObject.name = loadedObject.objectName;
+                newGameObject.tag = "Serializable";
+                newGameObject.transform.position = loadedObject.position.ToVector3();
+                newGameObject.transform.rotation = Quaternion.Euler(loadedObject.rotation.ToVector3());
+                newGameObject.transform.localScale = loadedObject.scale.ToVector3();
+            }
+            else
+            {
+                Debug.LogWarning("SimFileHandler.cs error: Prefab not found for object name: " + loadedObject.objectName);
+            }
+        }
+    }
+
 
     private void OnLoadTextSuccess(string[] filePaths)
     {
@@ -242,3 +201,9 @@ public class SimFileHandler : MonoBehaviour
     }
 }
 
+
+[Serializable]
+public class SerializableGameObjectWrapper
+{
+    public SerializableGameObject[] gameObjects;
+}
