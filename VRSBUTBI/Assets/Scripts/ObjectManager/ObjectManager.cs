@@ -26,7 +26,8 @@ public sealed class ObjectManager : MonoBehaviour
     {
         FileParser.CreateCommandReceived += CreateObject;
         ScenePlayer.DestroyCommandReceived += DestroyObject;
-        ScenePlayer.SetObjCommandReceived += ChangeObjectProperties;
+        ScenePlayer.SetObjCommandReceived += ChangeObjectProperty;
+        //ScenePlayer.DynUpdateCommandReceived += DynamicallyChangeObjectProperty;
     }
     /// <summary>
     /// Ensures that there is only one instance of ObjectCreator
@@ -181,6 +182,7 @@ public sealed class ObjectManager : MonoBehaviour
         //set position
         _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
         _loadedObject.transform.GetChild(0).name = (string)_objectData[1];
+        _loadedObject.tag = "Serializable";
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }
@@ -238,7 +240,7 @@ public sealed class ObjectManager : MonoBehaviour
     /// "TRANSFORM" float x , float y , float x scale factors 
     /// "ROTATE" float x, float y, float z, degrees 
     /// </param>
-    public void ChangeObjectProperties (object[] data){
+    public void ChangeObjectProperty (object[] data){
         GameObject obj = GameObject.Find((string)data[1]);
         if (obj == null){
             UnityEngine.Debug.Log(data[1] + " not found!");
@@ -320,4 +322,63 @@ public sealed class ObjectManager : MonoBehaviour
         }
         Destroy(obj);
     }
+
+    public void DynamicallyChangeObjectProperty(object[] data){
+        GameObject obj = GameObject.Find((string)data[1]);
+        if (obj == null)
+        {
+            UnityEngine.Debug.Log(data[1] + " not found!");
+            return;
+        }
+        switch ((string)data[2])
+        {
+            case "TRANSFORM":
+                if (data.Length != 7)
+                {
+                    UnityEngine.Debug.Log("Invalid syntax for SETOBJCELL TRANSFORM");
+                    return;
+                }
+                float xScale = float.Parse(data[4].ToString());
+                float yScale = float.Parse(data[5].ToString());
+                float zScale = float.Parse(data[6].ToString());
+                float timeTransform = float.Parse(data[3].ToString());
+                DynamicallyChangeObjectSize(obj, xScale, yScale, zScale, timeTransform);
+                break;
+            case "ROTATE":
+                if (data.Length != 7)
+                {
+                    UnityEngine.Debug.Log("Invalid syntax for SETOBJCELL ROTATE");
+                    return;
+                }
+                float xDegrees = float.Parse(data[4].ToString());
+                float yDegrees = float.Parse(data[5].ToString());
+                float zDegrees = float.Parse(data[6].ToString());
+                float timeRotate = float.Parse(data[3].ToString());
+                //DynamicallyRotateObject(obj, xDegrees, yDegrees, zDegrees);
+                break;
+            default:
+                UnityEngine.Debug.Log("Unidentified property");
+                break;
+        }
+    }
+
+    private void DynamicallyChangeObjectSize(GameObject obj, float x, float y, float z, float time)
+    {
+        if (x == 0)
+        {
+            x = obj.transform.localScale.x;
+        }
+        if (y == 0)
+        {
+            y = obj.transform.localScale.y;
+        }
+        if (z == 0)
+        {
+            z = obj.transform.localScale.z;
+        }
+        Vector3 scale = new Vector3(x, y, z);
+        DynamicObjectTransformer script = obj.AddComponent(typeof(DynamicObjectTransformer)) as DynamicObjectTransformer;
+        script.SetTransform(scale, time);
+    }
+
 }
