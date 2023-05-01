@@ -42,6 +42,8 @@ public class SimFileHandler : MonoBehaviour
     private string saveFileName = "saved_sim_state.bin";
     private static string savePath;
 
+    private string importedModelsPath;
+
     public delegate void OnGameFileLoaded(string filePath);
     public static event OnGameFileLoaded GameFileLoaded;
 
@@ -50,10 +52,27 @@ public class SimFileHandler : MonoBehaviour
 
     private void Start() 
     {
-        LoadExternalModels();
         CreateDirectories();
-        LoadImportedModels();
+        LoadExternalModels();
+        importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
+    }
 
+    public string[] GetAvailableModels()
+    {
+        if (!Directory.Exists(importedModelsPath))
+        {
+            Debug.LogError("Imported_Models directory not found.");
+            return new string[0];
+        }
+
+        string[] availableModels = Directory.GetFiles(importedModelsPath, "*.obj", SearchOption.AllDirectories);
+        return availableModels;
+    }
+
+    public bool ModelExists(string modelName)
+    {
+        string modelPath = Path.Combine(importedModelsPath, modelName + ".obj");
+        return File.Exists(modelPath);
     }
 
     private void CreateDirectories()
@@ -124,7 +143,6 @@ public class SimFileHandler : MonoBehaviour
             Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
         }
     }
-
 
     public static SerializableGameObject[] LoadGame(string fileName)
     {
@@ -209,7 +227,7 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
-    // Use if you want to load the models from the folder outside the Unity project folder
+    // Loads models from the imported_models directory.
     public void LoadExternalModels()
     {
         // Specify the folder where users can drop their 3D model files
