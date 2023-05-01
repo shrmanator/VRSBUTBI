@@ -51,19 +51,21 @@ public class SimFileHandler : MonoBehaviour
     private void Start() 
     {
         LoadExternalModels();
+        CreateDirectories();
+        LoadImportedModels();
+
     }
 
-    private void Awake()
+    private void CreateDirectories()
     {
-        // Create the "savegames" folder if it doesn't exist
-        savePath = Path.Combine(Application.persistentDataPath, "savegames");
-        if (!Directory.Exists(savePath))
+        string saveGamesPath = Path.Combine(Application.dataPath, "SaveGames");
+        string importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
+
+        if (!Directory.Exists(saveGamesPath))
         {
-            Directory.CreateDirectory(savePath);
+            Directory.CreateDirectory(saveGamesPath);
         }
 
-        // Create the "imported_models" folder if it doesn't exist
-        string importedModelsPath = Path.Combine(Application.persistentDataPath, "imported_models");
         if (!Directory.Exists(importedModelsPath))
         {
             Directory.CreateDirectory(importedModelsPath);
@@ -207,6 +209,7 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
+    // Use if you want to load the models from the folder outside the Unity project folder
     public void LoadExternalModels()
     {
         // Specify the folder where users can drop their 3D model files
