@@ -57,6 +57,10 @@ public class SimFileHandler : MonoBehaviour
         importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
     }
 
+    /// <summary>
+    /// Returns an array of file paths to available models in the Imported_Models directory.
+    /// </summary>
+    /// <returns>An array of file paths to available models.</returns>
     public string[] GetAvailableModels()
     {
         if (!Directory.Exists(importedModelsPath))
@@ -69,11 +73,17 @@ public class SimFileHandler : MonoBehaviour
         return availableModels;
     }
 
+    /// <summary>
+    /// Checks if a model with the given name exists in the Imported_Models directory.
+    /// </summary>
+    /// <param name="modelName">The name of the model to check for.</param>
+    /// <returns>True if the model exists, false otherwise.</returns>
     public bool ModelExists(string modelName)
     {
         string modelPath = Path.Combine(importedModelsPath, modelName + ".obj");
         return File.Exists(modelPath);
     }
+
 
     private void CreateDirectories()
     {
