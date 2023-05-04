@@ -23,21 +23,25 @@ public class FileParser : MonoBehaviour
     /// </summary>
     public static event CommandReceivedEventHandler CommandReceived;
 
-    public delegate void CreateCommandReceivedEventHandler(object[] newObject);
-    public static event CreateCommandReceivedEventHandler CreateCommandReceived;
+//    public delegate void CreateCommandReceivedEventHandler(object[] newObject);
+//    public static event CreateCommandReceivedEventHandler CreateCommandReceived;
 
-    public delegate void setobjCommandReceivedEventHandler(object[] data);
-    public static event setobjCommandReceivedEventHandler setobjCommandReceived;
+//    public delegate void setobjCommandReceivedEventHandler(object[] data);
+//    public static event setobjCommandReceivedEventHandler setobjCommandReceived;
 
-    public delegate void moveCommandReceivedEventHandler(string objectName3, string pathName, float duration1, float startPosition);
-    public static event moveCommandReceivedEventHandler moveCommandReceived;
+//    public delegate void moveCommandReceivedEventHandler(string objectName3, string pathName, float duration1, float startPosition);
+//    public static event moveCommandReceivedEventHandler moveCommandReceived;
 
-    public delegate void DestroyCommandReceivedEventHandler(string objectName);
-    public static event DestroyCommandReceivedEventHandler DestroyCommandReceived;
+//    public delegate void DestroyCommandReceivedEventHandler(string objectName);
+//    public static event DestroyCommandReceivedEventHandler DestroyCommandReceived;
+
+//    public delegate void DYNCommandReceivedEventHandler(object[] objectName);
+//    public static event DYNCommandReceivedEventHandler DYNjCommandReceived;
 
     List<object[]> createCommands;
     List<object[]> moveCommands;
     List<object[]> setobjCommands;
+    List<object[]> DYNCommands;
 
     List<object[]> commands;
 
@@ -137,6 +141,7 @@ public class FileParser : MonoBehaviour
                         float endVal = float.Parse(parts[5]);
                         string units = parts.Length > 6 ? parts[6] : null;
                         commands.Add(new object[] {cmd, objToUpdate, cellToUpdate, duration2, startVal, endVal, units });
+                        DYNCommands.Add(new object[] { objToUpdate, cellToUpdate, duration2, startVal, endVal, units });
                         break;
                     case "TIME":
                         commands.Add(new object[] {cmd, parts[1]});
