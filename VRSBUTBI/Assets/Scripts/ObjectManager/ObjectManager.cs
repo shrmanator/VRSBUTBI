@@ -27,7 +27,7 @@ public sealed class ObjectManager : MonoBehaviour
         FileParser.CreateCommandReceived += CreateObject;
         ScenePlayer.DestroyCommandReceived += DestroyObject;
         ScenePlayer.SetObjCommandReceived += ChangeObjectProperty;
-        //ScenePlayer.DynUpdateCommandReceived += DynamicallyChangeObjectProperty;
+        ScenePlayer.DynUpdateCommandReceived += DynamicallyChangeObjectProperty;
     }
     /// <summary>
     /// Ensures that there is only one instance of ObjectCreator
@@ -182,6 +182,7 @@ public sealed class ObjectManager : MonoBehaviour
         //set position
         _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
         _loadedObject.transform.GetChild(0).name = (string)_objectData[1];
+        _loadedObject.tag = "Serializable";
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }
@@ -277,8 +278,8 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     /// <param name="obj"> The object to change</param>
     /// <param name="x"> x axis scale factor</param>
-    /// <param name="x"> y axis scale factor</param>
-    /// <param name="x"> z axis scale factor</param>
+    /// <param name="y"> y axis scale factor</param>
+    /// <param name="z"> z axis scale factor</param>
     private void ChangeObjectSize (GameObject obj, float x, float y, float z){
         if (x == 0){
             x = obj.transform.localScale.x;
@@ -323,10 +324,11 @@ public sealed class ObjectManager : MonoBehaviour
     }
 
     public void DynamicallyChangeObjectProperty(object[] data){
+        UnityEngine.Debug.Log("DYNUPDATECELL command started");
         GameObject obj = GameObject.Find((string)data[1]);
         if (obj == null)
         {
-            UnityEngine.Debug.Log(data[1] + " not found!");
+            UnityEngine.Debug.Log(data[2] + " not found!");
             return;
         }
         switch ((string)data[2])
@@ -353,7 +355,7 @@ public sealed class ObjectManager : MonoBehaviour
                 float yDegrees = float.Parse(data[5].ToString());
                 float zDegrees = float.Parse(data[6].ToString());
                 float timeRotate = float.Parse(data[3].ToString());
-                //DynamicallyRotateObject(obj, xDegrees, yDegrees, zDegrees);
+                DynamicallyRotateObject(obj, xDegrees, yDegrees, zDegrees, timeRotate);
                 break;
             default:
                 UnityEngine.Debug.Log("Unidentified property");
@@ -378,6 +380,13 @@ public sealed class ObjectManager : MonoBehaviour
         Vector3 scale = new Vector3(x, y, z);
         DynamicObjectTransformer script = obj.AddComponent(typeof(DynamicObjectTransformer)) as DynamicObjectTransformer;
         script.SetTransform(scale, time);
+    }
+
+    private void DynamicallyRotateObject(GameObject obj, float x, float y, float z, float time)
+    {
+        Vector3 angle = new Vector3(x, y, z);
+        DynamicObjectRotator script = obj.AddComponent(typeof(DynamicObjectRotator)) as DynamicObjectRotator;
+        script.SetTransform(angle, time);
     }
 
 }

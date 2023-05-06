@@ -9,15 +9,31 @@ It also creates a persistent directory to store saved game states in and checks 
 before attempting to save to it. The script includes error handling for failed save or load attempts and
 uses events to notify other objects when a file has been successfully loaded.
 
-NOTE: SerializableGameObject is a class found in the SerializableGameObject.cs script. 
+NOTE1: SerializableGameObject is a class found in the SerializableGameObject.cs script. 
+
+NOTE2: Importing Models
+    After building the game, please find the "imported_models" folder at the following location:
+
+    - Windows: %USERPROFILE%\AppData\LocalLow\<CompanyName>\<ProductName>\imported_models
+    - macOS: ~/Library/Application Support/<CompanyName>/<ProductName>/imported_models
+    - Linux: ~/.config/unity3d/<CompanyName>/<ProductName>/imported_models
+
+    Drop your OBJ files into this folder, the game will load the 3D models using the LoadExternalModels()
+    method.
 */
 
+
+using Dummiesman;
+using System.Text;
+using System.Collections;
+using System.Linq;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using SimpleFileBrowser;
 using System;
+
 
 public class SimFileHandler : MonoBehaviour
 {
@@ -26,18 +42,62 @@ public class SimFileHandler : MonoBehaviour
     private string saveFileName = "saved_sim_state.bin";
     private static string savePath;
 
+    private string importedModelsPath;
+
     public delegate void OnGameFileLoaded(string filePath);
     public static event OnGameFileLoaded GameFileLoaded;
 
     public delegate void OnTextFileLoaded(string filePath);
     public static event OnTextFileLoaded TextFileLoaded;
 
-    private void Awake()
+    private void Start() 
     {
-        savePath = Path.Combine(Application.persistentDataPath, "savegames");
-        if (!Directory.Exists(savePath))
+        CreateDirectories();
+        LoadExternalModels();
+        importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
+    }
+
+    /// <summary>
+    /// Returns an array of file paths to available models in the Imported_Models directory.
+    /// </summary>
+    /// <returns>An array of file paths to available models.</returns>
+    public string[] GetAvailableModels()
+    {
+        if (!Directory.Exists(importedModelsPath))
         {
-            Directory.CreateDirectory(savePath);
+            Debug.LogError("Imported_Models directory not found.");
+            return new string[0];
+        }
+
+        string[] availableModels = Directory.GetFiles(importedModelsPath, "*.obj", SearchOption.AllDirectories);
+        return availableModels;
+    }
+
+    /// <summary>
+    /// Checks if a model with the given name exists in the Imported_Models directory.
+    /// </summary>
+    /// <param name="modelName">The name of the model to check for.</param>
+    /// <returns>True if the model exists, false otherwise.</returns>
+    public bool ModelExists(string modelName)
+    {
+        string modelPath = Path.Combine(importedModelsPath, modelName + ".obj");
+        return File.Exists(modelPath);
+    }
+
+
+    private void CreateDirectories()
+    {
+        string saveGamesPath = Path.Combine(Application.dataPath, "SaveGames");
+        string importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
+
+        if (!Directory.Exists(saveGamesPath))
+        {
+            Directory.CreateDirectory(saveGamesPath);
+        }
+
+        if (!Directory.Exists(importedModelsPath))
+        {
+            Directory.CreateDirectory(importedModelsPath);
         }
     }
 
@@ -94,7 +154,6 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
-
     public static SerializableGameObject[] LoadGame(string fileName)
     {
         string filePath = Path.Combine(savePath, fileName);
@@ -117,7 +176,6 @@ public class SimFileHandler : MonoBehaviour
             return null;
         }
     }
-
 
     public void OpenTextFileLoadDialog()
     {
@@ -179,6 +237,61 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
+    // Loads models from the imported_models directory.
+    public void LoadExternalModels()
+    {
+        // Specify the folder where users can drop their 3D model files
+        string importFolder = Path.Combine(Application.persistentDataPath, "imported_models");
+
+        // Get all the files in the import folder
+        string[] modelFiles = Directory.GetFiles(importFolder, "*.obj");
+
+        // Load each model file using OBJImporter
+        foreach (string modelFile in modelFiles)
+        {
+            StartCoroutine(LoadModel(modelFile));
+        }
+    }
+
+    private IEnumerator LoadModel(string filePath)
+    {
+        WWW www = new WWW("file://" + filePath);
+        yield return www;
+
+        if (!string.IsNullOrEmpty(www.error))
+        {
+            Debug.LogError("Error loading OBJ file: " + www.error);
+            yield break;
+        }
+
+        // Instantiate the loaded model using OBJImporter
+        Mesh holderMesh = new Mesh();
+        GameObject obj = new OBJLoader().Load(new MemoryStream(Encoding.UTF8.GetBytes(www.text)));
+        MeshFilter[] meshFilters = obj.GetComponentsInChildren<MeshFilter>();
+        List<Mesh> meshes = new List<Mesh>();
+
+        foreach (MeshFilter mf in meshFilters)
+        {
+            meshes.Add(mf.sharedMesh);
+        }
+
+
+        // Use the list of meshes (meshes) for further processing
+        GameObject modelGameObject = new GameObject(Path.GetFileNameWithoutExtension(filePath));
+        modelGameObject.AddComponent<MeshRenderer>();
+        MeshFilter meshFilter = modelGameObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = holderMesh;
+
+        // Add the "Serializable" tag to the model GameObject
+        modelGameObject.tag = "Serializable";
+
+        // Create and assign a material to the GameObject (optional)
+        Material modelMaterial = new Material(Shader.Find("Standard"));
+        modelGameObject.GetComponent<Renderer>().material = modelMaterial;
+
+        // Add the GameObject to the ObjectPrefabManager's list (optional)
+        objectPrefabManager.AddObjectToPrefabList(modelGameObject);
+    }
 
     private void OnLoadTextSuccess(string[] filePaths)
     {
