@@ -328,7 +328,7 @@ public sealed class ObjectManager : MonoBehaviour
         GameObject obj = GameObject.Find((string)data[1]);
         if (obj == null)
         {
-            UnityEngine.Debug.Log(data[1] + " not found!");
+            UnityEngine.Debug.Log(data[2] + " not found!");
             return;
         }
         switch ((string)data[2])
