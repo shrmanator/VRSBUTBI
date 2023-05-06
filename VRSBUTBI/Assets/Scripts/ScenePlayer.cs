@@ -13,8 +13,8 @@ public class ScenePlayer : MonoBehaviour
     public static ScenePlayer Player { get; private set; }
 
     // Event handlers for commands
-    public delegate void CreateCommandReceivedEventHandler(object[] newObject);
-    public static event CreateCommandReceivedEventHandler CreateCommandReceived;
+    //public delegate void CreateCommandReceivedEventHandler(object[] newObject);
+    //public static event CreateCommandReceivedEventHandler CreateCommandReceived;
 
     public delegate void SetObjCommandReceivedEventHandler(object[] data);
     public static event SetObjCommandReceivedEventHandler SetObjCommandReceived;
@@ -24,6 +24,9 @@ public class ScenePlayer : MonoBehaviour
 
     public delegate void DestroyCommandReceivedEventHandler(string objectName);
     public static event DestroyCommandReceivedEventHandler DestroyCommandReceived;
+
+    public delegate void DynUpdateCommandReceivedEventHandler(object[] data);
+    public static event DynUpdateCommandReceivedEventHandler DynUpdateCommandReceived;
 
     // The list of commands for playing the scene
     List<object[]> commands;
@@ -103,6 +106,10 @@ public class ScenePlayer : MonoBehaviour
                 case "TIME":
                     // set time to wait until
                     waitTime = startTime + float.Parse(cmd[1].ToString());
+                    break;
+                case "DYNUPDATECELL":
+                    UnityEngine.Debug.Log("DYNUPDATECELL command recieved");
+                    DynUpdateCommandReceived?.Invoke(cmd);
                     break;
                 default:
                     Debug.Log("Unrecognized command in ScenePlayer");

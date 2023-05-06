@@ -23,8 +23,9 @@ public class FileParser : MonoBehaviour
     /// </summary>
     public static event CommandReceivedEventHandler CommandReceived;
 
-//    public delegate void CreateCommandReceivedEventHandler(object[] newObject);
-//    public static event CreateCommandReceivedEventHandler CreateCommandReceived;
+// Used by ObjectManager
+    public delegate void CreateCommandReceivedEventHandler(object[] newObject);
+    public static event CreateCommandReceivedEventHandler CreateCommandReceived;
 
 //    public delegate void setobjCommandReceivedEventHandler(object[] data);
 //    public static event setobjCommandReceivedEventHandler setobjCommandReceived;
@@ -41,10 +42,10 @@ public class FileParser : MonoBehaviour
     List<object[]> createCommands;
     List<object[]> moveCommands;
     List<object[]> setobjCommands;
-    List<object[]> DYNCommands;
+    List<object[]> DynCommands;
 
     List<object[]> commands;
-
+    
     bool isCreatingObject;
 
     // whitespace delimeters to use for parsing
@@ -70,10 +71,10 @@ public class FileParser : MonoBehaviour
         string[] lines = fileText.Split('\n');
 
         // Create a list to hold the commands
-        //List<object[]> commands = new List<object[]>();
         createCommands = new List<object[]>();
         moveCommands = new List<object[]>();
         setobjCommands = new List<object[]>();
+        DynCommands = new List<object[]>();
         commands = new List<object[]>();
 
         isCreatingObject = false;
@@ -137,11 +138,11 @@ public class FileParser : MonoBehaviour
                         string objToUpdate = parts[1];
                         string cellToUpdate = parts[2];
                         float duration2 = float.Parse(parts[3]);
-                        float startVal = float.Parse(parts[4]);
-                        float endVal = float.Parse(parts[5]);
-                        string units = parts.Length > 6 ? parts[6] : null;
-                        commands.Add(new object[] {cmd, objToUpdate, cellToUpdate, duration2, startVal, endVal, units });
-                        DYNCommands.Add(new object[] { objToUpdate, cellToUpdate, duration2, startVal, endVal, units });
+                        float x2 = float.Parse(parts[4].ToString());
+                        float y2 = float.Parse(parts[5].ToString());
+                        float z2 = float.Parse(parts[6].ToString());
+                        commands.Add(new object[] {cmd, objToUpdate, cellToUpdate, duration2, x2, y2, z2 });
+                        DynCommands.Add(new object[] { objToUpdate, cellToUpdate, duration2, x2, y2, z2 });
                         break;
                     case "TIME":
                         commands.Add(new object[] {cmd, parts[1]});
