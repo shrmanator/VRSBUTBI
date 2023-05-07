@@ -22,19 +22,19 @@ public class InGameButtons : MonoBehaviour
         // Start : Stop simulation button:
         string buttonLabel = simulationController.SimulationRunning ? "Stop Simulation" : "Resume Simulation";
         if (simulationController.InitialRun) { buttonLabel = "Start Simulation";}
-        if (GUI.Button(new Rect(120, 10, 120, 30), buttonLabel))
+        if (GUI.Button(new Rect(120, 10, 130, 30), buttonLabel))
         {
             simulationController.ToggleSimulation();
         }
 
         // Load STROBO button:
-        if (GUI.Button(new Rect(240, 10, 140, 30), "Load STROBO file"))
+        if (GUI.Button(new Rect(250, 10, 140, 30), "Load STROBO file"))
         {
             simFileHandler.OpenTextFileLoadDialog();
         }
 
         // Load State button:
-        if (GUI.Button(new Rect(380, 10, 110, 30), "Load Saved file"))
+        if (GUI.Button(new Rect(390, 10, 110, 30), "Load Saved file"))
         {
             simFileHandler.OpenSimStateLoadDialog();
         }
