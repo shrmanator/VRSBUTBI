@@ -128,7 +128,7 @@ public class SimFileHandler : MonoBehaviour
         return serializableGameObjects.ToArray();
     }
 
-    public static void SaveGame(string fileName, SerializableGameObject[] gameObjects)
+    public static void SaveGame(string filePath, SerializableGameObject[] gameObjects)
     {
         if (gameObjects == null || gameObjects.Length == 0)
         {
@@ -136,12 +136,9 @@ public class SimFileHandler : MonoBehaviour
             return;
         }
 
-        if (Path.HasExtension(fileName))
-        {
-            fileName = Path.GetFileNameWithoutExtension(fileName);
-        }
+        String fileName = Path.GetFileNameWithoutExtension(filePath);
 
-        string filePath = Path.Combine(savePath, fileName + ".json");
+        // filePath = Path.Combine(savePath, fileName + ".json");
 
         try
         {
