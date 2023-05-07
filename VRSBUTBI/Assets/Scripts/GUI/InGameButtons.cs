@@ -3,29 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-/// <summary>
-/// Controls how the in-game buttons are displayed in the scene.
-/// </summary>
 public class InGameButtons : MonoBehaviour
 {
+    [SerializeField]
     private SimFileHandler simFileHandler;
-    
-    /// <summary>
-    /// Finds the "StateManager" object and gets the SimFileHandler component.
-    /// </summary>
-    private void Start()
-        {
-            GameObject simFileHandlerObject = GameObject.Find("StateManager");
-            simFileHandler = simFileHandlerObject.GetComponent<SimFileHandler>();
-        }
+
+    [SerializeField]
+    private SimulationController simulationController;
 
     private void OnGUI()
     {
-        /// <summary>
-        /// Displays a button that, when clicked, will show the save dialog.
-        /// </summary>
-        if (GUI.Button(new Rect(40, 10, 100, 30), "Save")) {simFileHandler.OpenGameSaveDialog();}
-        if (GUI.Button(new Rect(200, 10, 100, 30), "Import Model")) {} // add method to the empty {}
+        // Save button:
+        if (GUI.Button(new Rect(40, 10, 100, 30), "Save"))
+        {
+            simFileHandler.OpenGameSaveDialog();
+        }
+
+        // Start : Stop simulation button:
+        string buttonLabel = simulationController.SimulationRunning ? "Stop Simulation" : "Resume Simulation";
+        if (simulationController.InitialRun) { buttonLabel = "Start Simulation";}
+        if (GUI.Button(new Rect(150, 10, 150, 30), buttonLabel))
+        {
+            simulationController.ToggleSimulation();
+        }
     }
 }
