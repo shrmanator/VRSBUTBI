@@ -27,7 +27,7 @@ public sealed class ObjectManager : MonoBehaviour
         FileParser.CreateCommandReceived += CreateObject;
         ScenePlayer.DestroyCommandReceived += DestroyObject;
         ScenePlayer.SetObjCommandReceived += ChangeObjectProperty;
-        //ScenePlayer.DynUpdateCommandReceived += DynamicallyChangeObjectProperty;
+        ScenePlayer.DynUpdateCommandReceived += DynamicallyChangeObjectProperty;
     }
     /// <summary>
     /// Ensures that there is only one instance of ObjectCreator
@@ -278,8 +278,8 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     /// <param name="obj"> The object to change</param>
     /// <param name="x"> x axis scale factor</param>
-    /// <param name="x"> y axis scale factor</param>
-    /// <param name="x"> z axis scale factor</param>
+    /// <param name="y"> y axis scale factor</param>
+    /// <param name="z"> z axis scale factor</param>
     private void ChangeObjectSize (GameObject obj, float x, float y, float z){
         if (x == 0){
             x = obj.transform.localScale.x;
@@ -324,10 +324,11 @@ public sealed class ObjectManager : MonoBehaviour
     }
 
     public void DynamicallyChangeObjectProperty(object[] data){
+        UnityEngine.Debug.Log("DYNUPDATECELL command started");
         GameObject obj = GameObject.Find((string)data[1]);
         if (obj == null)
         {
-            UnityEngine.Debug.Log(data[1] + " not found!");
+            UnityEngine.Debug.Log(data[2] + " not found!");
             return;
         }
         switch ((string)data[2])
