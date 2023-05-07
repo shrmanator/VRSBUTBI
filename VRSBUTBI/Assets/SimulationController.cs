@@ -11,24 +11,29 @@ public class SimulationController : MonoBehaviour
 
         if (SimulationRunning)
         {
-            ResumeSimulation();
-
-            if (InitialRun) {
-                print("simulation start");
-            }
-            else {
-                print("simulation resumed");
-            }
-
-            InitialRun = false;
+            HandleSimulationStartOrResume();
         }
-
         else
         {
             PauseSimulation();
-            print("simulation stopped");
-
+            Debug.Log("Simulation stopped");
         }
+    }
+
+    private void HandleSimulationStartOrResume()
+    {
+        StartSimulation();
+
+        if (InitialRun)
+        {
+            Debug.Log("Simulation started");
+        }
+        else
+        {
+            Debug.Log("Simulation resumed");
+        }
+
+        InitialRun = false;
     }
 
     private void PauseSimulation()
@@ -36,7 +41,7 @@ public class SimulationController : MonoBehaviour
         Time.timeScale = 0;
     }
 
-    private void ResumeSimulation()
+    private void StartSimulation()
     {
         Time.timeScale = 1;
     }
