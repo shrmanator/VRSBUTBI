@@ -55,6 +55,7 @@ public class SimFileHandler : MonoBehaviour
         CreateDirectories();
         LoadExternalModels();
         importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
+        savePath = Path.Combine(Application.dataPath, "SaveGames");
     }
 
     /// <summary>
