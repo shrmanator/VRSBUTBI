@@ -50,7 +50,7 @@ public class SimFileHandler : MonoBehaviour
     public delegate void OnTextFileLoaded(string filePath);
     public static event OnTextFileLoaded TextFileLoaded;
 
-    private void Start() 
+    private void Awake() 
     {
         CreateDirectories();
         LoadExternalModels();
