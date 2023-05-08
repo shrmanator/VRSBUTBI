@@ -19,6 +19,7 @@ public class InGameButtons : MonoBehaviour
         {
             GameObject simFileHandlerObject = GameObject.Find("StateManager");
             simFileHandler = simFileHandlerObject.GetComponent<SimFileHandler>();
+            simulationController = simFileHandlerObject.GetComponent<SimulationController>();
         }
 
     private void OnGUI()
