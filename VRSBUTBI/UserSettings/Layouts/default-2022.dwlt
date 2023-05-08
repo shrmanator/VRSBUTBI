@@ -121,7 +121,11 @@ MonoBehaviour:
   vertical: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   controlID: 101
+=======
+  controlID: 18
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
   controlID: 18
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
@@ -149,6 +153,7 @@ MonoBehaviour:
     y: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     width: 2028
     height: 1274
   m_MinSize: {x: 200, y: 200}
@@ -158,6 +163,8 @@ MonoBehaviour:
 =======
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
     width: 1165
     height: 797
   m_MinSize: {x: 200, y: 200}
@@ -165,6 +172,9 @@ MonoBehaviour:
   vertical: 1
   controlID: 19
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
@@ -189,12 +199,21 @@ MonoBehaviour:
     y: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     width: 2028
     height: 887
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
   controlID: 44
+=======
+    width: 1165
+    height: 496.5
+  m_MinSize: {x: 200, y: 100}
+  m_MaxSize: {x: 16192, y: 8096}
+  vertical: 0
+  controlID: 20
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     width: 1165
     height: 496.5
@@ -230,8 +249,13 @@ MonoBehaviour:
     y: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     width: 332
     height: 887
+=======
+    width: 369.5
+    height: 496.5
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     width: 369.5
     height: 496.5
@@ -264,11 +288,19 @@ MonoBehaviour:
     serializedVersion: 2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     x: 332
     y: 0
     width: 1696
     height: 887
   m_MinSize: {x: 102, y: 121}
+=======
+    x: 369.5
+    y: 0
+    width: 795.5
+    height: 496.5
+  m_MinSize: {x: 202, y: 221}
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     x: 369.5
     y: 0
@@ -307,6 +339,7 @@ MonoBehaviour:
     x: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     y: 887
     width: 2028
     height: 387
@@ -326,6 +359,15 @@ MonoBehaviour:
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 15}
   m_Panes:
+=======
+    y: 496.5
+    width: 1165
+    height: 300.5
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 15}
+  m_Panes:
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     y: 496.5
     width: 1165
@@ -357,6 +399,7 @@ MonoBehaviour:
     serializedVersion: 2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     x: 2028
     y: 0
     width: 532
@@ -371,12 +414,19 @@ MonoBehaviour:
     x: 1165
     y: 0
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
+    x: 1165
+    y: 0
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
     width: 275
     height: 797
   m_MinSize: {x: 276, y: 71}
   m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 16}
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
@@ -563,9 +613,15 @@ MonoBehaviour:
     x: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     y: 985
     width: 2027
     height: 366
+=======
+    y: 559.5
+    width: 1164
+    height: 299.5
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     y: 559.5
     width: 1164
@@ -603,7 +659,11 @@ MonoBehaviour:
   m_LastFoldersGridSize: 96
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   m_LastProjectPath: C:\Users\Dov\OneDrive\Desktop\Construction VR\VRSBUTBI\VRSBUTBI
+=======
+  m_LastProjectPath: /Users/dovsherman/Desktop/CS/VRSBUTBI/VRSBUTBI
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
   m_LastProjectPath: /Users/dovsherman/Desktop/CS/VRSBUTBI/VRSBUTBI
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
@@ -616,9 +676,15 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     m_SelectedIDs: 3c650000
     m_LastClickedID: 25916
     m_ExpandedIDs: 00000000bc6100003265000000ca9a3b
+=======
+    m_SelectedIDs: 8a5b0000
+    m_LastClickedID: 23434
+    m_ExpandedIDs: 000000008a5b00008c5b00008e5b0000905b0000925b0000945b0000965b0000
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     m_SelectedIDs: 8a5b0000
     m_LastClickedID: 23434
@@ -658,7 +724,11 @@ MonoBehaviour:
     m_LastClickedID: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     m_ExpandedIDs: 00000000bc610000
+=======
+    m_ExpandedIDs: 000000008a5b00008c5b00008e5b0000905b0000925b0000945b0000965b0000
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     m_ExpandedIDs: 000000008a5b00008c5b00008e5b0000905b0000925b0000945b0000965b0000
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
@@ -691,10 +761,13 @@ MonoBehaviour:
   m_ListAreaState:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 0
 =======
+=======
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
     m_SelectedInstanceIDs: 045a0000
@@ -729,6 +802,7 @@ MonoBehaviour:
     m_GridSize: 96
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 277
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 --- !u!114 &13
@@ -891,6 +965,8 @@ MonoBehaviour:
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -899,6 +975,7 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   m_EditorHideFlags: 0
@@ -1242,6 +1319,8 @@ MonoBehaviour:
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
   m_EditorHideFlags: 1
   m_Script: {fileID: 12003, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
@@ -1257,9 +1336,15 @@ MonoBehaviour:
     x: 0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     y: 985
     width: 2027
     height: 366
+=======
+    y: 579.5
+    width: 1164
+    height: 279.5
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     y: 579.5
     width: 1164
@@ -1296,11 +1381,14 @@ MonoBehaviour:
     serializedVersion: 2
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     x: 2028
     y: 98
     width: 531
     height: 1253
 =======
+=======
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
     x: 1165

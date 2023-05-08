@@ -34,6 +34,7 @@ public class SimFileHandler : MonoBehaviour
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     private void Awake() 
     {
         CreateDirectories();
@@ -49,6 +50,12 @@ public class SimFileHandler : MonoBehaviour
     public string[] GetAvailableModels()
     {
         if (!Directory.Exists(importedModelsPath))
+=======
+    private void Awake()
+    {
+        savePath = Path.Combine(Application.persistentDataPath, "savegames");
+        if (!Directory.Exists(savePath))
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
     private void Awake()
     {
