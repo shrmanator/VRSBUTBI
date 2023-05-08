@@ -75,8 +75,8 @@ public class SimFileHandler : MonoBehaviour
 
     public void OpenGameSaveDialog()
     {
-        FileBrowser.SetFilters(false, new FileBrowser.Filter(".bin", ".bin"));
-        FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, savePath, "new_file.bin", "Save File", "Save");
+        FileBrowser.SetFilters(false, new FileBrowser.Filter(".json ", ".json"));
+        FileBrowser.ShowSaveDialog(OnGameSaveSuccess, OnSaveGameCancel, FileBrowser.PickMode.Files, false, savePath, "new_file.json", "Save File", "Save");
     }
 
     private void OnGameSaveSuccess(string[] filePaths)
