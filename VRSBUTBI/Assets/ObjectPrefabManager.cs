@@ -31,11 +31,4 @@ public class ObjectPrefabManager : MonoBehaviour
         }
         return objectPrefabMap.ContainsKey(name) ? objectPrefabMap[name] : null;
     }
-
-    public void AddObjectToPrefabList(GameObject obj)
-    {
-        objectPrefabs.Add(obj);
-        objectPrefabMap.Add(obj.name, obj);
-    }
-    
 }

@@ -182,7 +182,6 @@ public sealed class ObjectManager : MonoBehaviour
         //set position
         _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
         _loadedObject.transform.GetChild(0).name = (string)_objectData[1];
-        _loadedObject.tag = "Serializable";
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }
@@ -354,7 +353,7 @@ public sealed class ObjectManager : MonoBehaviour
                 float yDegrees = float.Parse(data[5].ToString());
                 float zDegrees = float.Parse(data[6].ToString());
                 float timeRotate = float.Parse(data[3].ToString());
-                DynamicallyRotateObject(obj, xDegrees, yDegrees, zDegrees, timeRotate);
+                //DynamicallyRotateObject(obj, xDegrees, yDegrees, zDegrees);
                 break;
             default:
                 UnityEngine.Debug.Log("Unidentified property");
@@ -379,13 +378,6 @@ public sealed class ObjectManager : MonoBehaviour
         Vector3 scale = new Vector3(x, y, z);
         DynamicObjectTransformer script = obj.AddComponent(typeof(DynamicObjectTransformer)) as DynamicObjectTransformer;
         script.SetTransform(scale, time);
-    }
-
-    private void DynamicallyRotateObject(GameObject obj, float x, float y, float z, float time)
-    {
-        Vector3 angle = new Vector3(x, y, z);
-        DynamicObjectRotator script = obj.AddComponent(typeof(DynamicObjectRotator)) as DynamicObjectRotator;
-        script.SetTransform(angle, time);
     }
 
 }

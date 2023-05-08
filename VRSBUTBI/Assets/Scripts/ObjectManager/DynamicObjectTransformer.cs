@@ -28,11 +28,6 @@ public class DynamicObjectTransformer : MonoBehaviour
         endScale = newScale;
         duration = newDuration;
         counter = 0;
-        var script = gameObject.GetComponent<DynamicObjectTransformer>();
-        if (script != null)
-        {
-            velocity = script.velocity;
-        }
         Debug.Log(Time.time);
     }
 }
