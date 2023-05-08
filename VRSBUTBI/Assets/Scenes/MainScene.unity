@@ -471,6 +471,9 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454184774}
   m_CullTransparentMesh: 1
+<<<<<<< HEAD
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 --- !u!1 &534479543
 GameObject:
@@ -681,6 +684,9 @@ Transform:
     m_PersistentCalls:
       m_Calls: []
   m_IsOn: 1
+<<<<<<< HEAD
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 --- !u!1 &666978645
 >>>>>>> parent of 1a2226f (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
@@ -702,7 +708,10 @@ GameObject:
   m_Layer: 0
   m_Name: Path (1)
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> parent of 1a2226f (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
+=======
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
   m_TagString: Untagged
@@ -808,10 +817,14 @@ Transform:
   m_Father: {fileID: 0}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 =======
   m_RootOrder: 9
+=======
+  m_RootOrder: 8
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
   m_RootOrder: 8
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
@@ -1176,6 +1189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
 <<<<<<< HEAD
+<<<<<<< HEAD
   objectPrefabs:
   - {fileID: 2388125095693758910, guid: e1294250b88ba4c12b93555840b00de1, type: 3}
 --- !u!114 &1578218473
@@ -1190,6 +1204,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a4d96a684bca45d9b7f8b8eed84c6a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+=======
+  objectPrefabs: []
+>>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
 =======
   objectPrefabs: []
 >>>>>>> parent of b24f192 (Merge branch 'master' of https://github.com/shrmanator/VRSBUTBI)
