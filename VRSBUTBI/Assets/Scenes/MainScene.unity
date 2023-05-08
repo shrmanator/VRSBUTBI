@@ -269,8 +269,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03b18b5387e56974aaf82cad9f3ea8b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  simFileHandler: {fileID: 1578218471}
-  simulationController: {fileID: 1578218473}
 --- !u!1001 &487626011
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -435,8 +433,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2e06efb04a64801b3fad1c0bb18484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPrefabs:
-  - {fileID: 2388125095693758910, guid: e1294250b88ba4c12b93555840b00de1, type: 3}
+  objectPrefabs: []
 --- !u!4 &605197134
 Transform:
   m_ObjectHideFlags: 0
@@ -644,8 +641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be2e06efb04a64801b3fad1c0bb18484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectPrefabs:
-  - {fileID: 2388125095693758910, guid: e1294250b88ba4c12b93555840b00de1, type: 3}
+  objectPrefabs: []
 --- !u!114 &1578218473
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,10 +1,5 @@
-/*
-Handles the object-prefab mapping.
-*/
-
 using System.Collections.Generic;
 using UnityEngine;
-
 
 public class ObjectPrefabManager : MonoBehaviour
 {
@@ -15,6 +10,12 @@ public class ObjectPrefabManager : MonoBehaviour
     private void Awake()
     {
         objectPrefabMap = new Dictionary<string, GameObject>();
+
+        if (objectPrefabs == null || objectPrefabs.Count == 0)
+        {
+            Debug.LogWarning("ObjectPrefabs list is empty or not assigned.");
+            return;
+        }
 
         foreach (GameObject prefab in objectPrefabs)
         {
@@ -34,8 +35,13 @@ public class ObjectPrefabManager : MonoBehaviour
 
     public void AddObjectToPrefabList(GameObject obj)
     {
+        if (obj == null)
+        {
+            Debug.LogWarning("Cannot add null object to ObjectPrefabs list.");
+            return;
+        }
+
         objectPrefabs.Add(obj);
         objectPrefabMap.Add(obj.name, obj);
     }
-    
 }
