@@ -288,7 +288,7 @@ public class SimFileHandler : MonoBehaviour
         modelGameObject.GetComponent<Renderer>().material = modelMaterial;
 
         // Add the GameObject to the ObjectPrefabManager's list (optional)
-        // objectPrefabManager.AddObjectToPrefabList(modelGameObject);
+        objectPrefabManager.AddObjectToPrefabList(modelGameObject);
     }
 
     private void OnLoadTextSuccess(string[] filePaths)
