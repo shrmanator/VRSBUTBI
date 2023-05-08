@@ -1,0 +1,9 @@
+localhost
+1.000000
+omniverse:/127.0.0.1/Users/ljobson/Unity/default.usda
+1
+1
+1
+0
+0
+0

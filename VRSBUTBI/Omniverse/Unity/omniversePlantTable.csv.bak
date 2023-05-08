@@ -1,0 +1,118 @@
+:Plants [General],Agave,1,0,Agave,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Plants [General],Dagger,1,0,Dagger,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs & Grasses,Acacia,1,0,Acacia,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Barberry,1,0,Barberry,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Boxwood,1,0,Boxwood,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Burning Bush,1,0,Burning_Bush,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Century,1,0,Century,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Fan Palm,1,0,Fan_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs & Grasses,Forsythia,1,0,Forsythia,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Fountain Grass,1,0,Fountain_Grass_Tall,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Fountain Grass 2,1,0,Fountain_Grass_Short,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Fountain Grass (2),1,0,Fountain_Grass_Short,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Fountain Grass [2],1,0,Fountain_Grass_Short,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Fraser Photina,1,0,Fraser_Photina,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Golden Flame Spirea,1,0,Japanese_Flame,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs & Grasses,Gold Flame Spirea,1,0,Japanese_Flame,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs & Grasses,Holly,1,0,Holly,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Holly [2],1,0,Holly,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Holly (2),1,0,Holly,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Hydrangea,1,0,Hydrangea,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Juniper,1,0,Juniper,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Lilac,1,0,Lilac,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Lupin,1,0,Lupin,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Magnolia,1,0,Magnolia,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Maiden Grass,1,0,Maiden_Grass,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Oleander,1,0,Oleander,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Pampas Grass,1,0,Pampas_Grass,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Prairie Dropseed,1,0,Prairie_Dropseed,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Privet,1,0,Privet,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Rhododendron,1,0,Rhododendron,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Sweet Mock Orange,1,0,Sweet_Mock_Orange,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Switchgrass,1,0,Switchgrass,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Switchgrass (2),1,0,Switchgrass,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Switchgrass [2],1,0,Switchgrass,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Thevetia,1,0,Thevetia,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Vibernum,1,0,Vibernum,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs & Grasses,Yew,1,0,Yew,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs [General],Cedar Shrub,1,0,Cedar_Shrub,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs [General],Crane Lily,1,0,Crane_Lily,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs [General],Daphne,1,0,Daphne,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs [General],Hibiscus,1,0,Hibiscus,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs [General],Hibiscus Syriacus,1,0,Hibiscus,/NVIDIA/Assets/Vegetation/Shrub/
+:Shrubs [General],Honey Myrtle,1,0,Honey_Myrtle,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs [General],Japanese Fern,1,0,Japanese_Flame,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs [General],Jungle Flame,1,0,Japanese_Flame,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Shrubs [General],Meadowlark,1,0,Meadowlark,/NVIDIA/Assets/Vegetation/Shrub/
+:Trees [Asian],Fraxinus,1,0,Fraxinus,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],American Beech,1,0,American_Beech,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Blue Berry Elder,1,0,Blue_Berry_Elder,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Blue-Berry Elder,1,0,Blue_Berry_Elder,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Chinese Juniper,1,0,Chinese_Juniper,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Colorado Spruce,1,0,Colorado_Spruce,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Common Apple,1,0,Common_Apple,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Douglas Fir,1,0,Douglas_Fir,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Eastern Hemlock,1,0,Eastern_Hemlock,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Golden Chain,1,0,Golden_Chain,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Golden-chain,1,0,Golden_Chain,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Gray Birch,1,0,Gray_Birch,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Hawthorn,1,0,Hawthorn,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Honey Locust,1,0,Honey_Locust,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Honey-Locust,1,0,Honey_Locust,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Italian Cypress,1,0,Italian_Cypress,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Japanese Cherry,1,0,Japanese_Cherry,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Japanese Flowering Cherry,1,0,Japanese_Cherry,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Japanese Maple,1,0,Japanese_Maple,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Kousa Dogwood,1,0,Kousa_Dogwood,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Largetooth Aspen,1,0,Largetooth_Aspen,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Lombardy Poplar,1,0,Lombardy_Poplar,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Norway Spruce,1,0,Norway_Spruce,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Red Ash,1,0,Red_Ash,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Red Cedar,1,0,Red_Cedar,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Red Maple,1,0,Red_Maple,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Scarlet Oak,1,0,Scarlet_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Scarlet_Oak,1,0,Scarlet_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Shumard Oak,1,0,Shumard_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Schumard Oak,1,0,Shumard_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Siberian Crab Apple,1,0,Siberian_Crab_Apple,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],White Pine,1,0,White_Pine,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Yellow Pine,1,0,Yellow_Pine,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [General],Yellow Pine (Adult),1,0,Yellow_Pine,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [Tropical],Australian Tree Furn,1,0,Australian_Tree_Fern,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Buddha Belly Bamboo,1,0,Buddha_Belly_Bamboo,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Cuban Royal Palm,1,0,Cuban_Royal_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Golden Malay Palm,1,0,Golden_Malay_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Grass Palm,1,0,Grass_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Hurricane Palm,1,0,Hurricane_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Japanese Fiber Banana,1,0,Japanese_Fiber_Banana,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Orange Tree,1,0,Orange_Tree,/NVIDIA/Assets/Vegetation/Trees/
+:Trees [Tropical],Travelers Palm,1,0,Travelers_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Traveler's Palm,1,0,Travelers_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Trees [Tropical],Windmill Palm,1,0,Windmill_Palm,/NVIDIA/Assets/Vegetation/Plant_Tropical/
+:Fall Trees [General],American Beech [Fall],1,0,American_Beech,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Black Oak,1,0,Black_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Black Oak [Fall],1,0,Black_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Dogwood,1,0,Dogwood,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Dogwood [Fall],1,0,Dogwood,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Elm Sapling,1,0,Elm_Sapling,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Elm (Sapling),1,0,Elm_Sapling,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Elm [Sapling] [Fall],1,0,Elm_Sapling,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Gray Birch [Fall],1,0,Gray_Birch,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Honey-Locust [Fall],1,0,Honey_Locust,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Japanese Maple [Fall],1,0,Japanese_Maple,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Lombardy Poplar [Fall],1,0,Lombardy_Poplar,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Red Ash,1,0,Red_Ash,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Red Ash [Fall],1,0,Red_Ash,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Red Oak,1,0,Red_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Red Oak [Fall],1,0,Red_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Scarlet Oak [Fall],1,0,Scarlet_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Service Berry,1,0,Service_Berry,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Service Berry [Fall],1,0,Service_Berry,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Shumard Oak [Fall],1,0,Shumard_Oak,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Sugar Maple,1,0,Sugar_Maple,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Sugar Maple [Fall],1,0,Sugar_Maple,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Sycamore,1,0,Sycamore,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],Sycamore [Fall],1,0,Sycamore,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],White Ash,1,0,White_Ash,/NVIDIA/Assets/Vegetation/Trees/
+:Fall Trees [General],White Ash [Fall],1,0,White_Ash,/NVIDIA/Assets/Vegetation/Trees/
+:Shrubs & Grasses,Pearl Bush,1,0,Pearl_Bush,/NVIDIA/Assets/Vegetation/Shrub/
