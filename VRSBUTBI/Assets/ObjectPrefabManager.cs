@@ -13,6 +13,7 @@ public class ObjectPrefabManager : MonoBehaviour
 
     private void Awake()
     {
+        // Ensure that there's only one instance of ObjectPrefabManager
         if (Manager != null && Manager != this)
         {
             Destroy(this);
@@ -22,7 +23,6 @@ public class ObjectPrefabManager : MonoBehaviour
             Manager = this;
         }
 
-        Debug.Log("OPM Awake");
         objectPrefabMap = new Dictionary<string, GameObject>();
 
         if (objectPrefabs == null || objectPrefabs.Count == 0)
@@ -37,20 +37,21 @@ public class ObjectPrefabManager : MonoBehaviour
         }
     }
 
-    public GameObject GetPrefabByType(string type)
+    /// <summary>
+    /// Gets prefab by type name
+    /// </summary>
+    /// <param name="name">The name of the prefab to look up</param>
+    /// <returns>The prefab's GameObject if found, null if not</returns>
+    public GameObject GetPrefabByType(string name)
     {
-        Debug.Log(objectPrefabMap.Count);
-        if (type == null)
+        if (name == null)
         {
             Debug.LogWarning("Cannot get prefab with null name");
             return null;
         }
-        Debug.Log("Getting type: " + type);
-        Debug.Log("Contains type: " + objectPrefabMap.ContainsKey(type));
-       if (objectPrefabMap.ContainsKey(type))
+       if (objectPrefabMap.ContainsKey(name))
        {
-            Debug.Log("Returning " + objectPrefabMap[type]);
-            return objectPrefabMap[type];
+            return objectPrefabMap[name];
        }
        else
        {
@@ -58,6 +59,11 @@ public class ObjectPrefabManager : MonoBehaviour
        }
     }
 
+    /// <summary>
+    /// Check if a prefab exists
+    /// </summary>
+    /// <param name="name">The name of the prefab to look up</param>
+    /// <returns>True if found, false if not</returns>
     public bool HasPrefab(string name)
     {
         return objectPrefabMap.ContainsKey(name);
@@ -70,10 +76,13 @@ public class ObjectPrefabManager : MonoBehaviour
             Debug.LogWarning("Cannot add null object to ObjectPrefabs list.");
             return;
         }
-
-        objectPrefabs.Add(obj);
-        objectPrefabMap.Add(obj.name, obj);
-        obj.SetActive(false);
-        obj.hideFlags = HideFlags.HideInHierarchy;
-    }
+        if (!objectPrefabMap.ContainsKey(obj.name))
+        {
+            objectPrefabs.Add(obj);
+            objectPrefabMap.Add(obj.name, obj);
+            // Prevents the prefab from showing up in scene
+            obj.SetActive(false);
+            obj.hideFlags = HideFlags.HideInHierarchy;
+        }
+    }   
 }

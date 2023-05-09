@@ -67,55 +67,10 @@ public sealed class ObjectManager : MonoBehaviour
         StartCoroutine(CreateObjectCoroutine(objectData));
     }
 
-   /* public void LoadModel(string filePath)
-    {
-        StartCoroutine(LoadModelCoroutine(filePath));
-    }
-
-    private IEnumerator LoadModelCoroutine(string filePath)
-    {
-        Debug.Log("Loading model " + filePath);
-        _isCreatingObject = true;
-        _isRetry = false;
-        WWW www = new WWW("file://" + filePath);
-        yield return www;
-
-        if (!string.IsNullOrEmpty(www.error))
-        {
-            Debug.LogError("Error loading OBJ file: " + www.error);
-            yield break;
-        }
-
-        //Need to figure out loading material. Switch to filepath?
-
-        Mesh holderMesh = new Mesh();
-        GameObject obj = new OBJLoader().Load(new MemoryStream(Encoding.UTF8.GetBytes(www.text)));
-        MeshFilter[] meshFilters = obj.GetComponentsInChildren<MeshFilter>();
-        List<Mesh> meshes = new List<Mesh>();
-
-        foreach (MeshFilter mf in meshFilters)
-        {
-            meshes.Add(mf.sharedMesh);
-        }
-
-
-        // Use the list of meshes (meshes) for further processing
-        GameObject modelGameObject = new GameObject(Path.GetFileNameWithoutExtension(filePath));
-        modelGameObject.AddComponent<MeshRenderer>();
-        MeshFilter meshFilter = modelGameObject.AddComponent<MeshFilter>();
-        meshFilter.mesh = holderMesh;
-
-        // Add the "Serializable" tag to the model GameObject
-        modelGameObject.tag = "Serializable";
-
-        // Create and assign a material to the GameObject (optional)
-        Material modelMaterial = new Material(Shader.Find("Standard"));
-        modelGameObject.GetComponent<Renderer>().material = modelMaterial;
-        Debug.Log("Loaded " + modelGameObject.name);
-        ObjectPrefabManager.Manager.AddObjectToPrefabList(modelGameObject);
-        //yield return new WaitWhile(() => _isCreatingObject);
-    }*/
-
+    /// <summary>
+    /// Creates model object from a .obj file.
+    /// </summary>
+    /// <param name="filePath">The .obj file to load</param>
     public void CreateModelFromFile(string filePath)
     {
         GameObject model = new OBJLoader().Load(filePath);
@@ -124,7 +79,6 @@ public sealed class ObjectManager : MonoBehaviour
             ObjectPrefabManager.Manager.AddObjectToPrefabList(model);
         }
         string name = model.name;
-        Debug.Log("Object in library: " + ObjectPrefabManager.Manager.GetPrefabByType(name));
     }
 
     /// <summary>
@@ -368,8 +322,8 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     /// <param name="obj"> The object to change </param>
     /// <param name="x"> Degrees to rotate on x axis </param>
-    /// <param name="x"> Degrees to rotate on y axis </param>
-    /// <param name="x"> Degrees to rotate on z axis </param>
+    /// <param name="y"> Degrees to rotate on y axis </param>
+    /// <param name="z"> Degrees to rotate on z axis </param>
     private void RotateObject(GameObject obj, float x, float y, float z){
         obj.transform.Rotate(x, y, z);
     }
@@ -390,6 +344,10 @@ public sealed class ObjectManager : MonoBehaviour
         Destroy(obj);
     }
 
+    /// <summary>
+    /// Dynamically changed the select object property. Called on DynUpdateCommandReceived event
+    /// </summary>
+    /// <param name="data">Expected [DYNUPDATECELL, objectName, PROPERTYNAME, duration, x, y, z] </param>
     public void DynamicallyChangeObjectProperty(object[] data){
         UnityEngine.Debug.Log("DYNUPDATECELL command started");
         GameObject obj = GameObject.Find((string)data[1]);
@@ -422,7 +380,7 @@ public sealed class ObjectManager : MonoBehaviour
                 float yDegrees = float.Parse(data[5].ToString());
                 float zDegrees = float.Parse(data[6].ToString());
                 float timeRotate = float.Parse(data[3].ToString());
-                //DynamicallyRotateObject(obj, xDegrees, yDegrees, zDegrees);
+                DynamicallyRotateObject(obj, xDegrees, yDegrees, zDegrees, timeRotate);
                 break;
             default:
                 UnityEngine.Debug.Log("Unidentified property");
@@ -430,6 +388,13 @@ public sealed class ObjectManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Dynamically changed the object's size.
+    /// </summary>
+    /// <param name="obj"> The object to change</param>
+    /// <param name="x"> x axis scale factor</param>
+    /// <param name="y"> y axis scale factor</param>
+    /// <param name="z"> z axis scale factor</param>
     private void DynamicallyChangeObjectSize(GameObject obj, float x, float y, float z, float time)
     {
         if (x == 0)
@@ -447,6 +412,20 @@ public sealed class ObjectManager : MonoBehaviour
         Vector3 scale = new Vector3(x, y, z);
         DynamicObjectTransformer script = obj.AddComponent(typeof(DynamicObjectTransformer)) as DynamicObjectTransformer;
         script.SetTransform(scale, time);
+    }
+
+    /// <summary>
+    /// Dynamically changed the object's rotation.
+    /// </summary>
+    /// <param name="obj"> The object to change</param>
+    /// <param name="x"> x axis angle</param>
+    /// <param name="y"> y axis angle</param>
+    /// <param name="z"> z axis angle</param>
+    private void DynamicallyRotateObject(GameObject obj, float x, float y, float z, float time)
+    {
+        Vector3 angle = new Vector3(x, y, z);
+        DynamicObjectRotator script = obj.AddComponent(typeof(DynamicObjectRotator)) as DynamicObjectRotator;
+        script.SetTransform(angle, time);
     }
 
 }
