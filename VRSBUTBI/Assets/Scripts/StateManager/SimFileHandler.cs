@@ -110,6 +110,7 @@ public class SimFileHandler : MonoBehaviour
 
     private void OnGameSaveSuccess(string[] filePaths)
     {
+        Debug.Log("Saving: " + filePaths[0]);
         SaveGame(filePaths[0], GetSerializableGameObjects());
     }
 
@@ -121,7 +122,7 @@ public class SimFileHandler : MonoBehaviour
             SerializableVector3 position = new SerializableVector3(obj.transform.position);
             SerializableVector3 rotation = new SerializableVector3(obj.transform.rotation.eulerAngles);
             SerializableVector3 scale = new SerializableVector3(obj.transform.localScale);
-            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, position, rotation, scale);
+            SerializableGameObject serializedObject = new SerializableGameObject(obj.name, obj.transform.GetChild(0).name, position, rotation, scale);
 
             serializableGameObjects.Add(serializedObject);
         }
@@ -209,8 +210,7 @@ public class SimFileHandler : MonoBehaviour
             return;
         }
 
-        ObjectPrefabManager prefabManager = FindObjectOfType<ObjectPrefabManager>();
-        if (prefabManager == null)
+        if (ObjectPrefabManager.Manager == null)
         {
             Debug.LogError("ObjectPrefabManager not found in the scene.");
             return;
@@ -218,7 +218,7 @@ public class SimFileHandler : MonoBehaviour
 
         foreach (SerializableGameObject loadedObject in loadedObjects)
         {
-            GameObject prefab = prefabManager.GetPrefabByName(loadedObject.objectName);
+            GameObject prefab = ObjectPrefabManager.Manager.GetPrefabByType(loadedObject.objectType);
             if (prefab != null)
             {
                 GameObject newGameObject = Instantiate(prefab);
@@ -227,10 +227,11 @@ public class SimFileHandler : MonoBehaviour
                 newGameObject.transform.position = loadedObject.position.ToVector3();
                 newGameObject.transform.rotation = Quaternion.Euler(loadedObject.rotation.ToVector3());
                 newGameObject.transform.localScale = loadedObject.scale.ToVector3();
+                newGameObject.SetActive(true);
             }
             else
             {
-                Debug.LogWarning("SimFileHandler.cs error: Prefab not found for object name: " + loadedObject.objectName);
+                Debug.LogWarning("SimFileHandler.cs error: Prefab not found for object type: " + loadedObject.objectType);
             }
         }
     }
@@ -244,14 +245,15 @@ public class SimFileHandler : MonoBehaviour
         // Get all the files in the import folder
         string[] modelFiles = Directory.GetFiles(importFolder, "*.obj");
 
-        // Load each model file using OBJImporter
+        // Load each model file
         foreach (string modelFile in modelFiles)
         {
-            StartCoroutine(LoadModel(modelFile));
+            //StartCoroutine(LoadModel(modelFile));
+            ObjectManager.Manager.CreateModelFromFile(modelFile);
         }
     }
 
-    private IEnumerator LoadModel(string filePath)
+   /* private IEnumerator LoadModel(string filePath)
     {
         WWW www = new WWW("file://" + filePath);
         yield return www;
@@ -289,7 +291,7 @@ public class SimFileHandler : MonoBehaviour
 
         // Add the GameObject to the ObjectPrefabManager's list (optional)
         objectPrefabManager.AddObjectToPrefabList(modelGameObject);
-    }
+    }*/
 
     private void OnLoadTextSuccess(string[] filePaths)
     {

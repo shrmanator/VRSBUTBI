@@ -5,10 +5,24 @@ public class ObjectPrefabManager : MonoBehaviour
 {
     [SerializeField] private List<GameObject> objectPrefabs;
 
-    public Dictionary<string, GameObject> objectPrefabMap;
+    private Dictionary<string, GameObject> objectPrefabMap;
+
+    public static ObjectPrefabManager Manager { get; private set; }
+
+
 
     private void Awake()
     {
+        if (Manager != null && Manager != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Manager = this;
+        }
+
+        Debug.Log("OPM Awake");
         objectPrefabMap = new Dictionary<string, GameObject>();
 
         if (objectPrefabs == null || objectPrefabs.Count == 0)
@@ -23,14 +37,30 @@ public class ObjectPrefabManager : MonoBehaviour
         }
     }
 
-    public GameObject GetPrefabByName(string name)
+    public GameObject GetPrefabByType(string type)
     {
-        if (name == null)
+        Debug.Log(objectPrefabMap.Count);
+        if (type == null)
         {
             Debug.LogWarning("Cannot get prefab with null name");
             return null;
         }
-        return objectPrefabMap.ContainsKey(name) ? objectPrefabMap[name] : null;
+        Debug.Log("Getting type: " + type);
+        Debug.Log("Contains type: " + objectPrefabMap.ContainsKey(type));
+       if (objectPrefabMap.ContainsKey(type))
+       {
+            Debug.Log("Returning " + objectPrefabMap[type]);
+            return objectPrefabMap[type];
+       }
+       else
+       {
+            return null;
+       }
+    }
+
+    public bool HasPrefab(string name)
+    {
+        return objectPrefabMap.ContainsKey(name);
     }
 
     public void AddObjectToPrefabList(GameObject obj)
@@ -43,5 +73,7 @@ public class ObjectPrefabManager : MonoBehaviour
 
         objectPrefabs.Add(obj);
         objectPrefabMap.Add(obj.name, obj);
+        obj.SetActive(false);
+        obj.hideFlags = HideFlags.HideInHierarchy;
     }
 }

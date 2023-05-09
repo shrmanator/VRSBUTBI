@@ -1,7 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Dummiesman;
+using System.IO;
+using System.Text;
+using System.Collections;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using SimpleFileBrowser;
+using System;
 
 /// <summary>
 /// creates objects from provided data
@@ -12,7 +18,7 @@ public sealed class ObjectManager : MonoBehaviour
     public delegate void ObjectCreatedReceivedEventHandler();
     public static event ObjectCreatedReceivedEventHandler ObjectCreated;
     public static ObjectManager Manager {get; private set;}
-    private static Dictionary<string, GameObject> _importLibrary = new Dictionary<string, GameObject>();
+    //private static Dictionary<string, GameObject> _importLibrary = new Dictionary<string, GameObject>();
     private GameObject _loadedObject = null;
     private object[] _objectData = new object[5];
     private bool _isCreatingObject = false;
@@ -59,6 +65,66 @@ public sealed class ObjectManager : MonoBehaviour
     public void CreateObject(object [] objectData)
     {
         StartCoroutine(CreateObjectCoroutine(objectData));
+    }
+
+   /* public void LoadModel(string filePath)
+    {
+        StartCoroutine(LoadModelCoroutine(filePath));
+    }
+
+    private IEnumerator LoadModelCoroutine(string filePath)
+    {
+        Debug.Log("Loading model " + filePath);
+        _isCreatingObject = true;
+        _isRetry = false;
+        WWW www = new WWW("file://" + filePath);
+        yield return www;
+
+        if (!string.IsNullOrEmpty(www.error))
+        {
+            Debug.LogError("Error loading OBJ file: " + www.error);
+            yield break;
+        }
+
+        //Need to figure out loading material. Switch to filepath?
+
+        Mesh holderMesh = new Mesh();
+        GameObject obj = new OBJLoader().Load(new MemoryStream(Encoding.UTF8.GetBytes(www.text)));
+        MeshFilter[] meshFilters = obj.GetComponentsInChildren<MeshFilter>();
+        List<Mesh> meshes = new List<Mesh>();
+
+        foreach (MeshFilter mf in meshFilters)
+        {
+            meshes.Add(mf.sharedMesh);
+        }
+
+
+        // Use the list of meshes (meshes) for further processing
+        GameObject modelGameObject = new GameObject(Path.GetFileNameWithoutExtension(filePath));
+        modelGameObject.AddComponent<MeshRenderer>();
+        MeshFilter meshFilter = modelGameObject.AddComponent<MeshFilter>();
+        meshFilter.mesh = holderMesh;
+
+        // Add the "Serializable" tag to the model GameObject
+        modelGameObject.tag = "Serializable";
+
+        // Create and assign a material to the GameObject (optional)
+        Material modelMaterial = new Material(Shader.Find("Standard"));
+        modelGameObject.GetComponent<Renderer>().material = modelMaterial;
+        Debug.Log("Loaded " + modelGameObject.name);
+        ObjectPrefabManager.Manager.AddObjectToPrefabList(modelGameObject);
+        //yield return new WaitWhile(() => _isCreatingObject);
+    }*/
+
+    public void CreateModelFromFile(string filePath)
+    {
+        GameObject model = new OBJLoader().Load(filePath);
+        if (!ObjectPrefabManager.Manager.HasPrefab(model.name))
+        {
+            ObjectPrefabManager.Manager.AddObjectToPrefabList(model);
+        }
+        string name = model.name;
+        Debug.Log("Object in library: " + ObjectPrefabManager.Manager.GetPrefabByType(name));
     }
 
     /// <summary>
@@ -114,7 +180,7 @@ public sealed class ObjectManager : MonoBehaviour
     private void SelectCreateMethod()
     {
         UnityEngine.Debug.Log("Creating " + _objectData[1] + " " + _objectData[0] + " at " + _objectData[2] + ", " +  _objectData[3] + ", " + _objectData[4]);
-        if (IsInImportLibrary((string)_objectData[1]))
+        if (ObjectPrefabManager.Manager.HasPrefab((string)_objectData[1]))
         {
             CreateObjectFromLibrary();
         }
@@ -137,7 +203,7 @@ public sealed class ObjectManager : MonoBehaviour
     private void CreateObjectFromFile(string[] filePath)
     {
         _loadedObject = new OBJLoader().Load(filePath[0]);
-        AddObjectToImportLibrary();
+        ObjectPrefabManager.Manager.AddObjectToPrefabList(_loadedObject);
         SetObjectProperties();
     }
 
@@ -146,20 +212,21 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     private void CreateObjectFromLibrary()
     {
-        if (IsInImportLibrary((string)_objectData[1]))
+        if (ObjectPrefabManager.Manager.HasPrefab((string)_objectData[1]))
         {
-            _loadedObject = Instantiate(_importLibrary[(string)_objectData[1]]);
+            _loadedObject = Instantiate(ObjectPrefabManager.Manager.GetPrefabByType((string)_objectData[1]));
+            _loadedObject.SetActive(true); 
             SetObjectProperties();
         }
     }
 
-    private void AddObjectToImportLibrary()
+   /* private void AddObjectToImportLibrary()
     {
         if (!IsInImportLibrary((string)_objectData[1]))
         {
-            _importLibrary.Add((string)_objectData[1], _loadedObject);
+            ObjectPrefabManager.Manager.AddObjectToPrefabList(_loadedObject);
         }
-    }
+    }*/
 
     /// <summary>
     /// Creates the appropriate file select prompt
@@ -176,12 +243,12 @@ public sealed class ObjectManager : MonoBehaviour
     /// </summary>
     private void SetObjectProperties()
     {
-        UnityEngine.Debug.Log("Setting object properties");
         //set name
         _loadedObject.name = (string)_objectData[0];
         //set position
         _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
         _loadedObject.transform.GetChild(0).name = (string)_objectData[1];
+        _loadedObject.tag = "Serializable";
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }
@@ -205,6 +272,7 @@ public sealed class ObjectManager : MonoBehaviour
         }
     }
 
+    /*
     /// <summary>
     /// Checks if the object type matches an object in _importLibrary
     /// </summary>
@@ -212,7 +280,7 @@ public sealed class ObjectManager : MonoBehaviour
     private bool IsInImportLibrary(string objectType)
     {
         return _importLibrary.ContainsKey(objectType);
-    }
+    }*/
 
     /// <summary>
     /// Imports asset from Resources folder or returns false if not found
@@ -225,7 +293,7 @@ public sealed class ObjectManager : MonoBehaviour
         if (loadedObjectPrefab != null)
         {
             _loadedObject = GameObject.Instantiate(loadedObjectPrefab);
-            AddObjectToImportLibrary();
+            ObjectPrefabManager.Manager.AddObjectToPrefabList(_loadedObject);
             return true;
         }
         return false;

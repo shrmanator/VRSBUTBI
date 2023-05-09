@@ -31,13 +31,15 @@ using System;
 public class SerializableGameObject
 {
     public string objectName;
+    public string objectType;
     public SerializableVector3 position;
     public SerializableVector3 rotation;
     public SerializableVector3 scale;
 
-    public SerializableGameObject(string objectName, SerializableVector3 position, SerializableVector3 rotation, SerializableVector3 scale)
+    public SerializableGameObject(string objectName, string objectType, SerializableVector3 position, SerializableVector3 rotation, SerializableVector3 scale)
     {
         this.objectName = objectName;
+        this.objectType = objectType;
         this.position = position;
         this.rotation = rotation;
         this.scale = scale;;
@@ -56,6 +58,7 @@ public class SerializableGameObject
     public void GetObjectData(SerializationInfo info, StreamingContext context)
     {
         info.AddValue("name", objectName);
+        info.AddValue("type", objectType);
         info.AddValue("position", position);
         info.AddValue("rotation", rotation);
         info.AddValue("scale", scale);
@@ -70,6 +73,7 @@ public class SerializableGameObject
         if (obj is SerializableGameObject serializedObject)
         {
             objectName = serializedObject.objectName;
+            objectType = serializedObject.objectType;
             position = serializedObject.position;
             rotation = serializedObject.rotation;
         }
