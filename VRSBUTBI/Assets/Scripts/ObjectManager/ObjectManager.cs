@@ -20,7 +20,7 @@ public sealed class ObjectManager : MonoBehaviour
     public static ObjectManager Manager {get; private set;}
     //private static Dictionary<string, GameObject> _importLibrary = new Dictionary<string, GameObject>();
     private GameObject _loadedObject = null;
-    private object[] _objectData = new object[5];
+    private object[] _objectData;
     private bool _isCreatingObject = false;
     private bool _isRetry = false;
 
@@ -136,16 +136,19 @@ public sealed class ObjectManager : MonoBehaviour
         UnityEngine.Debug.Log("Creating " + _objectData[1] + " " + _objectData[0] + " at " + _objectData[2] + ", " +  _objectData[3] + ", " + _objectData[4]);
         if (ObjectPrefabManager.Manager.HasPrefab((string)_objectData[1]))
         {
+            Debug.Log("Creating from library");
             CreateObjectFromLibrary();
         }
         // Resources has no "check if file exists function" so we try to import 
         // and if it returns null, no file exists
         else if (ImportFromResources())
         {
+            Debug.Log("Imported from Resources");
             SetObjectProperties();
         }
         else
         {
+            Debug.Log("Selecting file");
             ShowSelectObjFileDialogue();
         }
     }
@@ -157,37 +160,40 @@ public sealed class ObjectManager : MonoBehaviour
     private void CreateObjectFromFile(string[] filePath)
     {
         _loadedObject = new OBJLoader().Load(filePath[0]);
-        ObjectPrefabManager.Manager.AddObjectToPrefabList(_loadedObject);
+        AddObjectToImportLibrary(_loadedObject.transform.GetChild(0).gameObject, _objectData[1].ToString());
         SetObjectProperties();
     }
 
     /// <summary>
-    /// Copies the object from _importLibrary
+    /// Copies the object from ObjectPrefabManager
     /// </summary>
     private void CreateObjectFromLibrary()
     {
         if (ObjectPrefabManager.Manager.HasPrefab((string)_objectData[1]))
         {
-            _loadedObject = Instantiate(ObjectPrefabManager.Manager.GetPrefabByType((string)_objectData[1]));
-            _loadedObject.SetActive(true); 
+            _loadedObject = new GameObject();
+            var obj = Instantiate(ObjectPrefabManager.Manager.GetPrefabByType((string)_objectData[1]));
+            obj.transform.SetParent(_loadedObject.transform);
             SetObjectProperties();
         }
     }
 
-   /* private void AddObjectToImportLibrary()
+   private void AddObjectToImportLibrary(GameObject obj, string name)
     {
-        if (!IsInImportLibrary((string)_objectData[1]))
+        var objToAdd = Instantiate(obj);
+        if (_objectData[1] != null)
         {
-            ObjectPrefabManager.Manager.AddObjectToPrefabList(_loadedObject);
+                objToAdd.name = _objectData[1].ToString();
         }
-    }*/
+        ObjectPrefabManager.Manager.AddObjectToPrefabList(objToAdd);
+    }
 
     /// <summary>
     /// Creates the appropriate file select prompt
     /// </summary>
     private void ShowSelectObjFileDialogue(){
         FileBrowserHelper fileBrowser = gameObject.AddComponent<FileBrowserHelper>();
-        string title = "Select .obj file to import for " + _objectData[0];
+        string title = "Select .obj file to import for " + _objectData[1];
         string[] filter = {".obj"};
         fileBrowser.LoadSingleFile(CreateObjectFromFile, CancelledImportHandler, title, "Import", filter);
     }
@@ -200,9 +206,25 @@ public sealed class ObjectManager : MonoBehaviour
         //set name
         _loadedObject.name = (string)_objectData[0];
         //set position
-        _loadedObject.transform.position = new Vector3(float.Parse(_objectData[2].ToString()), float.Parse(_objectData[3].ToString()), float.Parse(_objectData[4].ToString()));
-        _loadedObject.transform.GetChild(0).name = (string)_objectData[1];
+        _loadedObject.transform.position = new Vector3(
+            float.Parse(_objectData[2].ToString()), 
+            float.Parse(_objectData[3].ToString()), 
+            float.Parse(_objectData[4].ToString()));
+        //optional set rotation
+        if (_objectData.Length == 8)
+        {
+            _loadedObject.transform.Rotate(
+                float.Parse(_objectData[5].ToString()), 
+                float.Parse(_objectData[6].ToString()), 
+                float.Parse(_objectData[7].ToString()));
+        }
+        if (_loadedObject.transform.childCount > 0)
+        {
+            _loadedObject.transform.GetChild(0).name = _objectData[1].ToString();
+            _loadedObject.transform.GetChild(0).gameObject.SetActive(true);
+        }
         _loadedObject.tag = "Serializable";
+        _loadedObject.SetActive(true);
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }
@@ -226,16 +248,6 @@ public sealed class ObjectManager : MonoBehaviour
         }
     }
 
-    /*
-    /// <summary>
-    /// Checks if the object type matches an object in _importLibrary
-    /// </summary>
-    /// <param name="objectType">The object type to look up</param>
-    private bool IsInImportLibrary(string objectType)
-    {
-        return _importLibrary.ContainsKey(objectType);
-    }*/
-
     /// <summary>
     /// Imports asset from Resources folder or returns false if not found
     /// File must be in 'Assets/Resources' and the file name must match the object type
@@ -247,7 +259,6 @@ public sealed class ObjectManager : MonoBehaviour
         if (loadedObjectPrefab != null)
         {
             _loadedObject = GameObject.Instantiate(loadedObjectPrefab);
-            ObjectPrefabManager.Manager.AddObjectToPrefabList(_loadedObject);
             return true;
         }
         return false;

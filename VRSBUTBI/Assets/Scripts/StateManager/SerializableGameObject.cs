@@ -65,6 +65,18 @@ public class SerializableGameObject
     }
 
     /// <summary>
+    /// Method for converting SerializableGameObject to an object array in the form used by ObjectManager
+    /// </summary>
+    /// <returns> an object array in the form used by ObjectManager to create objects </returns>
+    public object[] ToObjectData()
+    {
+        object[] objectData = {objectName, objectType, 
+            position.x, position.y, position.z,
+            rotation.x, rotation.y, rotation.z};
+        return objectData;
+    }
+
+    /// <summary>
     /// Method for deserializing a SerializableGameObject into this instance.
     /// </summary>
     /// <param name="obj">The SerializableGameObject to deserialize.</param>

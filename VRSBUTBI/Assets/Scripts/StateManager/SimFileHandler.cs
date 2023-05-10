@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 /*
 This script is responsible for handling the saving and loading of a simulation game state in Unity.
 
@@ -218,7 +219,7 @@ public class SimFileHandler : MonoBehaviour
 
         foreach (SerializableGameObject loadedObject in loadedObjects)
         {
-            GameObject prefab = ObjectPrefabManager.Manager.GetPrefabByType(loadedObject.objectType);
+            /*GameObject prefab = ObjectPrefabManager.Manager.GetPrefabByType(loadedObject.objectType);
             if (prefab != null)
             {
                 GameObject newGameObject = Instantiate(prefab);
@@ -232,7 +233,8 @@ public class SimFileHandler : MonoBehaviour
             else
             {
                 Debug.LogWarning("SimFileHandler.cs error: Prefab not found for object type: " + loadedObject.objectType);
-            }
+            }*/
+            ObjectManager.Manager.CreateObject(loadedObject.ToObjectData());
         }
     }
 
