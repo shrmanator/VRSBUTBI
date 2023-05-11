@@ -206,6 +206,23 @@ public class ScenePlayer : MonoBehaviour
         
     }
 
+    // Add the following method to ScenePlayer script
+    /// <summary>
+    /// Checks if a scene is currently playing.
+    /// </summary>
+    /// <returns>True if a scene is playing, False otherwise.</returns>
+    public bool IsScenePlaying()
+    {
+        return isPlayingScene;
+    }
+
+
+    public bool IsSceneLoaded()
+    {
+        // Check if there are any commands and createCommands
+        return commands != null && commands.Count > 0 && createCommands != null && createCommands.Count > 0;
+    }
+
     /// <summary>
     /// Coroutine for playing the scene
     /// <summary>
