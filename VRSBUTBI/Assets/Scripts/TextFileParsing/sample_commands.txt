@@ -1,3 +1,0 @@
-CREATE Truck Truck1 0 0 0
-SETOBJCELL Square width 190 mm
-CREATE BOAT BOAT1 20 20 20
