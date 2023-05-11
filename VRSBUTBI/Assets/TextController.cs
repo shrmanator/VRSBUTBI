@@ -1,9 +1,19 @@
 using UnityEngine;
 
+/// <summary>
+/// Displays instructions on the screen when the game is in the run state, but the simulation is not playing.
+/// </summary>
 public class TextController : MonoBehaviour
 {
+    /// <summary>
+    /// The UI GameObject containing the instruction text.
+    /// </summary>
     public GameObject instructionText;
 
+
+    /// <summary>
+    /// Initializes the instruction text GameObject.
+    /// </summary>
     private void Start()
     {
         if (instructionText != null)
@@ -12,6 +22,9 @@ public class TextController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Displays the instructions on the screen when the game is in the run state, but the simulation is not playing.
+    /// </summary>
     void OnGUI()
     {
         #if UNITY_EDITOR
@@ -29,7 +42,9 @@ public class TextController : MonoBehaviour
         }
     }
 
-
+    /// <summary>
+    /// Updates the state of the instruction text GameObject based on whether the simulation is playing or not.
+    /// </summary>
     private void Update()
     {
         if (Application.isPlaying && instructionText != null && !ScenePlayer.Player.IsScenePlaying())
