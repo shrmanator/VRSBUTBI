@@ -27,7 +27,7 @@ public class TextController : MonoBehaviour
     void Update()
     {
         // Show the instructions when the game is in the run state and there is no scene playing
-        if (!scenePlayer.IsSceneLoaded() && !scenePlayer.isPlayingScene)
+        if (!scenePlayer.IsSceneLoaded() && !scenePlayer.IsScenePlaying())
         {
             instructionPanel.SetActive(true);
         }

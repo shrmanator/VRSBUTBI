@@ -216,7 +216,6 @@ public class ScenePlayer : MonoBehaviour
         return isPlayingScene;
     }
 
-
     public bool IsSceneLoaded()
     {
         // Check if there are any commands and createCommands
