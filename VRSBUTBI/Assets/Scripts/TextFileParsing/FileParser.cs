@@ -42,13 +42,8 @@ public class FileParser : MonoBehaviour
     List<object[]> createCommands;
     List<object[]> moveCommands;
     List<object[]> setobjCommands;
-<<<<<<< Updated upstream
     List<object[]> DynCommands;
-
-=======
-    List<object[]> DYNCommands;
     List<object[]> pathCommands;
->>>>>>> Stashed changes
     List<object[]> commands;
     
     bool isCreatingObject;
@@ -79,11 +74,8 @@ public class FileParser : MonoBehaviour
         createCommands = new List<object[]>();
         moveCommands = new List<object[]>();
         setobjCommands = new List<object[]>();
-<<<<<<< Updated upstream
         DynCommands = new List<object[]>();
-=======
         pathCommands = new List<object[]>;
->>>>>>> Stashed changes
         commands = new List<object[]>();
 
         isCreatingObject = false;
