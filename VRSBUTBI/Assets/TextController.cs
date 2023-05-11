@@ -36,9 +36,12 @@ public class TextController : MonoBehaviour
             GUIStyle style = new GUIStyle(GUI.skin.label);
             style.alignment = TextAnchor.MiddleCenter;
             style.fontSize = 24;
-            GUI.Label(new Rect(Screen.width / 2 - 200, Screen.height / 2 - 40, 400, 80),
-                "Please import a text file or load a simulation state, then press \"Start Simulation\"",
-                style);
+            GUI.Label(new Rect(Screen.width / 2 - 400, Screen.height / 2 - 80, 800, 160),
+                "1. Add models to Assets/Imported_Models\n" +
+                "2. You can import a text file using the 'load text file' button\n" +
+                "3. You can load a simulation state using the 'load scene' button\n" +
+                "4. Press the play button to start the simulation",
+            style);
         }
     }
 

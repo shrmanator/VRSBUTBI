@@ -258,6 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03b18b5387e56974aaf82cad9f3ea8b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playIcon: {fileID: 2800000, guid: b4d648441f9074919a0d39270abfded7, type: 3}
+  pauseIcon: {fileID: 2800000, guid: 9e50b681960f74dc0ae1e43efd2b8c96, type: 3}
 --- !u!1 &534479543
 GameObject:
   m_ObjectHideFlags: 0

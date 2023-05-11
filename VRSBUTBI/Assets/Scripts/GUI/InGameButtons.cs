@@ -12,6 +12,9 @@ public class InGameButtons : MonoBehaviour
     private SimFileHandler simFileHandler;
     private SimulationController simulationController;
 
+    public Texture2D playIcon;
+    public Texture2D pauseIcon;
+
     // Space to leave at the edge of screen
     int endSpace = 20;
 
@@ -102,7 +105,7 @@ public class InGameButtons : MonoBehaviour
 
         rightButtonsPosition -= (playbackControlWidth + spacer);
         if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight),
-            "Pause Scene"))
+            pauseIcon))
         {
             ScenePlayer.Player.PauseScene();
         }
@@ -111,7 +114,7 @@ public class InGameButtons : MonoBehaviour
         rightButtonsPosition -= (playbackControlWidth + spacer);
 
         if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight),
-            "Play Scene"))
+            playIcon))
         {
             ScenePlayer.Player.PlayScene();
         }   
