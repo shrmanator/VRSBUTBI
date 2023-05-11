@@ -48,6 +48,7 @@ public class InGameButtons : MonoBehaviour
     {
         //Buttons aligned to the left
         int leftButtonsPosition = endSpace;
+        
         // Save button:
         if (GUI.Button(new Rect(leftButtonsPosition, buttonY, saveSceneWidth, buttonHeight), 
             "Save Scene"))
