@@ -42,8 +42,13 @@ public class FileParser : MonoBehaviour
     List<object[]> createCommands;
     List<object[]> moveCommands;
     List<object[]> setobjCommands;
+<<<<<<< Updated upstream
     List<object[]> DynCommands;
 
+=======
+    List<object[]> DYNCommands;
+    List<object[]> pathCommands;
+>>>>>>> Stashed changes
     List<object[]> commands;
     
     bool isCreatingObject;
@@ -74,7 +79,11 @@ public class FileParser : MonoBehaviour
         createCommands = new List<object[]>();
         moveCommands = new List<object[]>();
         setobjCommands = new List<object[]>();
+<<<<<<< Updated upstream
         DynCommands = new List<object[]>();
+=======
+        pathCommands = new List<object[]>;
+>>>>>>> Stashed changes
         commands = new List<object[]>();
 
         isCreatingObject = false;
@@ -128,6 +137,12 @@ public class FileParser : MonoBehaviour
                         float startPosition = parts.Length > 4 ? float.Parse(parts[4].Substring(12)) : 0;
                         commands.Add(new object[] {cmd, objectName3, pathName, duration1, startPosition });
                         moveCommands.Add(new object[] { objectName3, pathName, duration1, startPosition });
+                        break;
+                    case "PATH":
+                        string objectName4 = parts[1];
+                        string pathName = parts[2];
+                        commands.Add(new object[] { cmd, objectName4, pathName });
+                        pathCommands.Add(new object[] { cmd, objectName4, pathName });
                         break;
                     case "DESTROY":
                         string objToDestory = parts[1];
