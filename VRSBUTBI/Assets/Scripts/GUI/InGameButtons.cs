@@ -52,6 +52,7 @@ public class InGameButtons : MonoBehaviour
         if (GUI.Button(new Rect(leftButtonsPosition, buttonY, saveSceneWidth, buttonHeight), 
             "Save Scene"))
         {
+            PauseScenePlayer();
             simFileHandler.OpenGameSaveDialog();
         }
 
@@ -61,6 +62,7 @@ public class InGameButtons : MonoBehaviour
         if (GUI.Button(new Rect(leftButtonsPosition, buttonY, loadTextWidth, buttonHeight), 
             "Load Text File"))
         {
+            PauseScenePlayer();
             simFileHandler.OpenTextFileLoadDialog();
         }
 
@@ -70,6 +72,7 @@ public class InGameButtons : MonoBehaviour
         if (GUI.Button(new Rect(leftButtonsPosition, buttonY, loadSceneWidth, buttonHeight), 
             "Load Scene"))
         {
+            PauseScenePlayer();
             simFileHandler.OpenSimStateLoadDialog();
         }
 
@@ -90,23 +93,31 @@ public class InGameButtons : MonoBehaviour
         }
 
         rightButtonsPosition -= (playbackControlWidth + spacer);
-        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight), 
-            "Play Scene"))
-        {
-            ScenePlayer.Player.PlayScene();
-        }
-
-        rightButtonsPosition -= (playbackControlWidth + spacer);
-        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight), 
+        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight),
             "Reset Scene"))
         {
             ScenePlayer.Player.ResetScene();
         }
 
         rightButtonsPosition -= (playbackControlWidth + spacer);
+        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight),
+            "Pause Scene"))
+        {
+            ScenePlayer.Player.PauseScene();
+        }
 
 
+        rightButtonsPosition -= (playbackControlWidth + spacer);
 
-        
+        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight),
+            "Play Scene"))
+        {
+            ScenePlayer.Player.PlayScene();
+        }   
+    }
+
+    private void PauseScenePlayer()
+    {
+        if (!ScenePlayer.Player.isPaused){ScenePlayer.Player.PauseScene();}
     }
 }

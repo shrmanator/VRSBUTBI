@@ -12,7 +12,7 @@ public class ScenePlayer : MonoBehaviour
 {
     // The instance to call. 
     // ScenePlayer needs to be a singleton to ensure that there's only 1 active list of commands
-    public static ScenePlayer Player { get; private set; }
+    [SerializeField] public static ScenePlayer Player { get; private set; }
 
     // Event handlers for commands
     //public delegate void CreateCommandReceivedEventHandler(object[] newObject);
@@ -34,15 +34,21 @@ public class ScenePlayer : MonoBehaviour
     public static event MoveCommandReceivedEventHandler MoveCommandReceived;
 
     // The list of commands for playing the scene
-    List<object[]> commands;
+    [SerializeField]  List<object[]> commands;
     List<object[]> createCommands;
 
-    bool isCreatingObjects;
-    bool isPlayingScene = false;
+    // indicates if objects are currently being created
+    [SerializeField] bool isCreatingObjects = false;
+
+    // indicates if a scene is playing
+    [SerializeField] bool isPlayingScene = false;
+
+    // indicates if a scene is paused
+    [SerializeField] public bool isPaused { get; private set; } = false;
 
     // floats for the timing of commands
-    float startTime;
-    float waitTime = 0;
+    [SerializeField] private float startTime = 0;
+    [SerializeField] private float waitTime = 0;
 
     private void Start()
     {
@@ -66,15 +72,20 @@ public class ScenePlayer : MonoBehaviour
     /// <summary>
     /// Set a new list of commands to use
     /// <param name="newCommands">The list of commands to use</param>
+    /// <param name="newCreates">The list of CREATE commands to use</param>
     /// <summary>
     public void SetScene(List<object[]> newCommands, List<object[]> newCreates)
     {
+        ClearScene();
         commands = newCommands;
         createCommands = newCreates;
         StartCoroutine(SetSceneCoroutine());
         
     }
 
+    /// <summary>
+    /// The Coroutine for setting a scene. Ensures the initial scene doesn't save until the objects are created
+    /// <summary>
     private IEnumerator SetSceneCoroutine()
     {
         ClearScene();
@@ -84,46 +95,81 @@ public class ScenePlayer : MonoBehaviour
         SaveStartScene();
     }
 
+    /// <summary>
+    /// Checks that all objects in a scene exist
+    /// <summary>
     public bool CheckObjectsExist()
     {
-        foreach (object [] create in createCommands)
+        foreach (var cmd in commands)
         {
-            if (GameObject.Find(create[0].ToString()) == null){
-                Debug.LogWarning(create[0] + " does not exist in this scene!");
+            // ignore TIME commands as they do not have an object
+            if (cmd[0].ToString() == "TIME"){continue;}
+            if (GameObject.Find(cmd[1].ToString()) == null){
+                Debug.LogWarning(cmd[1] + " does not exist in this scene!");
                 return false;
             }
         }
         return true;
     }
 
+    /// <summary>
+    /// Remove all created (has Serializable tag) objects from scene
+    /// <summary>
     public void ClearScene()
     {
-        isPlayingScene = false;
         Debug.Log("Clearing scene");
+        SetDefaultValues();
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Serializable"))
         {
             Destroy(obj);
         }
     }
 
+    /// <summary>
+    /// Saves the starting state of the scene
+    /// <summary>
     private void SaveStartScene()
     {
         Debug.Log("Saving initial scene");
         SimFileHandler.Handler.SaveGame(Path.Combine(SimFileHandler.savePath, "scene_start.json"));
     }
 
+    /// <summary>
+    /// Loads the starting state of the scene
+    /// <summary>
     private void LoadStartScene()
     {
         Debug.Log("Loading initial scene: " + Path.Combine(SimFileHandler.savePath, "scene_start.json"));
         SimFileHandler.Handler.LoadGame("scene_start.json");
     }
 
+    /// <summary>
+    /// Resets the scene to its starting state
+    /// <summary>
     public void ResetScene()
     {
-        isPlayingScene = false;
         Debug.Log("Resetting scene");
         ClearScene();
         LoadStartScene();
+    }
+
+    /// <summary>
+    /// Pause or unpause if a scene is playing
+    /// <summary>
+    public void PauseScene()
+    {
+        // if a scene is playing, pause the scene
+        if (!isPaused && isPlayingScene)
+        {
+            isPaused = true;
+            Time.timeScale = 0;
+        }
+        // unpause the scene
+        else
+        {
+            isPaused = false;
+            Time.timeScale = 1;
+        }
     }
 
     /// <summary>
@@ -131,21 +177,33 @@ public class ScenePlayer : MonoBehaviour
     /// <summary>
     public void PlayScene()
     {
-        if (commands == null || commands.Count == 0){
-            Debug.LogWarning("No commands recieved");
-            return;
-        }
-        if (!CheckObjectsExist())
+        // resume playing scene if paused
+        if (isPaused && isPlayingScene)
         {
-            Debug.LogWarning("Cannot play scene with missing objects");
-            return;
+            PauseScene();
         }
-        waitTime = 0;
-        // Get start time of the scene 
-        // Time.time goes from when the user starts the program so it won't be 0
-        startTime = Time.time;
-        isPlayingScene = true;
-        StartCoroutine(PlaySceneCoroutine());
+        // play scene if a scene is not playing and objects are not being created
+        else if (!isPlayingScene && !isCreatingObjects)
+        {
+            if (commands == null || commands.Count == 0)
+            {
+                Debug.LogWarning("No commands recieved");
+                return;
+            }
+            if (!CheckObjectsExist())
+            {
+                Debug.LogWarning("Cannot play scene with missing objects");
+                return;
+            }
+            SetDefaultValues();
+            // Get start time of the scene 
+            // Time.time goes from when the user starts the program so it won't be 0
+            startTime = Time.time;
+            isPlayingScene = true;
+            StartCoroutine(PlaySceneCoroutine());
+        }
+        // do nothing if a scene is currently playing and not paused
+        
     }
 
     /// <summary>
@@ -155,13 +213,15 @@ public class ScenePlayer : MonoBehaviour
         foreach (var cmd in commands)
         {
             Debug.Log(cmd[0]);
-            if(!isPlayingScene){break;}
+            if(!isPlayingScene)
+            {
+                //cmd.GetEnumerator().Reset();
+                yield break;
+            }
             // choose command type
             switch ((string)cmd[0])
             {
                 case "CREATE":
-                // objects are currently created during file parsing 
-                // this is just a placeholder for potentially allowing objects to start existing during the scene
                     break;
                 case "DESTROY":
                     //invoke ObjectManager.DestroyObject
@@ -186,19 +246,28 @@ public class ScenePlayer : MonoBehaviour
                     Debug.LogWarning("Unrecognized command in ScenePlayer");
                     break;  
             }
-            // waits until the indicated time to execute next command
-            yield return new WaitWhile(() => Time.time < waitTime);
+            // waits until the indicated time to execute next command or if the scene is paused
+            yield return new WaitWhile(() => Time.time < waitTime || isPaused);
         }
         Debug.Log("Scene complete");
         isPlayingScene = false;
     }
 
-
     private void OnObjectsCreated()
     {
         Debug.Log("Objects Created Received");
         isCreatingObjects = false;
-    }      
+    }
+
+    private void SetDefaultValues()
+    {
+        isCreatingObjects = false;
+        isPaused = false;
+        isPlayingScene = false;
+        waitTime = 0;
+        startTime = 0;
+        Time.timeScale = 1;
+    }
 }
 
 
