@@ -58,7 +58,7 @@ public class FileParser : MonoBehaviour
         // Subscribe to the TextFileLoaded event of the SimFileHandler
         SimFileHandler.TextFileLoaded += ParseFile;
         // Subscribe to the ObjectCreated event of the ObjectCreator
-        ObjectManager.ObjectCreated += OnObjectCreated;
+        //ObjectManager.ObjectCreated += OnObjectCreated;
 
     }
 
@@ -107,8 +107,8 @@ public class FileParser : MonoBehaviour
                         commands.Add(new object[] {cmd, objectName1, masterName, x, y, z });
                         object[] newObject = new object[] { objectName1, masterName, x, y, z };
                         createCommands.Add(newObject);
-                        isCreatingObject = true;
-                        CreateCommandReceived?.Invoke(newObject);
+                        //isCreatingObject = true;
+                        //CreateCommandReceived?.Invoke(newObject);
                         break;
                     case "SETOBJCELL":
                         //Check for valid input (Core, width lenght, value, unit)
@@ -155,8 +155,7 @@ public class FileParser : MonoBehaviour
             // pauses the loop while isCreatingObject is true
             yield return new WaitWhile(() => isCreatingObject);
         }
-        ScenePlayer.Player.SetScene(commands);
-        ScenePlayer.Player.PlayScene();
+        ScenePlayer.Player.SetScene(commands, createCommands);
 
         /*foreach (object[] command in commands)
         {
@@ -170,8 +169,8 @@ public class FileParser : MonoBehaviour
     /// <summary>
     /// Callback for ObjectCreated event
     /// </summary>
-    private void OnObjectCreated(){
+    /*private void OnObjectCreated(){
         isCreatingObject = false;
-    }
+    }*/
 
 }

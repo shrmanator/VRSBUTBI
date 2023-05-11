@@ -24,6 +24,9 @@ public sealed class ObjectManager : MonoBehaviour
     private bool _isCreatingObject = false;
     private bool _isRetry = false;
 
+    public delegate void AllObjectsCreatedReceivedEventHandler();
+    public static event AllObjectsCreatedReceivedEventHandler AllObjectsCreated;
+
 
     /// <summary>
     /// Subscribe to Create, Destroy, and SetObj events
@@ -53,7 +56,7 @@ public sealed class ObjectManager : MonoBehaviour
     /// Creates objects from a list.
     /// </summary>
     /// <param name="objectsList">The list of objects to create</param>
-    public void CreateObjects(object [,] objectsList)
+    public void CreateObjects(List<object[]> objectsList)
     {
         StartCoroutine(CreateObjectsCoroutine(objectsList));
     }
@@ -89,21 +92,19 @@ public sealed class ObjectManager : MonoBehaviour
     /// <param name="objectsList">The data of the object to create. 
     /// Expected object data: {object name, object type, x, y, z starting coordinates
     /// </param>
-    private IEnumerator CreateObjectsCoroutine(object [,] objectsList)
+    private IEnumerator CreateObjectsCoroutine(List<object[]> objectsList)
     {
-        for (int i = 0; i < objectsList.GetLength(0); i++)
+        foreach (object[] objData in objectsList)
         {
             _loadedObject = null;
-            _objectData[0] = objectsList[i, 0];
-            _objectData[1] = objectsList[i, 1];
-            _objectData[2] = objectsList[i, 2];
-            _objectData[3] = objectsList[i, 3];
-            _objectData[4] = objectsList[i, 4];
+            _objectData = objData;
             _isCreatingObject = true;
             _isRetry = false;
             SelectCreateMethod();
             yield return new WaitWhile(() => _isCreatingObject);
         }
+        Debug.Log("All objects created");
+        AllObjectsCreated?.Invoke();
     }
 
     /// <summary>

@@ -40,8 +40,10 @@ public class SimFileHandler : MonoBehaviour
 {
     [SerializeField] private ObjectPrefabManager objectPrefabManager;
 
+    public static SimFileHandler Handler { get; private set; }
+
     private string saveFileName = "saved_sim_state.bin";
-    private static string savePath;
+    public static string savePath;
 
     private string importedModelsPath;
 
@@ -53,6 +55,14 @@ public class SimFileHandler : MonoBehaviour
 
     private void Awake() 
     {
+        if (Handler != null && Handler != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Handler = this;
+        }
         CreateDirectories();
         LoadExternalModels();
         importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
@@ -112,10 +122,10 @@ public class SimFileHandler : MonoBehaviour
     private void OnGameSaveSuccess(string[] filePaths)
     {
         Debug.Log("Saving: " + filePaths[0]);
-        SaveGame(filePaths[0], GetSerializableGameObjects());
+        SaveGame(filePaths[0]);
     }
 
-    private SerializableGameObject[] GetSerializableGameObjects()
+    private static SerializableGameObject[] GetSerializableGameObjects()
     {
         List<SerializableGameObject> serializableGameObjects = new List<SerializableGameObject>();
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Serializable"))
@@ -130,8 +140,9 @@ public class SimFileHandler : MonoBehaviour
         return serializableGameObjects.ToArray();
     }
 
-    public static void SaveGame(string filePath, SerializableGameObject[] gameObjects)
+    public void SaveGame(string filePath)
     {
+        var gameObjects = GetSerializableGameObjects();
         if (gameObjects == null || gameObjects.Length == 0)
         {
             Debug.LogWarning("Cannot save empty game state.");
@@ -154,9 +165,20 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
-    public static SerializableGameObject[] LoadGame(string fileName)
+    public void LoadGame(string filePath)
+    {
+        SerializableGameObject[] gameObjects = SimFileHandler.GetSerializableGameObjectFromFile(filePath);
+        if (gameObjects != null)
+        {
+            InstantiateLoadedObjects(gameObjects);
+        }
+        GameFileLoaded?.Invoke(filePath);
+    }
+
+    private static SerializableGameObject[] GetSerializableGameObjectFromFile(string fileName)
     {
         string filePath = Path.Combine(savePath, fileName);
+        Debug.Log("Loading from: " + filePath);
 
         if (!File.Exists(filePath))
         {
@@ -195,7 +217,7 @@ public class SimFileHandler : MonoBehaviour
     /// <param name="filePaths">The paths of the saved files.</param>
     private void OnLoadGameSuccess(string[] filePaths)
     {
-        SerializableGameObject[] gameObjects = SimFileHandler.LoadGame(filePaths[0]);
+        SerializableGameObject[] gameObjects = SimFileHandler.GetSerializableGameObjectFromFile(filePaths[0]);
         if (gameObjects != null)
         {
             InstantiateLoadedObjects(gameObjects);
