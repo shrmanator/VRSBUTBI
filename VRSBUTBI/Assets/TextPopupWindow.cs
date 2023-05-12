@@ -22,30 +22,34 @@ public class TextPopupWindow : MonoBehaviour
         guiStyle.normal.textColor = Color.white; // change this to the desired color
 
         // Center the popup window
-        popupRect = new Rect(Screen.width / 2 - 150, Screen.height / 2 - 100, 700, 170);
+        popupRect = new Rect(Screen.width / 2 - 150, Screen.height / 2 - 100, 700, 250);
     }
 
     private void OnGUI()
     {
         if (showPopup)
         {
-            popupRect = GUI.Window(0, popupRect, ShowPopupWindow, "Popup Window");
+            popupRect = GUI.Window(0, popupRect, ShowPopupWindow, "Start Here");
         }
     }
 
     private void ShowPopupWindow(int windowID)
     {
         // Add some text to the popup window
-        GUI.Label(new Rect(10, 20, popupRect.width - 20, 30), "Welcome to VerbaContruct", guiStyle);
+        GUI.Label(new Rect(10, 20, popupRect.width - 20, 30), "Welcome to VerbaContruct!", guiStyle);
 
         // Display bullet list items
+        int bulletListTop = 70; // vertical position of the bullet list
         for (int i = 0; i < bulletList.Length; i++)
         {
-            GUI.Label(new Rect(10, 50 + (i * 20), popupRect.width - 20, 30), bulletList[i], guiStyle);
+            GUI.Label(new Rect(10, bulletListTop + (i * 40), popupRect.width - 20, 30), bulletList[i], guiStyle);
         }
 
+        // Add some space below the bullet list
+        bulletListTop += (bulletList.Length * 40) + 20;
+
         // Add an OK button that closes the popup when clicked
-        if (GUI.Button(new Rect(popupRect.width / 2 - 50, 60 + (bulletList.Length * 20), 100, 20), "OK"))
+        if (GUI.Button(new Rect(popupRect.width / 2 - 50, bulletListTop, 100, 30), "OK"))
         {
             showPopup = false;
         }
