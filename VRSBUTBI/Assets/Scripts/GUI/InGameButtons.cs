@@ -15,6 +15,8 @@ public class InGameButtons : MonoBehaviour
     public Texture2D playIcon;
     public Texture2D pauseIcon;
 
+    int quitButtonWidth = 60;
+
     // Space to leave at the edge of screen
     int endSpace = 20;
 
@@ -85,6 +87,14 @@ public class InGameButtons : MonoBehaviour
 
         // Buttons alighned to the right. Buttons are listed from right to left in order of appearance
         int rightButtonsPosition = Screen.width - endSpace;
+
+        // Quit button:
+        rightButtonsPosition -= quitButtonWidth;
+        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, quitButtonWidth, buttonHeight), 
+            "Quit"))
+        {
+            Application.Quit();
+        }
 
         rightButtonsPosition -= playbackControlWidth;
         // Start : Stop simulation button:
