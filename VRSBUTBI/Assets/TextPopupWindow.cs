@@ -5,9 +5,9 @@ public class TextPopupWindow : MonoBehaviour
     private bool showPopup = true;
     private Rect popupRect;
     private string[] bulletList = { 
-        "First, add your models to New_Unity_Project_Data/Imported_Models",
-        "Press load text file to load in your STROBOSCOPE file",
-        "Press the play button to begin the simulation" 
+        "1. First, add your models to New_Unity_Project_Data/Imported_Models",
+        "2. Press load text file to load in your STROBOSCOPE file",
+        "3. Press the play button to begin the simulation" 
     };
 
     // Create a GUIStyle to set the font size
