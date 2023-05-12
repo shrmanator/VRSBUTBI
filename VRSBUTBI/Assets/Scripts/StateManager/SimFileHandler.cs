@@ -80,8 +80,14 @@ public class SimFileHandler : MonoBehaviour
             Debug.LogError("Imported_Models directory not found. " + "instead points to >> " + importedModelsPath + " <<");
             return new string[0];
         }
-
         string[] availableModels = Directory.GetFiles(importedModelsPath, "*.obj", SearchOption.AllDirectories);
+
+        print("imported model path are:")
+        for (int i = 0; i < availableModels.Length; i++)
+        {
+            print(availableModels[i]);
+        }
+        
         return availableModels;
     }
 
