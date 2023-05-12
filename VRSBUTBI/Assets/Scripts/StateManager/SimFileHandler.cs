@@ -273,11 +273,9 @@ public class SimFileHandler : MonoBehaviour
     // Loads models from the imported_models directory.
     public void LoadExternalModels()
     {
-        // Specify the folder where users can drop their 3D model files
-        string importFolder = Path.Combine(Application.persistentDataPath, "imported_models");
 
         // Get all the files in the import folder
-        string[] modelFiles = Directory.GetFiles(importFolder, "*.obj");
+        string[] modelFiles = Directory.GetFiles(importedModelsPath, "*.obj");
 
         // Load each model file
         foreach (string modelFile in modelFiles)
