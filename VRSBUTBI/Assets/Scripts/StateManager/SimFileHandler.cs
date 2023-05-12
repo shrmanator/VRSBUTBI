@@ -73,7 +73,7 @@ public class SimFileHandler : MonoBehaviour
     /// Returns an array of file paths to available models in the Imported_Models directory.
     /// </summary>
     /// <returns>An array of file paths to available models.</returns>
-    public string[] GetAvailableModels()
+    public string[] GetImportedModelFilePaths()
     {
         if (!Directory.Exists(importedModelsPath))
         {
@@ -120,7 +120,7 @@ public class SimFileHandler : MonoBehaviour
             print("Imported Models folder created at --> " + importedModelsPath);
         }
 
-        print(GetAvailableModels());
+        print(GetImportedModelFilePaths());
     }
 
     public void OpenGameSaveDialog()
