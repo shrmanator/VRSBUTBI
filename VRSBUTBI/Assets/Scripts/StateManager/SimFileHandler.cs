@@ -82,12 +82,12 @@ public class SimFileHandler : MonoBehaviour
         }
         string[] availableModels = Directory.GetFiles(importedModelsPath, "*.obj", SearchOption.AllDirectories);
 
-        print("imported model path are:")
+        print("imported model path are:");
         for (int i = 0; i < availableModels.Length; i++)
         {
             print(availableModels[i]);
         }
-        
+
         return availableModels;
     }
 
