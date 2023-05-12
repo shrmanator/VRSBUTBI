@@ -35,8 +35,9 @@ public class TextController : MonoBehaviour
         {
             GUIStyle style = new GUIStyle(GUI.skin.label);
             style.alignment = TextAnchor.MiddleCenter;
-            style.fontSize = 24;
-            GUI.Label(new Rect(Screen.width / 2 - 400, Screen.height / 2 - 80, 800, 160),
+            style.fontSize = 30; // Increase the font size here
+             style.fontStyle = FontStyle.Bold; // Set text style to bold
+            GUI.Label(new Rect(Screen.width / 2 - 500, Screen.height / 2 - 90, 900, 260),
                 "1. Add models to New_unity_Project_Data/Imported_Models\n" +
                 "2. You can import a text file using the 'load text file' button\n" +
                 "3. You can load a simulation state using the 'load scene' button\n" +

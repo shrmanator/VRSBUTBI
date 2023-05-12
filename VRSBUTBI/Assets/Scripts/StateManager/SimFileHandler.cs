@@ -77,7 +77,7 @@ public class SimFileHandler : MonoBehaviour
     {
         if (!Directory.Exists(importedModelsPath))
         {
-            Debug.LogError("Imported_Models directory not found.");
+            Debug.LogError("Imported_Models directory not found. " + "instead points to >> " + importedModelsPath + " <<");
             return new string[0];
         }
 
@@ -99,20 +99,22 @@ public class SimFileHandler : MonoBehaviour
 
     private void CreateDirectories()
     {
-        string saveGamesPath = Path.Combine(Application.dataPath, "SaveGames");
-        string importedModelsPath = Path.Combine(Application.persistentDataPath, "Imported_Models");
-        print("save game folder --> " + Application.persistentDataPath);
-        print("imported models folder --> " + Application.persistentDataPath);
+        savePath = Path.Combine(Application.persistentDataPath, "SaveGames");
+        importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
 
-        if (!Directory.Exists(saveGamesPath))
+        if (!Directory.Exists(savePath))
         {
-            Directory.CreateDirectory(saveGamesPath);
+            Directory.CreateDirectory(savePath);
+            print("SaveGames folder created at --> " + savePath);
         }
 
         if (!Directory.Exists(importedModelsPath))
         {
             Directory.CreateDirectory(importedModelsPath);
+            print("Imported Models folder created at --> " + importedModelsPath);
         }
+
+        print(GetAvailableModels());
     }
 
     public void OpenGameSaveDialog()
