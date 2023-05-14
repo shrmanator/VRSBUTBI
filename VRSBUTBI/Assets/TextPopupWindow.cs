@@ -22,7 +22,7 @@ public class TextPopupWindow : MonoBehaviour
         guiStyle.normal.textColor = Color.white; // change this to the desired color
 
         // Center the popup window
-        popupRect = new Rect(Screen.width / 2 - 150, Screen.height / 2 - 100, 700, 250);
+        popupRect = new Rect(Screen.width / 2 - 350, Screen.height / 2 - 125, 700, 250);
     }
 
     private void OnGUI()
