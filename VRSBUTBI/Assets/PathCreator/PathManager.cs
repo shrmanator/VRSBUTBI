@@ -15,6 +15,8 @@ public class PathManager : MonoBehaviour
 
     private bool isCreatingPath = false;
 
+    private int numPaths = 0;
+
     // Delete any other instances if they exist
     void Awake()
     {
@@ -123,6 +125,7 @@ public class PathManager : MonoBehaviour
     public void SavePath()
     {
         isCreatingPath = false;
+        GeneratePath(); 
 
     }
 
@@ -130,7 +133,28 @@ public class PathManager : MonoBehaviour
         return isCreatingPath;
     }
 
-    private void GeneratePath(){
-        
+    private void GeneratePath()
+    {
+        numPaths++;
+        var waypoints = GameObject.FindGameObjectsWithTag("New Waypoint");
+        List<Vector3> coordinates = new List<Vector3>(); 
+        foreach (var point in waypoints)
+        {
+            coordinates.Add(point.transform.position);
+        }
+        GameObject pathObject = new GameObject("Path" + numPaths);
+        var pathCreator = pathObject.AddComponent<PathCreator>();
+        pathCreator.bezierPath = new BezierPath(coordinates);
+        pathCreator.enabled = true;
+        ClearWaypoints();
+    }
+
+    public void ClearWaypoints()
+    {
+        var waypoints = GameObject.FindGameObjectsWithTag("New Waypoint");
+        foreach(var point in waypoints)
+        {
+            Destroy(point);
+        }
     }
 }

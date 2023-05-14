@@ -244,6 +244,7 @@ public class ScenePlayer : MonoBehaviour
                     DestroyCommandReceived?.Invoke((string)cmd[1]);
                     break;
                 case "MOVE":
+                PathManager.Manager.AssignMovement(cmd);
                     break;
                 case "SETOBJCELL":
                     //invoke ObjectManager.ChangeObjectProperties
@@ -257,6 +258,7 @@ public class ScenePlayer : MonoBehaviour
                     DynUpdateCommandReceived?.Invoke(cmd);
                     break;
                 case "PATH":
+                    PathManager.Manager.AssignPath(cmd);
                     break;
                 default:
                     Debug.LogWarning("Unrecognized command in ScenePlayer");
