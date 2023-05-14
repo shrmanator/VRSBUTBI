@@ -37,6 +37,7 @@ public class PathManager : MonoBehaviour
             mousePosition.z = 10f; // Set this to be the distance you want the object to be placed in front of the camera.            
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
             Instantiate(waypoint, worldPosition, Quaternion.identity);
+            //Tag so we can find the waypoints
             waypoint.tag = "New Waypoint";
         }
     }
@@ -136,19 +137,25 @@ public class PathManager : MonoBehaviour
     private void GeneratePath()
     {
         numPaths++;
+        // Get a list of points
         var waypoints = GameObject.FindGameObjectsWithTag("New Waypoint");
         List<Vector3> coordinates = new List<Vector3>(); 
         foreach (var point in waypoints)
         {
             coordinates.Add(point.transform.position);
         }
+        //Create our path
         GameObject pathObject = new GameObject("Path" + numPaths);
+        //Attach PathCreator to give it Path functionallity
         var pathCreator = pathObject.AddComponent<PathCreator>();
+        //Define the path from the list of points
         pathCreator.bezierPath = new BezierPath(coordinates);
         pathCreator.enabled = true;
+        //Remove waypoints as they're no longer needed and create clutter
         ClearWaypoints();
     }
 
+    // Clears all waypoints
     public void ClearWaypoints()
     {
         var waypoints = GameObject.FindGameObjectsWithTag("New Waypoint");
