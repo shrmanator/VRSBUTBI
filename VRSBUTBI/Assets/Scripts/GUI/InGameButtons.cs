@@ -84,7 +84,7 @@ public class InGameButtons : MonoBehaviour
 
         leftButtonsPosition += (loadSceneWidth+ spacer);
 
-        // Load State button:
+        // Create Path Button
         if (GUI.Button(new Rect(leftButtonsPosition, buttonY, loadSceneWidth, buttonHeight), 
             "Create Path"))
         {
