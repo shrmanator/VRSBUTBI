@@ -123,6 +123,7 @@ public class ScenePlayer : MonoBehaviour
         {
             Destroy(obj);
         }
+        PathManager.Manager.ClearWaypoints();
     }
 
     /// <summary>
