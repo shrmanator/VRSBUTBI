@@ -84,6 +84,15 @@ public class InGameButtons : MonoBehaviour
 
         leftButtonsPosition += (loadSceneWidth+ spacer);
 
+        // Create Path Button
+        if (GUI.Button(new Rect(leftButtonsPosition, buttonY, loadSceneWidth, buttonHeight), 
+            "Create Path"))
+        {
+            print("path created");
+        }
+
+        leftButtonsPosition += (loadSceneWidth+ spacer);
+
 
         // Buttons alighned to the right. Buttons are listed from right to left in order of appearance
         int rightButtonsPosition = Screen.width - endSpace;
@@ -134,4 +143,6 @@ public class InGameButtons : MonoBehaviour
     {
         if (!ScenePlayer.Player.isPaused){ScenePlayer.Player.PauseScene();}
     }
+
+    
 }
