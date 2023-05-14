@@ -1,3 +1,6 @@
+using PathCreation;
+using PathCreation.Examples;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,6 +40,7 @@ public class InGameButtons : MonoBehaviour
 
     int playbackControlWidth = 100;
 
+    int PathCreatorWidth = 100;
     
     
     /// <summary>
@@ -46,7 +50,6 @@ public class InGameButtons : MonoBehaviour
         {
             GameObject simFileHandlerObject = GameObject.Find("StateManager");
             simFileHandler = simFileHandlerObject.GetComponent<SimFileHandler>();
-            simulationController = simFileHandlerObject.GetComponent<SimulationController>();
         }
 
     private void OnGUI()
@@ -84,15 +87,24 @@ public class InGameButtons : MonoBehaviour
 
         leftButtonsPosition += (loadSceneWidth+ spacer);
 
-        // Create Path Button
-        if (GUI.Button(new Rect(leftButtonsPosition, buttonY, loadSceneWidth, buttonHeight), 
-            "Create Path"))
+        // PathCreator button:
+        if (PathManager.Manager.IsCreatingPath())
         {
-            print("path created");
+            if (GUI.Button(new Rect(leftButtonsPosition, buttonY, PathCreatorWidth, buttonHeight),
+            "Save Path"))
+            {
+                PathManager.Manager.SavePath();
+            }
         }
-
-        leftButtonsPosition += (loadSceneWidth+ spacer);
-
+        else
+        {
+            if (GUI.Button(new Rect(leftButtonsPosition, buttonY, PathCreatorWidth, buttonHeight),
+            "Create Path"))
+            {
+                PathManager.Manager.StartCreatingPath();
+            }
+        }
+        leftButtonsPosition += (PathCreatorWidth + spacer);
 
         // Buttons alighned to the right. Buttons are listed from right to left in order of appearance
         int rightButtonsPosition = Screen.width - endSpace;
@@ -143,6 +155,4 @@ public class InGameButtons : MonoBehaviour
     {
         if (!ScenePlayer.Player.isPaused){ScenePlayer.Player.PauseScene();}
     }
-
-    
 }

@@ -11,6 +11,10 @@ public class PathManager : MonoBehaviour
     // Singleton instance
     public static PathManager Manager { get; private set; }
 
+    public GameObject waypoint;
+
+    private bool isCreatingPath = false;
+
     // Delete any other instances if they exist
     void Awake()
     {
@@ -22,9 +26,20 @@ public class PathManager : MonoBehaviour
         {
             Manager = this;
         }
+    } 
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && isCreatingPath)
+        {
+            Vector3 mousePosition = Input.mousePosition; 
+            mousePosition.z = 10f; // Set this to be the distance you want the object to be placed in front of the camera.            
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+            Instantiate(waypoint, worldPosition, Quaternion.identity);
+            waypoint.tag = "New Waypoint";
+        }
     }
-    
-    // Subscribes to PATH and MOVE commands
+
+    // Subscribes to PATH and MOVE commands    
     void Start()
     {
         ScenePlayer.PathCommandReceived += AssignPath;
@@ -99,5 +114,23 @@ public class PathManager : MonoBehaviour
         else {
             script.SetMovement(float.Parse(data[2].ToString()), float.Parse(data[3].ToString()));
         }
+    }
+
+    public void StartCreatingPath(){
+        isCreatingPath = true;
+    }
+
+    public void SavePath()
+    {
+        isCreatingPath = false;
+
+    }
+
+    public bool IsCreatingPath(){
+        return isCreatingPath;
+    }
+
+    private void GeneratePath(){
+        
     }
 }
