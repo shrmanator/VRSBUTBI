@@ -14,16 +14,16 @@ public class PathFollower : MonoBehaviour
     // speed to move
     public float speed = 0;
 
-    // the distance travelled
-    float dstTravelled;
+    // the distance traveled
+    float dstTraveled;
 
     /// <summary>
     /// Called once per frame and updates the object's position along the path
     /// </summary>
     void Update()
     {
-        dstTravelled += speed * Time.deltaTime;
-        transform.position = pathCreator.path.GetPointAtDistance(dstTravelled, end);
+        dstTraveled += speed * Time.deltaTime;
+        transform.position = pathCreator.path.GetPointAtDistance(dstTraveled, end);
     }
 
     /// <summary>
@@ -44,5 +44,13 @@ public class PathFollower : MonoBehaviour
     {
         transform.position = pathCreator.path.GetPointAtDistance(startPoint);
         speed = (pathCreator.path.length - startPoint) / duration;
+    }
+
+    /// <summary>
+    /// Gets the distance that the the object has moved along the path
+    /// </summary>
+    public float getDistanceTraveled()
+    {
+        return dstTraveled;
     }
 }

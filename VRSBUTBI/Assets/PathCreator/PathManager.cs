@@ -109,7 +109,7 @@ public class PathManager : MonoBehaviour
             return;
         }
 
-        // Get PathFollower componant
+        // Get PathFollower component
         PathFollower script = obj.GetComponent<PathFollower>();
         if (script == null)
         {
@@ -124,7 +124,11 @@ public class PathManager : MonoBehaviour
         else {
             script.SetMovement(float.Parse(data[2].ToString()), float.Parse(data[3].ToString()));
         }
+
+        // make the object face the direction it's moving
+        obj.transform.forward = script.pathCreator.path.GetDirectionAtDistance(script.getDistanceTraveled());
     }
+
 
     public void StartCreatingPath(){
         isCreatingPath = true;
