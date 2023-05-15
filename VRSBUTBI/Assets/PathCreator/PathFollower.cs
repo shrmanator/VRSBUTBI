@@ -38,7 +38,6 @@ public class PathFollower : MonoBehaviour
 
         rb.MovePosition(transform.position);
         rb.MoveRotation(rotation);
-
     }
 
     /// <summary>
