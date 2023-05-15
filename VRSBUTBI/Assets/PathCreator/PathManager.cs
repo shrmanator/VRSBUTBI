@@ -29,17 +29,23 @@ public class PathManager : MonoBehaviour
         {
             Manager = this;
         }
-    }
+    } 
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && isCreatingPath && GUIUtility.hotControl == 0)
+        if (Input.GetMouseButtonDown(0) && isCreatingPath)
         {
-            Vector3 mousePosition = Input.mousePosition; 
-            mousePosition.z = 10f; // Set this to be the distance you want the object to be placed in front of the camera.            
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePosition);
-            Instantiate(waypoint, worldPosition, Quaternion.identity);
-            //Tag so we can find the waypoints
-            waypoint.tag = "New Waypoint";
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                // Instantiate a waypoint at the hit point
+                Instantiate(waypoint, hit.point, Quaternion.identity);
+                //Tag so we can find the waypoints
+                 waypoint.tag = "New Waypoint";
+            }
         }
     }
 
