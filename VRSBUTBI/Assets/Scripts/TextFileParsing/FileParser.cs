@@ -126,9 +126,9 @@ public class FileParser : MonoBehaviour
                         string objectName3 = parts[1];
                        // string pathName1 = parts[2];
                         float duration1 = float.Parse(parts[2]);
-                        float startPosition = parts.Length > 3 ? float.Parse(parts[3].Substring(12)) : 0;
-                        commands.Add(new object[] {cmd, objectName3, duration1, startPosition });
-                        moveCommands.Add(new object[] { objectName3, duration1, startPosition });
+//                        float startPosition = parts.Length > 2 ? float.Parse(parts[3].Substring(12)) : 0;
+                        commands.Add(new object[] {cmd, objectName3, duration1});
+                        moveCommands.Add(new object[] { objectName3, duration1});
                         break;
                     case "PATH":
                         string objectName4 = parts[1];
