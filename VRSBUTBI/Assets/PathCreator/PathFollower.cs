@@ -17,14 +17,28 @@ public class PathFollower : MonoBehaviour
     // the distance traveled
     float dstTraveled;
 
+    Rigidbody rb;
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+
+
     /// <summary>
     /// Called once per frame and updates the object's position along the path
     /// </summary>
-    void Update()
+    void FixedUpdate()
     {
         dstTraveled += speed * Time.deltaTime;
         transform.position = pathCreator.path.GetPointAtDistance(dstTraveled, end);
-        transform.rotation = pathCreator.path.GetRotationAtDistance(dstTraveled, end);
+
+        Quaternion rotation = pathCreator.path.GetRotationAtDistance(dstTraveled, end);
+
+        rb.MovePosition(transform.position);
+        rb.MoveRotation(rotation);
+
     }
 
     /// <summary>
