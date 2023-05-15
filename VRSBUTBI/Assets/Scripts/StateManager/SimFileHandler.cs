@@ -105,7 +105,7 @@ public class SimFileHandler : MonoBehaviour
 
     private void CreateDirectories()
     {
-        savePath = Path.Combine(Application.persistentDataPath, "SaveGames");
+        savePath = Path.Combine(Application.dataPath, "SaveGames");
         importedModelsPath = Path.Combine(Application.dataPath, "Imported_Models");
 
         if (!Directory.Exists(savePath))

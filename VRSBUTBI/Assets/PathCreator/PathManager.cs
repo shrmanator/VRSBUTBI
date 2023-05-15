@@ -30,7 +30,7 @@ public class PathManager : MonoBehaviour
             Manager = this;
         }
     }
-    /*void Update()
+    void Update()
     {
         if (Input.GetMouseButtonDown(0) && isCreatingPath && GUIUtility.hotControl == 0)
         {
@@ -41,36 +41,6 @@ public class PathManager : MonoBehaviour
             //Tag so we can find the waypoints
             waypoint.tag = "New Waypoint";
         }
-    }*/
-
-    void Update()
-
-    {
-
-        if (Input.GetMouseButtonDown(0) && isCreatingPath)
-
-        {
-
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-
-            {
-
-                // Instantiate a waypoint at the hit point
-
-                Instantiate(waypoint, hit.point, Quaternion.identity);
-
-                //Tag so we can find the waypoints
-
-                 waypoint.tag = "New Waypoint";
-
-            }
-
-        }
-
     }
 
     // Subscribes to PATH and MOVE commands    
