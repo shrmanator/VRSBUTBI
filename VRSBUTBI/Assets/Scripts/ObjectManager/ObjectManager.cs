@@ -236,8 +236,6 @@ public sealed class ObjectManager : MonoBehaviour
             rb.angularDrag = 0.05f;
             rb.useGravity = true;
             rb.isKinematic = false;
-            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
-
         }
         _loadedObject.tag = "Serializable";
         _loadedObject.SetActive(true);
