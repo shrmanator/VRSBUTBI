@@ -41,13 +41,21 @@ public class PathManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                // Instantiate a waypoint at the hit point
-                Instantiate(waypoint, hit.point, Quaternion.identity);
-                //Tag so we can find the waypoints
-                 waypoint.tag = "New Waypoint";
+                // Define an offset to raise the waypoint above the terrain
+                float yOffset = 5f; // Change this value to whatever offset you want
+
+                // Add the offset to the hit point's y-coordinate
+                Vector3 waypointPosition = hit.point + new Vector3(0, yOffset, 0);
+
+                // Instantiate a waypoint at the adjusted position
+                Instantiate(waypoint, waypointPosition, Quaternion.identity);
+
+                //Tag so we can find the waypoints
+                waypoint.tag = "New Waypoint";
             }
         }
     }
+
 
     // Subscribes to PATH and MOVE commands    
     void Start()

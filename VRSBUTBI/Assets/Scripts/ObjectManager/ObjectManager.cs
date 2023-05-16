@@ -214,7 +214,7 @@ public sealed class ObjectManager : MonoBehaviour
             float.Parse(_objectData[2].ToString()), 
             float.Parse(_objectData[3].ToString()), 
             float.Parse(_objectData[4].ToString()));
-        //optional set rotation
+        //set rotation
         if (_objectData.Length == 8)
         {
             _loadedObject.transform.Rotate(
@@ -236,7 +236,7 @@ public sealed class ObjectManager : MonoBehaviour
             rb.angularDrag = 0.05f;
             rb.useGravity = true;
             rb.isKinematic = false;
-            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
 
         }
         _loadedObject.tag = "Serializable";
