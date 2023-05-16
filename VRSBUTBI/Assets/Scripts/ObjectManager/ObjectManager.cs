@@ -227,16 +227,16 @@ public sealed class ObjectManager : MonoBehaviour
             _loadedObject.transform.GetChild(0).name = _objectData[1].ToString();
             _loadedObject.transform.GetChild(0).gameObject.SetActive(true);
 
-            // Add Rigidbody and MeshCollider components to the object
+            // Add Rigidbody and BoxCollider components to the object
             Rigidbody rb = _loadedObject.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
-            Collider modelCollider = _loadedObject.transform.GetChild(0).gameObject.AddComponent<MeshCollider>();
+            Collider modelCollider = _loadedObject.transform.GetChild(0).gameObject.AddComponent<BoxCollider>();
             // Set the properties of the Rigidbody
             rb.mass = 1;
             rb.drag = 0;
             rb.angularDrag = 0.05f;
             rb.useGravity = true;
             rb.isKinematic = false;
-            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+            rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
 
         }
         _loadedObject.tag = "Serializable";
@@ -244,6 +244,7 @@ public sealed class ObjectManager : MonoBehaviour
         _isCreatingObject = false;
         ObjectCreated?.Invoke();
     }
+
 
     /// <summary>
     /// Attempts to create object again or stop object creation if this is the second attempt
