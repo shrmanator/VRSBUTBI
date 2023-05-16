@@ -26,7 +26,6 @@ namespace PathCreation.Examples
         {
             if (pathCreator != null)
             {
-                print("in fixedupdate");
                 distanceTravelled += speed * Time.deltaTime;
                 Vector3 nextPosition = pathCreator.path.GetPointAtDistance(distanceTravelled, endOfPathInstruction);
                 Rigidbody rb = GetComponent<Rigidbody>();
@@ -38,9 +37,18 @@ namespace PathCreation.Examples
                 {
                     transform.position = nextPosition;
                 }
-                transform.rotation = pathCreator.path.GetRotationAtDistance(distanceTravelled, endOfPathInstruction);
+
+                // Make the object face the direction it's moving
+                Vector3 direction = pathCreator.path.GetDirectionAtDistance(distanceTravelled, endOfPathInstruction);
+                if (direction != Vector3.zero)
+                {
+                    Quaternion rotation = Quaternion.LookRotation(direction);
+                    transform.rotation = rotation;
+                }
             }
         }
+
+
 
 
         // If the path changes during the game, update the distance travelled so that the follower's position on the new path
