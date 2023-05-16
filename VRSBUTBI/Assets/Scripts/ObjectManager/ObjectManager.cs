@@ -228,11 +228,11 @@ public sealed class ObjectManager : MonoBehaviour
             // Rigidbody rb = _loadedObject.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
             // Collider modelCollider = _loadedObject.transform.GetChild(0).gameObject.AddComponent<MeshCollider>();
             // Set the properties of the Rigidbody
-            rb.mass = 1;
-            rb.drag = 0;
-            rb.angularDrag = 0.05f;
-            rb.useGravity = true;
-            rb.isKinematic = false;
+            // rb.mass = 1;
+            // rb.drag = 0;
+            // rb.angularDrag = 0.05f;
+            // rb.useGravity = true;
+            // rb.isKinematic = false;
         }
         _loadedObject.tag = "Serializable";
         _loadedObject.SetActive(true);
