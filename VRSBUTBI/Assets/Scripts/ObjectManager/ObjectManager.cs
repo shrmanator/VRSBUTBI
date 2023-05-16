@@ -76,8 +76,7 @@ public sealed class ObjectManager : MonoBehaviour
     /// <param name="filePath">The .obj file to load</param>
     public void CreateModelFromFile(string filePath)
     {
-        GameObject model = new GameObject();
-        model = new OBJLoader().Load(filePath);
+        GameObject model = new OBJLoader().Load(filePath);
         if (!ObjectPrefabManager.Manager.HasPrefab(model.name))
         {
             ObjectPrefabManager.Manager.AddObjectToPrefabList(model);
@@ -161,10 +160,8 @@ public sealed class ObjectManager : MonoBehaviour
     /// <param name="filePath">The path of the file to load</param>
     private void CreateObjectFromFile(string[] filePath)
     {
-        _loadedObject = new GameObject();
-        var obj = new OBJLoader().Load(filePath[0]);
-        AddObjectToImportLibrary(obj, _objectData[1].ToString());
-        obj.transform.SetParent(_loadedObject.transform);
+        _loadedObject = new OBJLoader().Load(filePath[0]);
+        AddObjectToImportLibrary(_loadedObject.transform.GetChild(0).gameObject, _objectData[1].ToString());
         SetObjectProperties();
     }
 
