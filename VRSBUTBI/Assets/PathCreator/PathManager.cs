@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using PathCreation;
-
+using PathCreation.Examples;
 /// <summary>
 /// Singleton class that manages paths
 /// <summary>

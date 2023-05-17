@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.IO;
+using PathCreation.Examples;
 
 /// <summary>
 /// Managers the execution of a scene
@@ -201,11 +202,23 @@ public class ScenePlayer : MonoBehaviour
             // Time.time goes from when the user starts the program so it won't be 0
             startTime = Time.time;
             isPlayingScene = true;
+
+            // Start all objects moving
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Serializable"))
+            {
+                PathFollower pathFollower = obj.GetComponent<PathFollower>();
+                print(pathFollower);
+                if (pathFollower != null)
+                {
+                    pathFollower.StartMoving();
+                }
+            }
+
             StartCoroutine(PlaySceneCoroutine());
         }
         // do nothing if a scene is currently playing and not paused
-        
     }
+
 
     // Add the following method to ScenePlayer script
     /// <summary>
