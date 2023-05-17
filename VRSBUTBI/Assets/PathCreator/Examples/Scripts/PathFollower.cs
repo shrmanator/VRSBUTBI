@@ -46,9 +46,10 @@ namespace PathCreation.Examples
                 // Make the object face the direction it's moving
                 Vector3 direction = pathCreator.path.GetDirectionAtDistance(distanceTravelled, endOfPathInstruction);
                 Vector3 normal = pathCreator.path.GetNormalAtDistance(distanceTravelled, endOfPathInstruction);
+                print(normal +  " normal");
                 if (direction != Vector3.zero)
                 {
-                    Quaternion rotation = Quaternion.LookRotation(direction, normal);
+                    Quaternion rotation = Quaternion.LookRotation(direction, new Vector3(0f, normal.y, 0f));
                     transform.rotation = rotation;
                 }
             }
@@ -63,7 +64,7 @@ namespace PathCreation.Examples
         {
             Vector3 startPosition = transform.position;
             Vector3 endPosition = pathCreator.path.GetPointAtDistance(0);
-            float duration = 1.0f; // Change this to control the speed of the movement
+            float duration = 2.0f; // Change this to control the speed of the movement
             float elapsedTime = 0;
 
             while (elapsedTime < duration) {
