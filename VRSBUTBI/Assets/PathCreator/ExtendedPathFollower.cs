@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using PathCreation;
 
@@ -6,7 +6,7 @@ namespace PathCreation.Examples
 {
     // Moves along a path at constant speed.
     // Depending on the end of path instruction, will either loop, reverse, or stop at the end of the path.
-    public class PathFollower : MonoBehaviour
+    public class ExtendedPathFollower : MonoBehaviour
     {
         public PathCreator pathCreator;
         public EndOfPathInstruction endOfPathInstruction;
@@ -46,10 +46,9 @@ namespace PathCreation.Examples
                 // Make the object face the direction it's moving
                 Vector3 direction = pathCreator.path.GetDirectionAtDistance(distanceTravelled, endOfPathInstruction);
                 Vector3 normal = pathCreator.path.GetNormalAtDistance(distanceTravelled, endOfPathInstruction);
-                print(normal +  " normal");
                 if (direction != Vector3.zero)
                 {
-                    Quaternion rotation = Quaternion.LookRotation(direction, new Vector3(0f, normal.y, 0f));
+                    Quaternion rotation = Quaternion.LookRotation(direction, normal);
                     transform.rotation = rotation;
                 }
             }
@@ -64,7 +63,7 @@ namespace PathCreation.Examples
         {
             Vector3 startPosition = transform.position;
             Vector3 endPosition = pathCreator.path.GetPointAtDistance(0);
-            float duration = 2.0f; // Change this to control the speed of the movement
+            float duration = 1.0f; // Change this to control the speed of the movement
             float elapsedTime = 0;
 
             while (elapsedTime < duration) {

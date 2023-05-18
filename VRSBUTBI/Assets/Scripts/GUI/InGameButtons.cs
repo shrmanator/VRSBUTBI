@@ -135,15 +135,15 @@ public class InGameButtons : MonoBehaviour
         }
 
         rightButtonsPosition -= (playbackControlWidth + spacer);
+        // Pause scene
         if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight),
             pauseIcon))
         {
             ScenePlayer.Player.PauseScene();
         }
 
-
+        // Play scene
         rightButtonsPosition -= (playbackControlWidth + spacer);
-
         if (GUI.Button(new Rect(rightButtonsPosition, buttonY, playbackControlWidth, buttonHeight),
             playIcon))
         {
