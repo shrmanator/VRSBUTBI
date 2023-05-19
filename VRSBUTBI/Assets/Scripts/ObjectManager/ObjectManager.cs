@@ -228,8 +228,8 @@ public sealed class ObjectManager : MonoBehaviour
             _loadedObject.transform.GetChild(0).gameObject.SetActive(true);
 
             // Add Rigidbody and BoxCollider components to the object
-            Rigidbody rb = _loadedObject.transform.GetChild(0).gameObject.AddComponent<Rigidbody>();
-            Collider modelCollider = _loadedObject.transform.GetChild(0).gameObject.AddComponent<BoxCollider>();
+            Rigidbody rb = _loadedObject.AddComponent<Rigidbody>();
+            Collider modelCollider = _loadedObject.AddComponent<BoxCollider>();
             // Set the properties of the Rigidbody
             rb.mass = 1;
             rb.drag = 0;

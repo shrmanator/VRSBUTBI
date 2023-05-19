@@ -19,7 +19,7 @@ namespace PathCreation
             if (pathCreator != null)
             {
                 // AddComponent of PathFollower
-                PathCreator pc = gameObject.AddComponent<PathCreator>() as PathCreator;
+                //PathCreator pc = gameObject.AddComponent<PathCreator>() as PathCreator;
 
                 // Subscribed to the pathUpdated event so that we're notified if the path changes during the game
                 pathCreator.pathUpdated += OnPathChanged;
