@@ -169,6 +169,12 @@ public class PathManager : MonoBehaviour
         //Define the path from the list of points
         pathCreator.bezierPath = new BezierPath(coordinates);
         pathCreator.enabled = true;
+        //Add line to path
+        var line = pathObject.AddComponent<LineRenderer>();
+        //LineRender.SetPositions only sets positions up to positionCount
+        line.positionCount = coordinates.Count;
+        line.SetPositions(coordinates.ToArray());
+        
         //Remove waypoints as they're no longer needed and create clutter
         ClearWaypoints();
     }
