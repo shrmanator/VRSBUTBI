@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using PathCreation;
-using PathCreation.Examples;
 /// <summary>
 /// Singleton class that manages paths
 /// <summary>
@@ -94,10 +93,10 @@ public class PathManager : MonoBehaviour
             return;
         }
         // Get existing PathFollower script on object or add one
-        PathFollower script = obj.GetComponent<PathFollower>();
+        ExtendedPathFollower script = obj.GetComponent<ExtendedPathFollower>();
         if (script == null)
         {
-            script = obj.AddComponent(typeof(PathFollower)) as PathFollower;
+            script = obj.AddComponent(typeof(ExtendedPathFollower)) as ExtendedPathFollower;
         }
    
         script.SetPath(path);
@@ -118,7 +117,7 @@ public class PathManager : MonoBehaviour
         }
 
         // Get PathFollower component
-        PathFollower script = obj.GetComponent<PathFollower>();
+        ExtendedPathFollower script = obj.GetComponent<ExtendedPathFollower>();
         if (script == null)
         {
             UnityEngine.Debug.Log(data[1] + " is not on a path!");
