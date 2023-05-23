@@ -226,19 +226,17 @@ public sealed class ObjectManager : MonoBehaviour
         {
             _loadedObject.transform.GetChild(0).name = _objectData[1].ToString();
             _loadedObject.transform.GetChild(0).gameObject.SetActive(true);
-
-            // Add Rigidbody and BoxCollider components to the object
-            Rigidbody rb = _loadedObject.AddComponent<Rigidbody>();
-            Collider modelCollider = _loadedObject.AddComponent<BoxCollider>();
-            // Set the properties of the Rigidbody
-            rb.mass = 1;
-            rb.drag = 0;
-            rb.angularDrag = 0.05f;
-            rb.useGravity = true;
-            rb.isKinematic = false;
-            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-
         }
+        // Add Rigidbody and BoxCollider components to the object
+        /*Rigidbody rb = _loadedObject.AddComponent<Rigidbody>();
+        Collider modelCollider = _loadedObject.AddComponent<BoxCollider>();
+        // Set the properties of the Rigidbody
+        rb.mass = 1;
+        rb.drag = 0;
+        rb.angularDrag = 0.05f;
+        rb.useGravity = true;
+        rb.isKinematic = false;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;*/
         _loadedObject.tag = "Serializable";
         _loadedObject.SetActive(true);
         _isCreatingObject = false;
