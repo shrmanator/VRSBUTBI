@@ -9,13 +9,13 @@ namespace PathCreation
     public class ExtendedPathFollower : MonoBehaviour
     {
         public PathCreator pathCreator;
-        public EndOfPathInstruction endOfPathInstruction;
+        public EndOfPathInstruction endOfPathInstruction = EndOfPathInstruction.Stop;
         public float speed = 10;
         float distanceTravelled;
 
         Rigidbody rb;
 
-        void Start() {
+       /* void Start() {
             if (pathCreator != null)
             {
                 // AddComponent of PathFollower
@@ -25,8 +25,8 @@ namespace PathCreation
                 pathCreator.pathUpdated += OnPathChanged;
             }
 
-            rb = GetComponent<Rigidbody>();
-        }
+           // rb = GetComponent<Rigidbody>();
+        } */
 
         void FixedUpdate()
         {
@@ -44,17 +44,17 @@ namespace PathCreation
                 }
 
                 // Make the object face the direction it's moving
-                Vector3 direction = pathCreator.path.GetDirectionAtDistance(distanceTravelled, endOfPathInstruction);
+               /* Vector3 direction = pathCreator.path.GetDirectionAtDistance(distanceTravelled, endOfPathInstruction);
                 Vector3 normal = pathCreator.path.GetNormalAtDistance(distanceTravelled, endOfPathInstruction);
                 if (direction != Vector3.zero)
                 {
                     Quaternion rotation = Quaternion.LookRotation(direction, normal);
                     transform.rotation = rotation;
-                }
+                }*/
             }
         }
 
-        public void StartMoving()
+        /*public void StartMoving()
         {
             StartCoroutine(MoveToFirstWaypoint());
         }
@@ -77,7 +77,7 @@ namespace PathCreation
 
         void OnPathChanged() {
             StartCoroutine(MoveToFirstWaypoint());
-        }
+        }*/
 
         public void SetPath(PathCreator newPath)
         {

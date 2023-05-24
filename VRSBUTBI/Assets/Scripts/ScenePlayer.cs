@@ -125,16 +125,8 @@ public class ScenePlayer : MonoBehaviour
         Debug.Log("Clearing scene");
         SetDefaultValues();
         ClearObjects();
-        ClearPaths();
+        PathManager.Manager.ClearPaths();
         PathManager.Manager.ClearWaypoints();
-    }
-
-    private void ClearPaths()
-    {
-        foreach (GameObject path in GameObject.FindGameObjectsWithTag("Path"))
-        {
-            Destroy(path);
-        }
     }
 
     private void ClearObjects()
@@ -151,7 +143,10 @@ public class ScenePlayer : MonoBehaviour
     private void SaveStartScene()
     {
         Debug.Log("Saving initial scene");
-        SimFileHandler.Handler.SaveGame(Path.Combine(SimFileHandler.savePath, "scene_start.json"));
+        if (!isCreatingObjects)
+        {
+            SimFileHandler.Handler.SaveGame(Path.Combine(SimFileHandler.savePath, "scene_start.json"));
+        }
     }
 
     /// <summary>
@@ -298,6 +293,7 @@ public class ScenePlayer : MonoBehaviour
     {
         Debug.Log("Objects Created Received");
         isCreatingObjects = false;
+        SaveStartScene();
     }
 
     private void SetDefaultValues()

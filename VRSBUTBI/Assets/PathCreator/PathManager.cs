@@ -177,6 +177,21 @@ public class PathManager : MonoBehaviour
         }
     }
 
+    public GameObject[] GetAllPaths()
+    {
+        return GameObject.FindGameObjectsWithTag("Path");
+    }
+
+    public void ClearPaths()
+    {
+        var paths = GetAllPaths();
+        foreach (var path in paths)
+        {
+            Destroy(path);
+        }
+        numPaths = 0;
+    }
+
     public void GeneratePathFromVertices(List<Vector3> vertices)
     {
         numPaths++;

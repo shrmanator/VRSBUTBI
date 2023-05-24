@@ -50,6 +50,7 @@ public class SimFileHandler : MonoBehaviour
     public delegate void OnTextFileLoaded(string filePath);
     public static event OnTextFileLoaded TextFileLoaded;
 
+
     private void Awake() 
     {
         if (Handler != null && Handler != this)
@@ -194,7 +195,6 @@ public class SimFileHandler : MonoBehaviour
             Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
         }*/
         SerializableScene scene = new SerializableScene(GetSerializableGameObjects(), GetSerializablePaths(), GetSerializableCommands());
-        Debug.Log(scene.objects.list);
 
         String fileName = Path.GetFileNameWithoutExtension(filePath);
         try
@@ -219,11 +219,8 @@ public class SimFileHandler : MonoBehaviour
         SerializableScene scene = GetSerializableSceneFromFile(filePath);
         if (scene != null)
         {
-            Debug.Log("Scene objects: " + scene.objects.list);
             InstantiateLoadedObjects(scene.objects.list.ToArray());
-            Debug.Log("Scene paths: " + scene.paths.list);
             InstantiatePaths(scene.paths.list.ToArray());
-            Debug.Log("Scene commands: " + scene.commands.list);
             InstantiateCommands(scene.commands.list.ToArray());
         }
         GameFileLoaded?.Invoke(filePath);
@@ -317,6 +314,7 @@ public class SimFileHandler : MonoBehaviour
             return;
         }
 
+        List<object[]> objectsData = new List<object[]>();
         foreach (SerializableGameObject loadedObject in loadedObjects)
         {
             /*GameObject prefab = ObjectPrefabManager.Manager.GetPrefabByType(loadedObject.objectType);
@@ -334,15 +332,15 @@ public class SimFileHandler : MonoBehaviour
             {
                 Debug.LogWarning("SimFileHandler.cs error: Prefab not found for object type: " + loadedObject.objectType);
             }*/
-            ObjectManager.Manager.CreateObject(loadedObject.ToObjectData());
+            objectsData.Add(loadedObject.ToObjectData());
         }
+        ObjectManager.Manager.CreateObjects(objectsData);
     }
 
     private void InstantiatePaths(SerializablePath[] paths)
     {
         foreach (var path in paths)
         {
-            Debug.Log("Path: " + path);
             PathManager.Manager.GeneratePathFromVertices(path.ToVerticesList());
         }
     }
@@ -352,10 +350,8 @@ public class SimFileHandler : MonoBehaviour
         List<object[]> commands = new List<object[]>();
         foreach (var serializedCmd in serializedCommands)
         {
-            Debug.Log("Command: " + serializedCmd);
             commands.Add(serializedCmd.ToObjectData());
         }
-        Debug.Log("Commands: " + commands);
         ScenePlayer.Player.SetCommands(commands);
     }
 
