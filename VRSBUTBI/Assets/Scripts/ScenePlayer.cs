@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.IO;
-using PathCreation.Examples;
 
 /// <summary>
 /// Managers the execution of a scene
@@ -35,7 +34,7 @@ public class ScenePlayer : MonoBehaviour
     public static event MoveCommandReceivedEventHandler MoveCommandReceived;
 
     // The list of commands for playing the scene
-    [SerializeField]  List<object[]> commands;
+    [SerializeField] public List<object[]> commands;
     List<object[]> createCommands;
 
     // indicates if objects are currently being created
@@ -84,12 +83,17 @@ public class ScenePlayer : MonoBehaviour
         
     }
 
+    public void SetCommands(List<object[]> newCommands)
+    {
+        commands = newCommands;
+        SaveStartScene();
+    }
+
     /// <summary>
     /// The Coroutine for setting a scene. Ensures the initial scene doesn't save until the objects are created
     /// <summary>
     private IEnumerator SetSceneCoroutine()
     {
-        ClearScene();
         isCreatingObjects = true;
         ObjectManager.Manager.CreateObjects(createCommands);
         yield return new WaitWhile(() => isCreatingObjects);
@@ -120,11 +124,25 @@ public class ScenePlayer : MonoBehaviour
     {
         Debug.Log("Clearing scene");
         SetDefaultValues();
+        ClearObjects();
+        ClearPaths();
+        PathManager.Manager.ClearWaypoints();
+    }
+
+    private void ClearPaths()
+    {
+        foreach (GameObject path in GameObject.FindGameObjectsWithTag("Path"))
+        {
+            Destroy(path);
+        }
+    }
+
+    private void ClearObjects()
+    {
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Serializable"))
         {
             Destroy(obj);
         }
-        PathManager.Manager.ClearWaypoints();
     }
 
     /// <summary>
@@ -151,7 +169,9 @@ public class ScenePlayer : MonoBehaviour
     public void ResetScene()
     {
         Debug.Log("Resetting scene");
-        ClearScene();
+        SetDefaultValues();
+        ClearObjects();
+        PathManager.Manager.ClearWaypoints();
         LoadStartScene();
     }
 
@@ -203,17 +223,6 @@ public class ScenePlayer : MonoBehaviour
             startTime = Time.time;
             isPlayingScene = true;
 
-            // Start all objects moving
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Serializable"))
-            {
-                PathFollower pathFollower = obj.GetComponent<PathFollower>();
-                print(pathFollower);
-                if (pathFollower != null)
-                {
-                    pathFollower.StartMoving();
-                }
-            }
-
             StartCoroutine(PlaySceneCoroutine());
         }
         // do nothing if a scene is currently playing and not paused
@@ -258,7 +267,7 @@ public class ScenePlayer : MonoBehaviour
                     DestroyCommandReceived?.Invoke((string)cmd[1]);
                     break;
                 case "MOVE":
-                PathManager.Manager.AssignMovement(cmd);
+                    PathManager.Manager.AssignMovement(cmd);
                     break;
                 case "SETOBJCELL":
                     //invoke ObjectManager.ChangeObjectProperties

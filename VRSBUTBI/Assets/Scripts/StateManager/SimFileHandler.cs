@@ -24,16 +24,13 @@ NOTE2: Importing Models
 */
 
 
-using Dummiesman;
-using System.Text;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using SimpleFileBrowser;
 using System;
+using PathCreation;
 
 
 public class SimFileHandler : MonoBehaviour
@@ -135,24 +132,47 @@ public class SimFileHandler : MonoBehaviour
         SaveGame(filePaths[0]);
     }
 
-    private static SerializableGameObject[] GetSerializableGameObjects()
+    private static List<SerializableGameObject> GetSerializableGameObjects()
     {
         List<SerializableGameObject> serializableGameObjects = new List<SerializableGameObject>();
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Serializable"))
         {
-            SerializableVector3 position = new SerializableVector3(obj.transform.position);
+            /*SerializableVector3 position = new SerializableVector3(obj.transform.position);
             SerializableVector3 rotation = new SerializableVector3(obj.transform.rotation.eulerAngles);
             SerializableVector3 scale = new SerializableVector3(obj.transform.localScale);
             SerializableGameObject serializedObject = new SerializableGameObject(obj.name, obj.transform.GetChild(0).name, position, rotation, scale);
 
-            serializableGameObjects.Add(serializedObject);
+            serializableGameObjects.Add(serializedObject);*/
+            serializableGameObjects.Add(new SerializableGameObject(obj.name, obj.transform.GetChild(0).name,
+                                                obj.transform.position, obj.transform.rotation.eulerAngles, obj.transform.localScale));
         }
-        return serializableGameObjects.ToArray();
+        return serializableGameObjects;
+    }
+
+    private static List<SerializablePath> GetSerializablePaths()
+    {
+        List<SerializablePath> serializablePath = new List<SerializablePath>();
+        foreach (GameObject pathObject in GameObject.FindGameObjectsWithTag("Path"))
+        {
+            PathCreator path = pathObject.GetComponent<PathCreator>();
+            serializablePath.Add(new SerializablePath(path.path.localPoints.ToList<Vector3>()));
+        }
+        return serializablePath;
+    }
+
+    private static List<SerializableCommand> GetSerializableCommands()
+    {
+        List<SerializableCommand> serializableCommands = new List<SerializableCommand>();
+        foreach (var cmd in ScenePlayer.Player.commands)
+        {
+            serializableCommands.Add(new SerializableCommand(cmd));
+        }
+        return serializableCommands;
     }
 
     public void SaveGame(string filePath)
     {
-        var gameObjects = GetSerializableGameObjects();
+        /*var gameObjects = GetSerializableGameObjects();
         if (gameObjects == null || gameObjects.Length == 0)
         {
             Debug.LogWarning("Cannot save empty game state.");
@@ -172,15 +192,39 @@ public class SimFileHandler : MonoBehaviour
         catch (IOException ex)
         {
             Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
+        }*/
+        SerializableScene scene = new SerializableScene(GetSerializableGameObjects(), GetSerializablePaths(), GetSerializableCommands());
+        Debug.Log(scene.objects.list);
+
+        String fileName = Path.GetFileNameWithoutExtension(filePath);
+        try
+        {
+            string json = JsonUtility.ToJson(scene, true);
+            File.WriteAllText(filePath, json);
+            Debug.Log($"Simulation state saved to {filePath}");
+        }
+        catch (IOException ex)
+        {
+            Debug.LogError($"Failed to save game to {filePath}: {ex.Message}");
         }
     }
 
     public void LoadGame(string filePath)
     {
-        SerializableGameObject[] gameObjects = SimFileHandler.GetSerializableGameObjectFromFile(filePath);
+        /*SerializableGameObject[] gameObjects = SimFileHandler.GetSerializableGameObjectFromFile(filePath);
         if (gameObjects != null)
         {
             InstantiateLoadedObjects(gameObjects);
+        }*/
+        SerializableScene scene = GetSerializableSceneFromFile(filePath);
+        if (scene != null)
+        {
+            Debug.Log("Scene objects: " + scene.objects.list);
+            InstantiateLoadedObjects(scene.objects.list.ToArray());
+            Debug.Log("Scene paths: " + scene.paths.list);
+            InstantiatePaths(scene.paths.list.ToArray());
+            Debug.Log("Scene commands: " + scene.commands.list);
+            InstantiateCommands(scene.commands.list.ToArray());
         }
         GameFileLoaded?.Invoke(filePath);
     }
@@ -209,6 +253,30 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
+    private static SerializableScene GetSerializableSceneFromFile(string fileName)
+    {
+        string filePath = Path.Combine(savePath, fileName);
+        Debug.Log("Loading from: " + filePath);
+
+        if (!File.Exists(filePath))
+        {
+            Debug.LogError("Failed to load game from " + filePath + ": File not found");
+            return null;
+        }
+
+        try
+        {
+            string json = File.ReadAllText(filePath);
+            SerializableScene scene = JsonUtility.FromJson<SerializableScene>(json);
+            return scene;
+        }
+        catch (IOException ex)
+        {
+            Debug.LogError("Failed to load game from " + filePath + ": " + ex.Message);
+            return null;
+        }
+    }
+
     public void OpenTextFileLoadDialog()
     {
         FileBrowser.SetFilters(false, new FileBrowser.Filter(".txt", ".txt"));
@@ -227,12 +295,12 @@ public class SimFileHandler : MonoBehaviour
     /// <param name="filePaths">The paths of the saved files.</param>
     private void OnLoadGameSuccess(string[] filePaths)
     {
-        SerializableGameObject[] gameObjects = SimFileHandler.GetSerializableGameObjectFromFile(filePaths[0]);
+        /*SerializableGameObject[] gameObjects = SimFileHandler.GetSerializableGameObjectFromFile(filePaths[0]);
         if (gameObjects != null)
         {
             InstantiateLoadedObjects(gameObjects);
-        }
-        GameFileLoaded?.Invoke(filePaths[0]);
+        }*/
+        LoadGame(filePaths[0]);
     }
 
     private void InstantiateLoadedObjects(SerializableGameObject[] loadedObjects)
@@ -268,6 +336,27 @@ public class SimFileHandler : MonoBehaviour
             }*/
             ObjectManager.Manager.CreateObject(loadedObject.ToObjectData());
         }
+    }
+
+    private void InstantiatePaths(SerializablePath[] paths)
+    {
+        foreach (var path in paths)
+        {
+            Debug.Log("Path: " + path);
+            PathManager.Manager.GeneratePathFromVertices(path.ToVerticesList());
+        }
+    }
+
+    private void InstantiateCommands(SerializableCommand[] serializedCommands)
+    {
+        List<object[]> commands = new List<object[]>();
+        foreach (var serializedCmd in serializedCommands)
+        {
+            Debug.Log("Command: " + serializedCmd);
+            commands.Add(serializedCmd.ToObjectData());
+        }
+        Debug.Log("Commands: " + commands);
+        ScenePlayer.Player.SetCommands(commands);
     }
 
     // Loads models from the imported_models directory.

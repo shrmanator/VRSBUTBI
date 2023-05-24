@@ -154,7 +154,6 @@ public class PathManager : MonoBehaviour
 
     private void GeneratePath()
     {
-        numPaths++;
         // Get a list of points
         var waypoints = GameObject.FindGameObjectsWithTag("New Waypoint");
         List<Vector3> coordinates = new List<Vector3>(); 
@@ -162,18 +161,7 @@ public class PathManager : MonoBehaviour
         {
             coordinates.Add(point.transform.position);
         }
-        //Create our path
-        GameObject pathObject = new GameObject("Path" + numPaths);
-        //Attach PathCreator to give it Path functionallity
-        var pathCreator = pathObject.AddComponent<PathCreator>();
-        //Define the path from the list of points
-        pathCreator.bezierPath = new BezierPath(coordinates);
-        pathCreator.enabled = true;
-        //Add line to path
-        var line = pathObject.AddComponent<LineRenderer>();
-        //LineRender.SetPositions only sets positions up to positionCount
-        line.positionCount = coordinates.Count;
-        line.SetPositions(coordinates.ToArray());
+        GeneratePathFromVertices(coordinates);
         
         //Remove waypoints as they're no longer needed and create clutter
         ClearWaypoints();
@@ -187,5 +175,23 @@ public class PathManager : MonoBehaviour
         {
             Destroy(point);
         }
+    }
+
+    public void GeneratePathFromVertices(List<Vector3> vertices)
+    {
+        numPaths++;
+        //Create our path
+        GameObject pathObject = new GameObject("Path" + numPaths);
+        //Attach PathCreator to give it Path functionallity
+        var pathCreator = pathObject.AddComponent<PathCreator>();
+        //Define the path from the list of points
+        pathCreator.bezierPath = new BezierPath(vertices);
+        pathCreator.enabled = true;
+        //Add line to path
+        var line = pathObject.AddComponent<LineRenderer>();
+        //LineRender.SetPositions only sets positions up to positionCount
+        line.positionCount = vertices.Count;
+        line.SetPositions(vertices.ToArray());
+        pathObject.tag = "Path";
     }
 }
