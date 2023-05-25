@@ -106,6 +106,25 @@ public class InGameButtons : MonoBehaviour
         }
         leftButtonsPosition += (PathCreatorWidth + spacer);
 
+        // Clear Paths and Cancel Path buttons
+        if (PathManager.Manager.IsCreatingPath())
+        {
+            if (GUI.Button(new Rect(leftButtonsPosition, buttonY, PathCreatorWidth, buttonHeight),
+            "Cancel Path"))
+            {
+                PathManager.Manager.CancelPath();
+            }
+        }
+        else
+        {
+            if (GUI.Button(new Rect(leftButtonsPosition, buttonY, PathCreatorWidth, buttonHeight),
+            "Clear Paths"))
+            {
+                PathManager.Manager.ClearPaths();
+            }
+        }
+        
+
         // Buttons alighned to the right. Buttons are listed from right to left in order of appearance
         int rightButtonsPosition = Screen.width - endSpace;
 

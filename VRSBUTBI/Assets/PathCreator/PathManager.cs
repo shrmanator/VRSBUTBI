@@ -177,6 +177,12 @@ public class PathManager : MonoBehaviour
         }
     }
 
+    public void CancelPath()
+    {
+        isCreatingPath = false;
+        ClearWaypoints();
+    }
+
     public GameObject[] GetAllPaths()
     {
         return GameObject.FindGameObjectsWithTag("Path");
