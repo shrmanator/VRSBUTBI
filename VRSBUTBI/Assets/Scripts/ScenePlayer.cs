@@ -118,6 +118,23 @@ public class ScenePlayer : MonoBehaviour
     }
 
     /// <summary>
+    /// Checks that all paths in a scene exist
+    /// <summary>
+    public bool CheckPathsExist()
+    {
+        foreach (var cmd in commands)
+        {
+            if (cmd[0].ToString() == "PATH")
+            if (GameObject.Find(cmd[2].ToString()) == null)
+            {
+                Debug.LogWarning(cmd[2] + " does not exist in this scene!");
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /// <summary>
     /// Remove all created (has Serializable tag) objects from scene
     /// <summary>
     public void ClearScene()
@@ -210,6 +227,11 @@ public class ScenePlayer : MonoBehaviour
             if (!CheckObjectsExist())
             {
                 Debug.LogWarning("Cannot play scene with missing objects");
+                return;
+            }
+            if (!CheckPathsExist())
+            {
+                Debug.LogWarning("Cannot play scene with missing paths");
                 return;
             }
             SetDefaultValues();
