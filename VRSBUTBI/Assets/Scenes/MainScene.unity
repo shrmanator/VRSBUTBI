@@ -689,9 +689,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cc91c88c01404c278a31f91ab5ced21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  panSpeed: 100
-  zoomSpeed: 1000
-  mouseSensitivity: 2000
+  panSpeed: 50
+  zoomSpeed: 50
+  mouseSensitivity: 1000
   verticalMin: 2
   verticalMax: 1000
   fwdCameraKey: 119
