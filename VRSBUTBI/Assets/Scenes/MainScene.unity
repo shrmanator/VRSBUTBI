@@ -693,7 +693,7 @@ MonoBehaviour:
   zoomSpeed: 1000
   mouseSensitivity: 2000
   verticalMin: 2
-  verticalMax: 200
+  verticalMax: 1000
   fwdCameraKey: 119
   backwardCameraKey: 115
   leftCameraStrafeKey: 97

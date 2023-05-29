@@ -17,17 +17,17 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Speed at which camera zooms in or out.
     /// </summary>
-    float zoomSpeed = 50f;
+    float zoomSpeed = 1000f;
     [SerializeField] 
     /// <summary>
     /// Sensitivity of the mouse movement for rotation.
     /// </summary>
-    float mouseSensitivity = 800.0f;
+    float mouseSensitivity = 2000f;
     [SerializeField] 
     /// <summary>
     /// Minimum limit of vertical movement.
     /// </summary>
-    float verticalMin = 2f;
+    float verticalMin = 13f;
     [SerializeField] 
     /// <summary>
     /// Maximum limit of vertical movement.
@@ -191,7 +191,7 @@ public class CameraController : MonoBehaviour
 
         // Position the camera above the center of the scene.
         // You may need to adjust the Y value based on the size of your scene.
-        transform.position = sceneCenter + new Vector3(0, 100, 0);
+        transform.position = sceneCenter + new Vector3(194, 453, 250);
 
         // Point the camera straight down.
         transform.rotation = Quaternion.Euler(90, 0, 0);
