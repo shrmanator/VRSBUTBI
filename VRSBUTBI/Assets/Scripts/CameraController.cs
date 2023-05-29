@@ -154,4 +154,22 @@ public class CameraController : MonoBehaviour
         // set the camera's transform position equal to the updated camera position
         transform.position = cameraPosition;
     }
+
+
+    /// <summary>
+    /// Adjusts the camera to a top-down view.
+    /// </summary>
+    public void SwitchToTopDownView()
+    {
+        // Get the center of your scene. This depends on your scene layout.
+        Vector3 sceneCenter = new Vector3(0, 0, 0);
+
+        // Position the camera above the center of the scene.
+        // You may need to adjust the Y value based on the size of your scene.
+        transform.position = sceneCenter + new Vector3(0, 100, 0);
+
+        // Point the camera straight down.
+        transform.rotation = Quaternion.Euler(90, 0, 0);
+    }
+
 }

@@ -41,6 +41,9 @@ public class InGameButtons : MonoBehaviour
     int playbackControlWidth = 100;
 
     int PathCreatorWidth = 100;
+
+    int topDownViewWidth = 120;
+
     
     
     /// <summary>
@@ -151,6 +154,14 @@ public class InGameButtons : MonoBehaviour
             "Reset Scene"))
         {
             ScenePlayer.Player.ResetScene();
+        }
+
+        // Top Down View button:
+        rightButtonsPosition -= (topDownViewWidth + spacer);
+        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, topDownViewWidth, buttonHeight),
+            "Top Down View"))
+        {
+            // Insert logic for switching to top down view here
         }
 
         rightButtonsPosition -= (playbackControlWidth + spacer);
