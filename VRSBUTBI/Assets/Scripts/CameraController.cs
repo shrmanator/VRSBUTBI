@@ -87,54 +87,33 @@ public class CameraController : MonoBehaviour
 
         // ====== HORIZONTAL CAMERA MOVEMENT ======
         //
-        if (topDownView)
-        {
-            // In top-down view, always move along the Z-axis.
-            if (Input.GetKey(fwdCameraKey))
-            {
-                cameraPosition += Vector3.forward * panSpeed * Time.deltaTime;
-            }
-            if (Input.GetKey(backwardCameraKey))
-            {
-                cameraPosition -= Vector3.forward * panSpeed * Time.deltaTime;
-            }
-        }
-        else
-        {
-            // In regular view, move in the direction the camera is facing.
-            if (Input.GetKey(fwdCameraKey))
-            {
-                Vector3 forward = new Vector3(transform.forward.x, 0, transform.forward.z);
-                cameraPosition += forward * panSpeed * Time.deltaTime;
-            }
-            if (Input.GetKey(backwardCameraKey))
-            {
-                Vector3 backward = new Vector3(-transform.forward.x, 0, -transform.forward.z);
-                cameraPosition += backward * panSpeed * Time.deltaTime;
-            }
-        }
+        // Move the camera in the direction it's facing on the xz-plane.
         if (Input.GetKey(fwdCameraKey))
         {
-            // move forward in respect to x and z (increase x and z)
-            Vector3 forward = new Vector3(transform.forward.x, 0, transform.forward.z);
+            Vector3 forward = transform.forward;
+            forward.y = 0;  // ignore vertical direction
+            forward.Normalize();  // make sure the speed is consistent
             cameraPosition += forward * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(backwardCameraKey))
         {
-            // move backward in respect to x and z (decrease x and z)
-            Vector3 backward = new Vector3(-transform.forward.x, 0, -transform.forward.z);
+            Vector3 backward = -transform.forward;
+            backward.y = 0;  // ignore vertical direction
+            backward.Normalize();  // make sure the speed is consistent
             cameraPosition += backward * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(rightCameraStrafeKey))
         {
-            // move right in respect to x and z (increase x and z)
-            Vector3 right = new Vector3(transform.right.x, 0, transform.right.z);
+            Vector3 right = transform.right;
+            right.y = 0;  // ignore vertical direction
+            right.Normalize();  // make sure the speed is consistent
             cameraPosition += right * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(leftCameraStrafeKey))
         {
-            // move left in respect to x and z (decrease x and z)
-            Vector3 left = new Vector3(-transform.right.x, 0, -transform.right.z);
+            Vector3 left = -transform.right;
+            left.y = 0;  // ignore vertical direction
+            left.Normalize();  // make sure the speed is consistent
             cameraPosition += left * panSpeed * Time.deltaTime;
         }
 
@@ -142,12 +121,10 @@ public class CameraController : MonoBehaviour
         //
         if (Input.GetKey(verticalUpCameraKey))
         {
-            // move up in respect to y (increase y)
             cameraPosition += Vector3.up * panSpeed * Time.deltaTime;
         }
         if (Input.GetKey(verticalDownCameraKey))
         {
-            // move down in respect to y (decrease y)
             cameraPosition -= Vector3.up * panSpeed * Time.deltaTime;
         }
 
@@ -183,6 +160,7 @@ public class CameraController : MonoBehaviour
         transform.position = cameraPosition;
     }
 
+        
 
     // public void SwitchToTopDownView()
     // {
