@@ -162,13 +162,14 @@ public class InGameButtons : MonoBehaviour
             ScenePlayer.Player.ResetScene();
         }
 
-        // Top Down View button:
-        rightButtonsPosition -= (topDownViewWidth + spacer);
-        if (GUI.Button(new Rect(rightButtonsPosition, buttonY, topDownViewWidth, buttonHeight),
-            "Top Down View"))
-        {
-             cameraController.SwitchToTopDownView();
-        }
+        //TODO: Uncomment this after semester:
+        // // Top Down View button:
+        // rightButtonsPosition -= (topDownViewWidth + spacer);
+        // if (GUI.Button(new Rect(rightButtonsPosition, buttonY, topDownViewWidth, buttonHeight),
+        //     "Top Down View"))
+        // {
+        //      cameraController.SwitchToTopDownView();
+        // }
 
         rightButtonsPosition -= (playbackControlWidth + spacer);
         // Pause scene
