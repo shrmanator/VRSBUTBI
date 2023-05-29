@@ -15,6 +15,8 @@ public class InGameButtons : MonoBehaviour
     private SimFileHandler simFileHandler;
     private SimulationController simulationController;
 
+    private CameraController cameraController;
+
     public Texture2D playIcon;
     public Texture2D pauseIcon;
 
@@ -47,12 +49,16 @@ public class InGameButtons : MonoBehaviour
     
     
     /// <summary>
-    /// Finds the "StateManager" object and gets the SimFileHandler component.
+    /// 1. Finds the "StateManager" object and gets the SimFileHandler component.
+    /// 2. Finds the "Main Camera" object and gets the CameraController component.
     /// </summary>
     private void Start()
         {
             GameObject simFileHandlerObject = GameObject.Find("StateManager");
             simFileHandler = simFileHandlerObject.GetComponent<SimFileHandler>();
+
+            GameObject cameraObject = GameObject.Find("Main Camera");
+            cameraController = cameraObject.GetComponent<CameraController>();
         }
 
     private void OnGUI()
@@ -161,7 +167,7 @@ public class InGameButtons : MonoBehaviour
         if (GUI.Button(new Rect(rightButtonsPosition, buttonY, topDownViewWidth, buttonHeight),
             "Top Down View"))
         {
-            // Insert logic for switching to top down view here
+             cameraController.SwitchToTopDownView();
         }
 
         rightButtonsPosition -= (playbackControlWidth + spacer);

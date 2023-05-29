@@ -79,12 +79,40 @@ public class CameraController : MonoBehaviour
     /// </summary>
     float currentYRotation;
 
+    bool topDownView = false;
+
     void Update()
     {
         Vector3 cameraPosition = transform.position;
 
         // ====== HORIZONTAL CAMERA MOVEMENT ======
         //
+        if (topDownView)
+        {
+            // In top-down view, always move along the Z-axis.
+            if (Input.GetKey(fwdCameraKey))
+            {
+                cameraPosition += Vector3.forward * panSpeed * Time.deltaTime;
+            }
+            if (Input.GetKey(backwardCameraKey))
+            {
+                cameraPosition -= Vector3.forward * panSpeed * Time.deltaTime;
+            }
+        }
+        else
+        {
+            // In regular view, move in the direction the camera is facing.
+            if (Input.GetKey(fwdCameraKey))
+            {
+                Vector3 forward = new Vector3(transform.forward.x, 0, transform.forward.z);
+                cameraPosition += forward * panSpeed * Time.deltaTime;
+            }
+            if (Input.GetKey(backwardCameraKey))
+            {
+                Vector3 backward = new Vector3(-transform.forward.x, 0, -transform.forward.z);
+                cameraPosition += backward * panSpeed * Time.deltaTime;
+            }
+        }
         if (Input.GetKey(fwdCameraKey))
         {
             // move forward in respect to x and z (increase x and z)
@@ -156,9 +184,6 @@ public class CameraController : MonoBehaviour
     }
 
 
-    /// <summary>
-    /// Adjusts the camera to a top-down view.
-    /// </summary>
     public void SwitchToTopDownView()
     {
         // Get the center of your scene. This depends on your scene layout.
@@ -170,6 +195,10 @@ public class CameraController : MonoBehaviour
 
         // Point the camera straight down.
         transform.rotation = Quaternion.Euler(90, 0, 0);
+
+        // Set topDownView to true
+        topDownView = true;
     }
+
 
 }
