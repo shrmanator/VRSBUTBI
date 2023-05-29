@@ -12,17 +12,17 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Speed at which camera pans horizontally or vertically.
     /// </summary>
-    float panSpeed = 50f;
+    float panSpeed = 450f;
     [SerializeField] 
     /// <summary>
     /// Speed at which camera zooms in or out.
     /// </summary>
-    float zoomSpeed = 1000f;
+    float zoomSpeed = 750f;
     [SerializeField] 
     /// <summary>
     /// Sensitivity of the mouse movement for rotation.
     /// </summary>
-    float mouseSensitivity = 2000f;
+    float mouseSensitivity = 4000f;
     [SerializeField] 
     /// <summary>
     /// Minimum limit of vertical movement.
