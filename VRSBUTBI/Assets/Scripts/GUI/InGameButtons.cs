@@ -185,9 +185,12 @@ public class InGameButtons : MonoBehaviour
             playIcon))
         {
             ScenePlayer.Player.PlayScene();
-        }   
+        }
     }
 
+    /// <summary>
+    /// Pauses the scene player if not already paused.
+    /// </summary>
     private void PauseScenePlayer()
     {
         if (!ScenePlayer.Player.isPaused){ScenePlayer.Player.PauseScene();}

@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// A class for displaying a pop-up window with instructions in a Unity application.
+/// </summary>
 public class TextPopupWindow : MonoBehaviour
 {
     private bool showPopup = true;
@@ -13,18 +16,24 @@ public class TextPopupWindow : MonoBehaviour
     // Create a GUIStyle to set the font size
     private GUIStyle guiStyle = new GUIStyle();
 
+    /// <summary>
+    /// Initialize the pop-up window's properties at start. 
+    /// </summary>
     private void Start()
     {
         // Set the font size
-        guiStyle.fontSize = 20; // adjust this value to change the font size
+        guiStyle.fontSize = 20;
 
         // Set the text color
-        guiStyle.normal.textColor = Color.white; // change this to the desired color
+        guiStyle.normal.textColor = Color.white;
 
         // Center the popup window
         popupRect = new Rect(Screen.width / 2 - 350, Screen.height / 2 - 125, 700, 250);
     }
 
+    /// <summary>
+    /// Displays the pop-up window if showPopup is set to true.
+    /// </summary>
     private void OnGUI()
     {
         if (showPopup)
@@ -33,6 +42,11 @@ public class TextPopupWindow : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Defines the content and behaviour of the pop-up window. 
+    /// Displays instruction text and a button that can close the window.
+    /// </summary>
+    /// <param name="windowID">The unique identifier for the window.</param>
     private void ShowPopupWindow(int windowID)
     {
         // Add some text to the popup window
