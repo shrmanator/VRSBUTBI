@@ -337,6 +337,10 @@ public class SimFileHandler : MonoBehaviour
         ObjectManager.Manager.CreateObjects(objectsData);
     }
 
+    /// <summary>
+    /// Instantiates path objects based on the given serialized paths.
+    /// </summary>
+    /// <param name="paths">An array of serialized path objects to be instantiated.</param>
     private void InstantiatePaths(SerializablePath[] paths)
     {
         foreach (var path in paths)
@@ -345,6 +349,10 @@ public class SimFileHandler : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Instantiates command objects based on the given serialized commands.
+    /// </summary>
+    /// <param name="serializedCommands">An array of serialized command objects to be instantiated.</param>
     private void InstantiateCommands(SerializableCommand[] serializedCommands)
     {
         List<object[]> commands = new List<object[]>();
@@ -355,7 +363,9 @@ public class SimFileHandler : MonoBehaviour
         ScenePlayer.Player.SetCommands(commands);
     }
 
-    // Loads models from the imported_models directory.
+    /// <summary>
+    /// Loads models from the imported_models directory.
+    /// <summary>
     public void LoadExternalModels()
     {
 
@@ -369,46 +379,6 @@ public class SimFileHandler : MonoBehaviour
             ObjectManager.Manager.CreateModelFromFile(modelFile);
         }
     }
-
-   /* private IEnumerator LoadModel(string filePath)
-    {
-        WWW www = new WWW("file://" + filePath);
-        yield return www;
-
-        if (!string.IsNullOrEmpty(www.error))
-        {
-            Debug.LogError("Error loading OBJ file: " + www.error);
-            yield break;
-        }
-
-        // Instantiate the loaded model using OBJImporter
-        Mesh holderMesh = new Mesh();
-        GameObject obj = new OBJLoader().Load(new MemoryStream(Encoding.UTF8.GetBytes(www.text)));
-        MeshFilter[] meshFilters = obj.GetComponentsInChildren<MeshFilter>();
-        List<Mesh> meshes = new List<Mesh>();
-
-        foreach (MeshFilter mf in meshFilters)
-        {
-            meshes.Add(mf.sharedMesh);
-        }
-
-
-        // Use the list of meshes (meshes) for further processing
-        GameObject modelGameObject = new GameObject(Path.GetFileNameWithoutExtension(filePath));
-        modelGameObject.AddComponent<MeshRenderer>();
-        MeshFilter meshFilter = modelGameObject.AddComponent<MeshFilter>();
-        meshFilter.mesh = holderMesh;
-
-        // Add the "Serializable" tag to the model GameObject
-        modelGameObject.tag = "Serializable";
-
-        // Create and assign a material to the GameObject (optional)
-        Material modelMaterial = new Material(Shader.Find("Standard"));
-        modelGameObject.GetComponent<Renderer>().material = modelMaterial;
-
-        // Add the GameObject to the ObjectPrefabManager's list (optional)
-        objectPrefabManager.AddObjectToPrefabList(modelGameObject);
-    }*/
 
     private void OnLoadTextSuccess(string[] filePaths)
     {

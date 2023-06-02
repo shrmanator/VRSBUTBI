@@ -63,13 +63,11 @@ public class CameraController : MonoBehaviour
     ///  Moves the camera down vertically.
     /// </summary>
     KeyCode verticalDownCameraKey;
-    //TODO: add inverse mouse rotate control
     [SerializeField]
     /// <summary>
     ///  Moves the camera down vertically.
     /// </summary>
     bool invertCameraRotation;
-
     /// <summary>
     /// The camera's current X rotation.
     /// </summary>
@@ -161,7 +159,10 @@ public class CameraController : MonoBehaviour
     }
 
         
-
+    /*
+    This method will be used alongside the path creator scripts.
+    When the user wants to create a path for an object, switch to top-down view.
+    */
     // public void SwitchToTopDownView()
     // {
     //     // Get the center of your scene. This depends on your scene layout.
@@ -177,6 +178,4 @@ public class CameraController : MonoBehaviour
     //     // Set topDownView to true
     //     topDownView = true;
     // }
-
-
 }
