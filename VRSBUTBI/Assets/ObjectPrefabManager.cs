@@ -1,16 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages a collection of GameObject prefabs.
+/// </summary>
 public class ObjectPrefabManager : MonoBehaviour
 {
+    /// <summary>
+    /// List of GameObject prefabs.
+    /// </summary>
     [SerializeField] private List<GameObject> objectPrefabs;
 
+    /// <summary>
+    /// Map of GameObject prefabs keyed by name.
+    /// </summary>
     private Dictionary<string, GameObject> objectPrefabMap;
 
+    /// <summary>
+    /// Singleton instance of the ObjectPrefabManager.
+    /// </summary>
     public static ObjectPrefabManager Manager { get; private set; }
 
 
 
+    /// <summary>
+    /// Initialize the ObjectPrefabManager and populate the prefab map.
+    /// </summary>
     private void Awake()
     {
         // Ensure that there's only one instance of ObjectPrefabManager
@@ -69,6 +84,10 @@ public class ObjectPrefabManager : MonoBehaviour
         return objectPrefabMap.ContainsKey(name);
     }
 
+    /// <summary>
+    /// Adds a new GameObject to the prefab list and map.
+    /// </summary>
+    /// <param name="obj">The GameObject to add</param>
     public void AddObjectToPrefabList(GameObject obj)
     {
         if (obj == null)
